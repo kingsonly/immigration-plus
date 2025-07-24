@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { MapPin, Menu, X, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Image from "next/image"
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -35,13 +36,13 @@ const Navigation = () => {
   return (
     <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-red-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center min-h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
-              <MapPin className="w-4 h-4 text-white" />
+            <div className="w-20 h-20 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
+              <Image src="/logo.png" alt="logo" width={100} height={100} className="bg-white" />
             </div>
-            <span className="font-bold text-xl text-gray-900">Coming2Canada</span>
+            {/* <span className="font-bold text-xl text-gray-900">Coming2Canada</span> */}
           </Link>
 
           {/* Desktop Navigation */}
@@ -51,11 +52,10 @@ const Navigation = () => {
                 {item.dropdown ? (
                   <div className="relative">
                     <button
-                      className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                        pathname.startsWith(item.href)
-                          ? "text-red-600 bg-red-50"
-                          : "text-gray-700 hover:text-red-600 hover:bg-red-50"
-                      }`}
+                      className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${pathname.startsWith(item.href)
+                        ? "text-red-600 bg-red-50"
+                        : "text-gray-700 hover:text-red-600 hover:bg-red-50"
+                        }`}
                     >
                       <span>{item.name}</span>
                       <ChevronDown className="w-4 h-4" />
@@ -75,11 +75,10 @@ const Navigation = () => {
                 ) : (
                   <Link
                     href={item.href}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      pathname === item.href
-                        ? "text-red-600 bg-red-50"
-                        : "text-gray-700 hover:text-red-600 hover:bg-red-50"
-                    }`}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${pathname === item.href
+                      ? "text-red-600 bg-red-50"
+                      : "text-gray-700 hover:text-red-600 hover:bg-red-50"
+                      }`}
                   >
                     {item.name}
                   </Link>
@@ -89,11 +88,11 @@ const Navigation = () => {
           </div>
 
           {/* CTA Button */}
-          <div className="hidden lg:block">
+          {/* <div className="hidden lg:block">
             <Button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
               Free Assessment
             </Button>
-          </div>
+          </div> */}
 
           {/* Mobile menu button */}
           <button
@@ -151,11 +150,10 @@ const Navigation = () => {
                   ) : (
                     <Link
                       href={item.href}
-                      className={`block px-3 py-2 rounded-md text-base font-medium ${
-                        pathname === item.href
-                          ? "text-red-600 bg-red-50"
-                          : "text-gray-700 hover:text-red-600 hover:bg-red-50"
-                      }`}
+                      className={`block px-3 py-2 rounded-md text-base font-medium ${pathname === item.href
+                        ? "text-red-600 bg-red-50"
+                        : "text-gray-700 hover:text-red-600 hover:bg-red-50"
+                        }`}
                       onClick={() => setIsOpen(false)}
                     >
                       {item.name}

@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Coming2Canada - Immigration Consulting Services",
   description: "TENTACULAR IMMIGRATION SOLUTIONS LTD - Your trusted partner for Canadian immigration success",
-    generator: 'v0.dev'
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({

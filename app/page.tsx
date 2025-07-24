@@ -59,19 +59,27 @@ export default function HomePage() {
     },
     {
       icon: GraduationCap,
-      title: "Study & Work Permits",
-      description: "Education and career opportunities await",
+      title: "Study",
+      description: "Educational opportunities await",
       details:
-        "Study permits allow international students to pursue education in Canada, while work permits provide opportunities to gain valuable Canadian work experience.",
+        "Study permits allow international students to pursue education in Canada.",
+      color: "from-red-500 to-red-700",
+      href: "/services/study-work-permits",
+    },
+    {
+      icon: GraduationCap,
+      title: "Work Permits",
+      description: "career opportunities await",
+      details:
+        "Work permits provide opportunities to gain valuable Canadian work experience.",
       color: "from-red-500 to-red-700",
       href: "/services/study-work-permits",
     },
     {
       icon: MapPin,
-      title: "Provincial Nominee Program (PNP)",
-      description: "Find your perfect province to call home",
-      details:
-        "Each Canadian province has its own immigration programs designed to meet specific economic and demographic needs. PNP offers a pathway tailored to regional requirements.",
+      title: "Visitors Visa",
+      description: "Welcome visitors from around the world",
+      details: "Visitors visas allow you to visit Canada for a specific period of time.",
       color: "from-red-700 to-pink-500",
       href: "/services/pnp",
     },
@@ -139,7 +147,7 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link href="/contact">
+                <Link href="/services">
                   <Button
                     size="lg"
                     className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-lg px-8 py-4 rounded-full"
@@ -150,13 +158,13 @@ export default function HomePage() {
                 </Link>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link href="/about">
+                <Link href="/contact">
                   <Button
                     size="lg"
                     variant="outline"
                     className="border-red-500 text-red-600 hover:bg-red-50 text-lg px-8 py-4 rounded-full"
                   >
-                    Learn More
+                    Free Consultation
                   </Button>
                 </Link>
               </motion.div>
@@ -174,7 +182,7 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-white">
+      {/* <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
@@ -194,7 +202,7 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Services Journey */}
       <section className="py-20 bg-gradient-to-b from-white to-gray-50">
