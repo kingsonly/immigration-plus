@@ -13,6 +13,14 @@ import {
   Clock,
   DollarSign,
   FileText,
+  Award,
+  Star,
+  MapPinned,
+  ClipboardCheck,
+  BarChart4,
+  FileSignature,
+  HeartHandshake,
+  Repeat,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -112,6 +120,86 @@ export default function ServicesPage() {
     },
   ]
 
+  const offerings = [
+    {
+      icon: MapPinned, // Lucide icon for guidance/navigation
+      title: "Guidance on Program Selection",
+      description:
+        "We guide you in selecting the most suitable federal or provincial pathway — including Express Entry, CEC, PNPs, RNIP, and more — aligned with your goals and qualifications.",
+      tips: [
+        "Compare federal and provincial immigration pathways based on your background.",
+        "Evaluate eligibility for Express Entry, RNIP, or CEC routes.",
+        "Receive personalized advice based on your qualifications and goals.",
+      ],
+    },
+    {
+      icon: ClipboardCheck, // Lucide icon for document review
+      title: "Comprehensive Profile Setup & Documentation Review",
+      description:
+        "We ensure your online profiles (e.g., Express Entry) are correctly created and thoroughly supported by compliant, well-organized documentation that meets IRCC standards.",
+      tips: [
+        "Create and optimize your Express Entry or PNP profile.",
+        "Organize supporting documents to meet Canadian immigration requirements.",
+        "Avoid common mistakes that lead to rejections or delays.",
+      ],
+    },
+    {
+      icon: BarChart4, // Lucide icon for ranking/metrics
+      title: "CRS Optimization Strategies",
+      description:
+        "We identify and implement strategies to boost your Comprehensive Ranking System (CRS) score, increasing your chances of receiving an Invitation to Apply (ITA).",
+      tips: [
+        "Evaluate your current CRS score and identify areas for improvement.",
+        "Get support to improve language test results or gain additional experience.",
+        "Explore PNP options that offer bonus CRS points.",
+      ],
+    },
+    {
+      icon: FileSignature, // Lucide icon for application handling
+      title: "Support from ITA to PR Submission",
+      description:
+        "From the moment you receive an ITA, we guide you through every step — including forms, police certificates, medicals, and document uploads — until your permanent residency is finalized.",
+      tips: [
+        "Understand and complete post-ITA requirements with confidence.",
+        "Prepare and upload all documents according to IRCC guidelines.",
+        "Avoid delays by tracking deadlines and required submissions.",
+      ],
+    },
+    {
+      icon: HeartHandshake, // Lucide icon for humanitarian help
+      title: "Humanitarian and Compassionate (H&C) Application Support",
+      description:
+        "For clients with exceptional circumstances, we prepare compelling submissions that highlight hardship, establishment in Canada, and best interests of children.",
+      tips: [
+        "Highlight evidence of hardship and Canadian establishment.",
+        "Craft strong narratives aligned with IRCC's H&C principles.",
+        "Emphasize family ties and children's best interests where applicable.",
+      ],
+    },
+    {
+      icon: Repeat, // Lucide icon for transition or change
+      title: "Transition Planning from Temporary to Permanent Residency",
+      description:
+        "We provide strategic planning for those on work or study permits to transition smoothly to permanent residence through appropriate pathways.",
+      tips: [
+        "Review options under CEC, PNP, or bridging work permits.",
+        "Plan your timelines and documents while on temporary status.",
+        "Maximize your time in Canada toward PR eligibility.",
+      ],
+    },
+    {
+      icon: Star, // Lucide icon representing qualification/highlight
+      title: "Eligibility and Credential Assessments",
+      description:
+        "We evaluate your educational background, work history, and language proficiency to determine your suitability for various Canadian immigration programs.",
+      tips: [
+        "Assess your credentials through approved PR bodies like WES or IQAS.",
+        "Match your job history to eligible NOC codes used in PR pathways.",
+        "Identify programs like Express Entry or PNPs that fit your profile.",
+      ],
+    },
+  ];
+
   const processSteps = [
     {
       step: "01",
@@ -159,75 +247,136 @@ export default function ServicesPage() {
           >
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Our Services
+                Permanent Residency
               </span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Comprehensive Canadian immigration services tailored to your unique situation. From permanent residency to
-              family reunification, we're here to guide you every step of the way.
+              At Coming2Canada, we guide skilled workers, international graduates, and temporary residents through Canada’s immigration pathways, including Express Entry, CEC, PNPs, and H&C applications. We offer personalized support with eligibility assessments, CRS optimization, and full documentation to help you successfully transition to permanent residency.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Services Grid */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">Explore Your Pathway to Permanent Residence</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              We provide comprehensive support throughout your entire immigration journey
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: FileText,
+                title: "Express Entry System",
+                description:
+                  "Express Entry manages applications for skilled workers through FSW, CEC, and FST. Candidates are ranked via CRS, with top applicants invited to apply and most receiving PR within six months.",
+              },
+              {
+                icon: FileText,
+                title: "Provincial Nominee Programs",
+                description:
+                  "Each Canadian province (except Quebec) offers tailored immigration streams for skilled workers, graduates, semi-skilled workers, and entrepreneurs, accessible through Express Entry or direct provincial nomination pathways.",
+              },
+              {
+                icon: FileText,
+                title: "International Graduate Streams",
+                description:
+                  "Canadian post-secondary graduates can fast-track permanent residency through programs like the Canadian Experience Class (CEC) or province-specific International Graduate streams under the Provincial Nominee Program (PNP).",
+              },
+              {
+                icon: FileText,
+                title: "Rural & Northern Immigration Pilot (RNIP/RCIP)",
+                description:
+                  "Smaller Canadian towns run community-driven programs like the Rural Community Immigration Pilot, which replaced RNIP, to attract skilled workers with job offers and local support toward permanent residency.",
+              },
+              {
+                icon: Clock,
+                title: "Agri‑Food & Home Care Worker Pilots",
+                description:
+                  "Canada offers sector-focused PR streams like the Agri-Food Pilot (for farm workers, extended to 2025) and Home Care Worker Pilots, providing direct permanent residency pathways for eligible caregivers and support workers.",
+              },
+              {
+                icon: Users,
+                title: "Humanitarian & Compassionate (H&C) & Public Policy Pathways",
+                description:
+                  "Humanitarian and compassionate (H&C) and policy-based streams offer permanent residency pathways for applicants in exceptional situations, such as hardship or long-term establishment in Canada, outside standard economic immigration programs.",
+              },
+            ].map((feature, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="h-full hover:shadow-xl transition-all duration-300 group">
+                <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
                   <CardContent className="p-6">
-                    <div
-                      className={`w-16 h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
-                    >
-                      <service.icon className="w-8 h-8 text-white" />
+                    <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <feature.icon className="w-8 h-8 text-white" />
                     </div>
-
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">{service.title}</h3>
-                    <p className="text-gray-600 mb-4">{service.description}</p>
-
-                    <div className="space-y-2 mb-6">
-                      {service.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center space-x-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          <span className="text-sm text-gray-600">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="border-t pt-4 space-y-2 mb-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Clock className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-600">Processing Time</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{service.processingTime}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <DollarSign className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-600">Starting From</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{service.startingPrice}</span>
-                      </div>
-                    </div>
-
-                    <Link href={service.href}>
-                      <Button className={`w-full bg-gradient-to-r ${service.color} hover:opacity-90`}>
-                        Learn More
-                        <ArrowRight className="ml-2 w-4 h-4" />
-                      </Button>
-                    </Link>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+                    <p className="text-gray-600">{feature.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+      {/* What we offer Section */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white ">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                What We Offer
+              </span>
+            </h2>
+
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {
+              offerings.map((tip, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                    <CardContent className="p-6">
+                      <div className="flex items-center space-x-4 mb-4">
+                        <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center">
+                          <tip.icon className="w-6 h-6 text-white" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900">{tip.title}</h3>
+                      </div>
+                      <p className="text-gray-600 mb-4">{tip.description}</p>
+                      <ul className="space-y-2">
+                        {tip.tips.map((tipItem, tipIndex) => (
+                          <li key={tipIndex} className="flex items-start space-x-2">
+                            <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-sm text-gray-600">{tipItem}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
           </div>
         </div>
       </section>
