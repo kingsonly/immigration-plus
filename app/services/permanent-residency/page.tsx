@@ -21,6 +21,7 @@ import {
   FileSignature,
   HeartHandshake,
   Repeat,
+  Leaf,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -119,6 +120,46 @@ export default function ServicesPage() {
       href: "/services/citizenship",
     },
   ]
+
+  const pathway = [
+    {
+      icon: BarChart4, // CRS-based ranking and scoring
+      title: "Express Entry System",
+      description:
+        "Express Entry manages applications for skilled workers through FSW, CEC, and FST. Candidates are ranked via CRS, with top applicants invited to apply and most receiving PR within six months.",
+    },
+    {
+      icon: MapPinned, // Location-specific programs across provinces
+      title: "Provincial Nominee Programs",
+      description:
+        "Each Canadian province (except Quebec) offers tailored immigration streams for skilled workers, graduates, semi-skilled workers, and entrepreneurs, accessible through Express Entry or direct provincial nomination pathways.",
+    },
+    {
+      icon: GraduationCap, // For graduates pursuing PR
+      title: "International Graduate Streams",
+      description:
+        "Canadian post-secondary graduates can fast-track permanent residency through programs like the Canadian Experience Class (CEC) or province-specific International Graduate streams under the Provincial Nominee Program (PNP).",
+    },
+    {
+      icon: Home, // Community-based immigration programs
+      title: "Rural & Northern Immigration Pilot (RNIP/RCIP)",
+      description:
+        "Smaller Canadian towns run community-driven programs like the Rural Community Immigration Pilot, which replaced RNIP, to attract skilled workers with job offers and local support toward permanent residency.",
+    },
+    {
+      icon: Leaf, // Agriculture and caregiving sectors
+      title: "Agri‑Food & Home Care Worker Pilots",
+      description:
+        "Canada offers sector-focused PR streams like the Agri-Food Pilot (for farm workers, extended to 2025) and Home Care Worker Pilots, providing direct permanent residency pathways for eligible caregivers and support workers.",
+    },
+    {
+      icon: HeartHandshake, // Compassionate and policy-based routes
+      title: "Humanitarian & Compassionate (H&C) & Public Policy Pathways",
+      description:
+        "Humanitarian and compassionate (H&C) and policy-based streams offer permanent residency pathways for applicants in exceptional situations, such as hardship or long-term establishment in Canada, outside standard economic immigration programs.",
+    },
+  ];
+
 
   const offerings = [
     {
@@ -272,61 +313,63 @@ export default function ServicesPage() {
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: FileText,
-                title: "Express Entry System",
-                description:
-                  "Express Entry manages applications for skilled workers through FSW, CEC, and FST. Candidates are ranked via CRS, with top applicants invited to apply and most receiving PR within six months.",
-              },
-              {
-                icon: FileText,
-                title: "Provincial Nominee Programs",
-                description:
-                  "Each Canadian province (except Quebec) offers tailored immigration streams for skilled workers, graduates, semi-skilled workers, and entrepreneurs, accessible through Express Entry or direct provincial nomination pathways.",
-              },
-              {
-                icon: FileText,
-                title: "International Graduate Streams",
-                description:
-                  "Canadian post-secondary graduates can fast-track permanent residency through programs like the Canadian Experience Class (CEC) or province-specific International Graduate streams under the Provincial Nominee Program (PNP).",
-              },
-              {
-                icon: FileText,
-                title: "Rural & Northern Immigration Pilot (RNIP/RCIP)",
-                description:
-                  "Smaller Canadian towns run community-driven programs like the Rural Community Immigration Pilot, which replaced RNIP, to attract skilled workers with job offers and local support toward permanent residency.",
-              },
-              {
-                icon: Clock,
-                title: "Agri‑Food & Home Care Worker Pilots",
-                description:
-                  "Canada offers sector-focused PR streams like the Agri-Food Pilot (for farm workers, extended to 2025) and Home Care Worker Pilots, providing direct permanent residency pathways for eligible caregivers and support workers.",
-              },
-              {
-                icon: Users,
-                title: "Humanitarian & Compassionate (H&C) & Public Policy Pathways",
-                description:
-                  "Humanitarian and compassionate (H&C) and policy-based streams offer permanent residency pathways for applicants in exceptional situations, such as hardship or long-term establishment in Canada, outside standard economic immigration programs.",
-              },
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
-                <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
-                  <CardContent className="p-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <feature.icon className="w-8 h-8 text-white" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                    <p className="text-gray-600">{feature.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+            {
+              // [
+              //   {
+              //     icon: FileText,
+              //     title: "Express Entry System",
+              //     description:
+              //       "Express Entry manages applications for skilled workers through FSW, CEC, and FST. Candidates are ranked via CRS, with top applicants invited to apply and most receiving PR within six months.",
+              //   },
+              //   {
+              //     icon: FileText,
+              //     title: "Provincial Nominee Programs",
+              //     description:
+              //       "Each Canadian province (except Quebec) offers tailored immigration streams for skilled workers, graduates, semi-skilled workers, and entrepreneurs, accessible through Express Entry or direct provincial nomination pathways.",
+              //   },
+              //   {
+              //     icon: FileText,
+              //     title: "International Graduate Streams",
+              //     description:
+              //       "Canadian post-secondary graduates can fast-track permanent residency through programs like the Canadian Experience Class (CEC) or province-specific International Graduate streams under the Provincial Nominee Program (PNP).",
+              //   },
+              //   {
+              //     icon: FileText,
+              //     title: "Rural & Northern Immigration Pilot (RNIP/RCIP)",
+              //     description:
+              //       "Smaller Canadian towns run community-driven programs like the Rural Community Immigration Pilot, which replaced RNIP, to attract skilled workers with job offers and local support toward permanent residency.",
+              //   },
+              //   {
+              //     icon: Clock,
+              //     title: "Agri‑Food & Home Care Worker Pilots",
+              //     description:
+              //       "Canada offers sector-focused PR streams like the Agri-Food Pilot (for farm workers, extended to 2025) and Home Care Worker Pilots, providing direct permanent residency pathways for eligible caregivers and support workers.",
+              //   },
+              //   {
+              //     icon: Users,
+              //     title: "Humanitarian & Compassionate (H&C) & Public Policy Pathways",
+              //     description:
+              //       "Humanitarian and compassionate (H&C) and policy-based streams offer permanent residency pathways for applicants in exceptional situations, such as hardship or long-term establishment in Canada, outside standard economic immigration programs.",
+              //   },
+              // ]
+              pathway.map((feature, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
+                    <CardContent className="p-6">
+                      <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <feature.icon className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+                      <p className="text-gray-600">{feature.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
           </div>
         </div>
       </section>

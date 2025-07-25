@@ -19,6 +19,10 @@ import {
   Star,
   Award,
   Globe,
+  Rocket,
+  Plane,
+  HeartHandshake,
+  BriefcaseBusiness,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -29,9 +33,74 @@ export default function HomePage() {
   const { scrollYProgress } = useScroll()
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
 
+  // const services = [
+  //   {
+  //     icon: Home,
+  //     title: "Permanent Residency (PR)",
+  //     description: "Your pathway to calling Canada home permanently",
+  //     details:
+  //       "Permanent Residency allows you to live, work, and study anywhere in Canada. Through various programs like Express Entry, you can build a new life in one of the world's most welcoming countries.",
+  //     color: "from-red-500 to-red-600",
+  //     href: "/services/permanent-residency",
+  //   },
+  //   {
+  //     icon: Briefcase,
+  //     title: "Start-Up Visa Program",
+  //     description: "Turn your innovative business idea into Canadian success",
+  //     details:
+  //       "The Start-up Visa Program targets immigrant entrepreneurs with innovative business ideas and the potential to create jobs for Canadians and compete on a global scale.",
+  //     color: "from-red-600 to-pink-600",
+  //     href: "/services/business-immigration",
+  //   },
+  //   {
+  //     icon: Users,
+  //     title: "Business & Investor Immigration",
+  //     description: "Invest in your future and Canada's economy",
+  //     details:
+  //       "Various investor and business immigration programs allow you to immigrate to Canada by making a significant investment or starting a business that benefits the Canadian economy.",
+  //     color: "from-pink-600 to-red-500",
+  //     href: "/services/business-immigration",
+  //   },
+  //   {
+  //     icon: GraduationCap,
+  //     title: "Study",
+  //     description: "Educational opportunities await",
+  //     details:
+  //       "Study permits allow international students to pursue education in Canada.",
+  //     color: "from-red-500 to-red-700",
+  //     href: "/services/study-work-permits",
+  //   },
+  //   {
+  //     icon: GraduationCap,
+  //     title: "Work Permits",
+  //     description: "career opportunities await",
+  //     details:
+  //       "Work permits provide opportunities to gain valuable Canadian work experience.",
+  //     color: "from-red-500 to-red-700",
+  //     href: "/services/study-work-permits",
+  //   },
+  //   {
+  //     icon: MapPin,
+  //     title: "Visitors Visa",
+  //     description: "Welcome visitors from around the world",
+  //     details: "Visitors visas allow you to visit Canada for a specific period of time.",
+  //     color: "from-red-700 to-pink-500",
+  //     href: "/services/pnp",
+  //   },
+  //   {
+  //     icon: Heart,
+  //     title: "Family Sponsorship",
+  //     description: "Reunite with your loved ones in Canada",
+  //     details:
+  //       "Sponsor your spouse, children, parents, or grandparents to join you in Canada. Family reunification is a cornerstone of Canadian immigration policy.",
+  //     color: "from-pink-500 to-red-600",
+  //     href: "/services/family-sponsorship",
+  //   },
+  // ]
+
   const services = [
     {
-      icon: Home,
+      icon: Home, // ✔️ Keep — matches the concept of settling permanently
       title: "Permanent Residency (PR)",
       description: "Your pathway to calling Canada home permanently",
       details:
@@ -40,7 +109,7 @@ export default function HomePage() {
       href: "/services/permanent-residency",
     },
     {
-      icon: Briefcase,
+      icon: Rocket, // 🆕 Better fit for innovation and startups
       title: "Start-Up Visa Program",
       description: "Turn your innovative business idea into Canadian success",
       details:
@@ -49,7 +118,7 @@ export default function HomePage() {
       href: "/services/business-immigration",
     },
     {
-      icon: Users,
+      icon: BriefcaseBusiness, // 🆕 Better than generic "Users" for business/investment
       title: "Business & Investor Immigration",
       description: "Invest in your future and Canada's economy",
       details:
@@ -58,7 +127,7 @@ export default function HomePage() {
       href: "/services/business-immigration",
     },
     {
-      icon: GraduationCap,
+      icon: GraduationCap, // ✔️ Already perfect
       title: "Study",
       description: "Educational opportunities await",
       details:
@@ -67,24 +136,25 @@ export default function HomePage() {
       href: "/services/study-work-permits",
     },
     {
-      icon: GraduationCap,
+      icon: Briefcase, // 🆕 Change from duplicate GraduationCap to Briefcase
       title: "Work Permits",
-      description: "career opportunities await",
+      description: "Career opportunities await",
       details:
         "Work permits provide opportunities to gain valuable Canadian work experience.",
       color: "from-red-500 to-red-700",
       href: "/services/study-work-permits",
     },
     {
-      icon: MapPin,
+      icon: Plane, // 🆕 More intuitive for travel/visits than MapPin
       title: "Visitors Visa",
       description: "Welcome visitors from around the world",
-      details: "Visitors visas allow you to visit Canada for a specific period of time.",
+      details:
+        "Visitors visas allow you to visit Canada for a specific period of time.",
       color: "from-red-700 to-pink-500",
       href: "/services/pnp",
     },
     {
-      icon: Heart,
+      icon: HeartHandshake, // 🆕 Stronger emotional symbol for family reunification
       title: "Family Sponsorship",
       description: "Reunite with your loved ones in Canada",
       details:
@@ -92,7 +162,8 @@ export default function HomePage() {
       color: "from-pink-500 to-red-600",
       href: "/services/family-sponsorship",
     },
-  ]
+  ];
+
 
   const stats = [
     { icon: Users, number: "500+", label: "Successful Applications" },
@@ -351,7 +422,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
+
 
     </div>
   )

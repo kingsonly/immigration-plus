@@ -13,6 +13,10 @@ import {
   Clock,
   DollarSign,
   FileText,
+  Rocket,
+  BriefcaseBusiness,
+  Plane,
+  HeartHandshake,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -21,96 +25,70 @@ import Link from "next/link"
 export default function ServicesPage() {
   const services = [
     {
-      icon: Home,
+      icon: Home, // ✔️ Keep — matches the concept of settling permanently
       title: "Permanent Residency (PR)",
       description: "Your pathway to calling Canada home permanently",
-      features: [
-        "Express Entry System",
-        "Federal Skilled Worker Program",
-        "Canadian Experience Class",
-        "Federal Skilled Trades Program",
-      ],
-      processingTime: "6-12 months",
-      startingPrice: "Contact for pricing",
+      details:
+        "Permanent Residency allows you to live, work, and study anywhere in Canada. Through various programs like Express Entry, you can build a new life in one of the world's most welcoming countries.",
       color: "from-red-500 to-red-600",
       href: "/services/permanent-residency",
     },
     {
-      icon: Briefcase,
-      title: "Business Immigration",
-      description: "Turn your business expertise into Canadian success",
-      features: [
-        "Start-up Visa Program",
-        "Self-employed Persons Program",
-        "Investor Programs",
-        "Entrepreneur Programs",
-      ],
-      processingTime: "12-24 months",
-      startingPrice: "Contact for pricing",
+      icon: Rocket, // 🆕 Better fit for innovation and startups
+      title: "Start-Up Visa Program",
+      description: "Turn your innovative business idea into Canadian success",
+      details:
+        "The Start-up Visa Program targets immigrant entrepreneurs with innovative business ideas and the potential to create jobs for Canadians and compete on a global scale.",
       color: "from-red-600 to-pink-600",
       href: "/services/business-immigration",
     },
     {
-      icon: GraduationCap,
-      title: "Study & Work Permits",
-      description: "Education and career opportunities in Canada",
-      features: [
-        "Study Permit Applications",
-        "Work Permit Applications",
-        "Post-Graduation Work Permits",
-        "Co-op Work Permits",
-      ],
-      processingTime: "4-12 weeks",
-      startingPrice: "Contact for pricing",
+      icon: BriefcaseBusiness, // 🆕 Better than generic "Users" for business/investment
+      title: "Business & Investor Immigration",
+      description: "Invest in your future and Canada's economy",
+      details:
+        "Various investor and business immigration programs allow you to immigrate to Canada by making a significant investment or starting a business that benefits the Canadian economy.",
       color: "from-pink-600 to-red-500",
+      href: "/services/business-immigration",
+    },
+    {
+      icon: GraduationCap, // ✔️ Already perfect
+      title: "Study",
+      description: "Educational opportunities await",
+      details:
+        "Study permits allow international students to pursue education in Canada.",
+      color: "from-red-500 to-red-700",
       href: "/services/study-work-permits",
     },
     {
-      icon: Heart,
-      title: "Family Sponsorship",
-      description: "Reunite with your loved ones in Canada",
-      features: [
-        "Spouse/Partner Sponsorship",
-        "Dependent Children Sponsorship",
-        "Parent & Grandparent Program",
-        "Other Eligible Relatives",
-      ],
-      processingTime: "12-24 months",
-      startingPrice: "Contact for pricing",
+      icon: Briefcase, // 🆕 Change from duplicate GraduationCap to Briefcase
+      title: "Work Permits",
+      description: "Career opportunities await",
+      details:
+        "Work permits provide opportunities to gain valuable Canadian work experience.",
       color: "from-red-500 to-red-700",
-      href: "/services/family-sponsorship",
+      href: "/services/study-work-permits",
     },
     {
-      icon: MapPin,
-      title: "Provincial Nominee Program",
-      description: "Find your perfect province to call home",
-      features: [
-        "Ontario Immigrant Nominee Program",
-        "British Columbia PNP",
-        "Alberta Immigrant Nominee Program",
-        "Other Provincial Programs",
-      ],
-      processingTime: "6-18 months",
-      startingPrice: "Contact for pricing",
+      icon: Plane, // 🆕 More intuitive for travel/visits than MapPin
+      title: "Visitors Visa",
+      description: "Welcome visitors from around the world",
+      details:
+        "Visitors visas allow you to visit Canada for a specific period of time.",
       color: "from-red-700 to-pink-500",
       href: "/services/pnp",
     },
     {
-      icon: Users,
-      title: "Citizenship Applications",
-      description: "Complete your journey to becoming a Canadian citizen",
-      features: [
-        "Citizenship Applications",
-        "Citizenship Test Preparation",
-        "Citizenship Ceremony Guidance",
-        "Urgent Processing Requests",
-      ],
-      processingTime: "12-18 months",
-      startingPrice: "Contact for pricing",
+      icon: HeartHandshake, // 🆕 Stronger emotional symbol for family reunification
+      title: "Family Sponsorship",
+      description: "Reunite with your loved ones in Canada",
+      details:
+        "Sponsor your spouse, children, parents, or grandparents to join you in Canada. Family reunification is a cornerstone of Canadian immigration policy.",
       color: "from-pink-500 to-red-600",
-      href: "/services/citizenship",
+      href: "/services/family-sponsorship",
     },
-  ]
+  ];
+
 
   const processSteps = [
     {
@@ -171,61 +149,85 @@ export default function ServicesPage() {
       </section>
 
       {/* Services Grid */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                Your Immigration Journey
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Discover the pathway that's right for you. Each route offers unique opportunities to build your future in
+              Canada.
+            </p>
+          </motion.div> */}
+
+          <div className="space-y-32">
             {services.map((service, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className={`service-section relative ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} flex flex-col lg:flex items-center gap-12`}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <Card className="h-full hover:shadow-xl transition-all duration-300 group">
-                  <CardContent className="p-6">
+                {/* Content */}
+                <div className="flex-1 space-y-6">
+                  <div className="flex items-center space-x-4">
                     <div
-                      className={`w-16 h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+                      className={`w-16 h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center transform rotate-12`}
                     >
                       <service.icon className="w-8 h-8 text-white" />
                     </div>
-
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">{service.title}</h3>
-                    <p className="text-gray-600 mb-4">{service.description}</p>
-
-                    <div className="space-y-2 mb-6">
-                      {service.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center space-x-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          <span className="text-sm text-gray-600">{feature}</span>
-                        </div>
-                      ))}
+                    <div>
+                      <h3 className="text-3xl font-bold text-gray-900">{service.title}</h3>
+                      <p className="text-lg text-red-600 font-medium">{service.description}</p>
                     </div>
+                  </div>
+                  <p className="text-gray-600 text-lg leading-relaxed">{service.details}</p>
+                  <div className="flex items-center space-x-4">
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span className="text-gray-700">Expert guidance throughout the process</span>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span className="text-gray-700">Personalized strategy for your situation</span>
+                  </div>
+                  <Link href={service.href}>
+                    <Button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
+                      Learn More
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </Link>
+                </div>
 
-                    <div className="border-t pt-4 space-y-2 mb-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Clock className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-600">Processing Time</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{service.processingTime}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <DollarSign className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-600">Starting From</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{service.startingPrice}</span>
-                      </div>
-                    </div>
-
-                    <Link href={service.href}>
-                      <Button className={`w-full bg-gradient-to-r ${service.color} hover:opacity-90`}>
-                        Learn More
-                        <ArrowRight className="ml-2 w-4 h-4" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
+                {/* Visual Element */}
+                <div className="flex-1 flex justify-center">
+                  <motion.div
+                    className={`w-80 h-80 bg-gradient-to-br ${service.color} rounded-3xl transform rotate-6 flex items-center justify-center relative overflow-hidden`}
+                    whileHover={{ rotate: 0, scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <motion.div
+                      className="absolute inset-0 bg-white/10"
+                      animate={{
+                        background: [
+                          "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                          "radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                          "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                        ],
+                      }}
+                      transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
+                    />
+                    <service.icon className="w-32 h-32 text-white/80" />
+                  </motion.div>
+                </div>
               </motion.div>
             ))}
           </div>
