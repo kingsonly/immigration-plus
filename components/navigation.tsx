@@ -20,7 +20,7 @@ const Navigation = () => {
       name: "Services",
       href: "/services",
       dropdown: [
-        { name: "All Services", href: "/services" },
+
         { name: "Permanent Residency", href: "/services/permanent-residency" },
         { name: "Business & Investor Immigration", href: "/services/business-immigration" },
         { name: "Study", href: "/services/study" },
@@ -29,6 +29,7 @@ const Navigation = () => {
         { name: "Visitor Visa", href: "/services/visitors-visa" },
         { name: "Citizenship & Integration", href: "/services/citizenship" },
         { name: "Refugee/Asylum Visa", href: "/services/refugee-hc" },
+        { name: "Recruitment", href: "/services/recruitment" },
       ],
     },
     { name: "Immigration Programs", href: "/programs" },
@@ -55,7 +56,8 @@ const Navigation = () => {
               <div key={item.name} className="relative group">
                 {item.dropdown ? (
                   <div className="relative">
-                    <button
+                    <Link
+                      href={item.href}
                       className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${pathname.startsWith(item.href)
                         ? "text-red-600 bg-red-50"
                         : "text-gray-700 hover:text-red-600 hover:bg-red-50"
@@ -63,7 +65,7 @@ const Navigation = () => {
                     >
                       <span>{item.name}</span>
                       <ChevronDown className="w-4 h-4" />
-                    </button>
+                    </Link>
                     <div className="absolute top-full left-0 mt-1 w-64 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                       {item.dropdown.map((subItem) => (
                         <Link

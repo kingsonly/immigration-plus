@@ -24,6 +24,7 @@ import {
   HeartHandshake,
   BriefcaseBusiness,
   ShieldCheck,
+  UserSearch,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -47,7 +48,7 @@ export default function HomePage() {
     {
       icon: Award, // Lucide icon symbolizing achievement and official status
       title: "Citizenship",
-      description: "Take the final step in your Canadian immigration journey by becoming a citizen.",
+      description: "Become a citizen and complete your Canadian journey.",
       details: "Your passport to full Canadian rights and responsibilities.",
       color: "from-red-600 to-pink-600",
       href: "/services/citizenship",
@@ -100,10 +101,21 @@ export default function HomePage() {
     {
       icon: ShieldCheck, // Lucide icon representing protection and humanitarian support
       title: "Refugee & H&C",
-      description: "Pathways for those seeking protection or facing exceptional hardship in Canada.",
-      details: "Support when safety, dignity, or compassion are at stake.",
+      description: "Support when safety, dignity, or compassion are at stake.",
+      details: "Compassionate support for those in vulnerable or life-threatening situations.",
       color: "from-pink-500 to-red-600",
       href: "/services/refugee-hc",
+    },
+
+    {
+      icon: UserSearch, // Lucide icon for recruitment and talent sourcing
+      title: "Recruitment Services",
+      description:
+        "Your gateway to hiring or working in Canada.",
+      details:
+        "Connecting skilled candidates with Canadian employers in sectors like hospitality, healthcare, tech, and agriculture.",
+      color: "from-red-500 to-red-600",
+      href: "/services/recruitment",
     }
   ];
 
