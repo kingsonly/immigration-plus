@@ -32,8 +32,8 @@ export default function RootLayout({
             <div className="grid md:grid-cols-4 gap-8">
               <div>
                 <div className="flex items-center space-x-2 mb-4">
-                  <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
-                    <MapPin className="w-4 h-4 text-white" />
+                  <div className="min-w-8 min-h-8 bg-gradient-to-r from-white to-white rounded-full flex items-center justify-center">
+                    <Image src="/logo.png" alt="logo" width={60} height={60} />
                   </div>
                   <span className="font-bold text-xl">Coming2Canada</span>
                 </div>

@@ -17,6 +17,8 @@ import {
   BriefcaseBusiness,
   Plane,
   HeartHandshake,
+  Award,
+  ShieldCheck,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -34,13 +36,12 @@ export default function ServicesPage() {
       href: "/services/permanent-residency",
     },
     {
-      icon: Rocket, // 🆕 Better fit for innovation and startups
-      title: "Start-Up Visa Program",
-      description: "Turn your innovative business idea into Canadian success",
-      details:
-        "The Start-up Visa Program targets immigrant entrepreneurs with innovative business ideas and the potential to create jobs for Canadians and compete on a global scale.",
+      icon: Award, // Lucide icon symbolizing achievement and official status
+      title: "Citizenship",
+      description: "Take the final step in your Canadian immigration journey by becoming a citizen.",
+      details: "Your passport to full Canadian rights and responsibilities.",
       color: "from-red-600 to-pink-600",
-      href: "/services/business-immigration",
+      href: "/services/citizenship",
     },
     {
       icon: BriefcaseBusiness, // 🆕 Better than generic "Users" for business/investment
@@ -58,7 +59,7 @@ export default function ServicesPage() {
       details:
         "Study permits allow international students to pursue education in Canada.",
       color: "from-red-500 to-red-700",
-      href: "/services/study-work-permits",
+      href: "/services/study",
     },
     {
       icon: Briefcase, // 🆕 Change from duplicate GraduationCap to Briefcase
@@ -67,7 +68,7 @@ export default function ServicesPage() {
       details:
         "Work permits provide opportunities to gain valuable Canadian work experience.",
       color: "from-red-500 to-red-700",
-      href: "/services/study-work-permits",
+      href: "/services/work-permit",
     },
     {
       icon: Plane, // 🆕 More intuitive for travel/visits than MapPin
@@ -76,7 +77,7 @@ export default function ServicesPage() {
       details:
         "Visitors visas allow you to visit Canada for a specific period of time.",
       color: "from-red-700 to-pink-500",
-      href: "/services/pnp",
+      href: "/services/visitors-visa",
     },
     {
       icon: HeartHandshake, // 🆕 Stronger emotional symbol for family reunification
@@ -87,6 +88,14 @@ export default function ServicesPage() {
       color: "from-pink-500 to-red-600",
       href: "/services/family-sponsorship",
     },
+    {
+      icon: ShieldCheck, // Lucide icon representing protection and humanitarian support
+      title: "Refugee & H&C",
+      description: "Pathways for those seeking protection or facing exceptional hardship in Canada.",
+      details: "Support when safety, dignity, or compassion are at stake.",
+      color: "from-pink-500 to-red-600",
+      href: "/services/refugee-hc",
+    }
   ];
 
 

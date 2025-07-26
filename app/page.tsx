@@ -23,6 +23,7 @@ import {
   Plane,
   HeartHandshake,
   BriefcaseBusiness,
+  ShieldCheck,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -32,71 +33,6 @@ export default function HomePage() {
   const [activeSection, setActiveSection] = useState(0)
   const { scrollYProgress } = useScroll()
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
-
-  // const services = [
-  //   {
-  //     icon: Home,
-  //     title: "Permanent Residency (PR)",
-  //     description: "Your pathway to calling Canada home permanently",
-  //     details:
-  //       "Permanent Residency allows you to live, work, and study anywhere in Canada. Through various programs like Express Entry, you can build a new life in one of the world's most welcoming countries.",
-  //     color: "from-red-500 to-red-600",
-  //     href: "/services/permanent-residency",
-  //   },
-  //   {
-  //     icon: Briefcase,
-  //     title: "Start-Up Visa Program",
-  //     description: "Turn your innovative business idea into Canadian success",
-  //     details:
-  //       "The Start-up Visa Program targets immigrant entrepreneurs with innovative business ideas and the potential to create jobs for Canadians and compete on a global scale.",
-  //     color: "from-red-600 to-pink-600",
-  //     href: "/services/business-immigration",
-  //   },
-  //   {
-  //     icon: Users,
-  //     title: "Business & Investor Immigration",
-  //     description: "Invest in your future and Canada's economy",
-  //     details:
-  //       "Various investor and business immigration programs allow you to immigrate to Canada by making a significant investment or starting a business that benefits the Canadian economy.",
-  //     color: "from-pink-600 to-red-500",
-  //     href: "/services/business-immigration",
-  //   },
-  //   {
-  //     icon: GraduationCap,
-  //     title: "Study",
-  //     description: "Educational opportunities await",
-  //     details:
-  //       "Study permits allow international students to pursue education in Canada.",
-  //     color: "from-red-500 to-red-700",
-  //     href: "/services/study-work-permits",
-  //   },
-  //   {
-  //     icon: GraduationCap,
-  //     title: "Work Permits",
-  //     description: "career opportunities await",
-  //     details:
-  //       "Work permits provide opportunities to gain valuable Canadian work experience.",
-  //     color: "from-red-500 to-red-700",
-  //     href: "/services/study-work-permits",
-  //   },
-  //   {
-  //     icon: MapPin,
-  //     title: "Visitors Visa",
-  //     description: "Welcome visitors from around the world",
-  //     details: "Visitors visas allow you to visit Canada for a specific period of time.",
-  //     color: "from-red-700 to-pink-500",
-  //     href: "/services/pnp",
-  //   },
-  //   {
-  //     icon: Heart,
-  //     title: "Family Sponsorship",
-  //     description: "Reunite with your loved ones in Canada",
-  //     details:
-  //       "Sponsor your spouse, children, parents, or grandparents to join you in Canada. Family reunification is a cornerstone of Canadian immigration policy.",
-  //     color: "from-pink-500 to-red-600",
-  //     href: "/services/family-sponsorship",
-  //   },
-  // ]
 
   const services = [
     {
@@ -109,13 +45,12 @@ export default function HomePage() {
       href: "/services/permanent-residency",
     },
     {
-      icon: Rocket, // 🆕 Better fit for innovation and startups
-      title: "Start-Up Visa Program",
-      description: "Turn your innovative business idea into Canadian success",
-      details:
-        "The Start-up Visa Program targets immigrant entrepreneurs with innovative business ideas and the potential to create jobs for Canadians and compete on a global scale.",
+      icon: Award, // Lucide icon symbolizing achievement and official status
+      title: "Citizenship",
+      description: "Take the final step in your Canadian immigration journey by becoming a citizen.",
+      details: "Your passport to full Canadian rights and responsibilities.",
       color: "from-red-600 to-pink-600",
-      href: "/services/business-immigration",
+      href: "/services/citizenship",
     },
     {
       icon: BriefcaseBusiness, // 🆕 Better than generic "Users" for business/investment
@@ -133,7 +68,7 @@ export default function HomePage() {
       details:
         "Study permits allow international students to pursue education in Canada.",
       color: "from-red-500 to-red-700",
-      href: "/services/study-work-permits",
+      href: "/services/study",
     },
     {
       icon: Briefcase, // 🆕 Change from duplicate GraduationCap to Briefcase
@@ -142,7 +77,7 @@ export default function HomePage() {
       details:
         "Work permits provide opportunities to gain valuable Canadian work experience.",
       color: "from-red-500 to-red-700",
-      href: "/services/study-work-permits",
+      href: "/services/work-permit",
     },
     {
       icon: Plane, // 🆕 More intuitive for travel/visits than MapPin
@@ -151,7 +86,7 @@ export default function HomePage() {
       details:
         "Visitors visas allow you to visit Canada for a specific period of time.",
       color: "from-red-700 to-pink-500",
-      href: "/services/pnp",
+      href: "/services/visitors-visa",
     },
     {
       icon: HeartHandshake, // 🆕 Stronger emotional symbol for family reunification
@@ -162,6 +97,14 @@ export default function HomePage() {
       color: "from-pink-500 to-red-600",
       href: "/services/family-sponsorship",
     },
+    {
+      icon: ShieldCheck, // Lucide icon representing protection and humanitarian support
+      title: "Refugee & H&C",
+      description: "Pathways for those seeking protection or facing exceptional hardship in Canada.",
+      details: "Support when safety, dignity, or compassion are at stake.",
+      color: "from-pink-500 to-red-600",
+      href: "/services/refugee-hc",
+    }
   ];
 
 
