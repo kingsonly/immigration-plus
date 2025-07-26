@@ -159,6 +159,27 @@ export default function PermanentResidencyPage() {
         "Humanitarian and compassionate (H&C) and policy-based streams offer permanent residency pathways for applicants in exceptional situations, such as hardship or long-term establishment in Canada, outside standard economic immigration programs.",
     },
   ];
+  const additionalSupport = [
+    {
+      icon: Clock, // CRS-based ranking and scoring
+      title: "Bridging Open Work Permit (BOWP)",
+      description:
+        "Support for eligible applicants whose work permits are expiring while awaiting a decision on their PR application.",
+    },
+    {
+      icon: ClipboardCheck, // Location-specific programs across provinces
+      title: "Credential Recognition & Licensing Guidance",
+      description:
+        "Support for regulated professions requiring credential evaluation and licensing before or after arrival.",
+    },
+    {
+      icon: Users, // For graduates pursuing PR
+      title: "Settlement & Integration Referrals",
+      description:
+        "Guidance on housing, job search tools, and integration programs through trusted partners and community organizations.",
+    },
+
+  ];
 
 
   const offerings = [
@@ -298,6 +319,7 @@ export default function PermanentResidencyPage() {
         </div>
       </section>
 
+      {/* Pathway Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -314,44 +336,6 @@ export default function PermanentResidencyPage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {
-              // [
-              //   {
-              //     icon: FileText,
-              //     title: "Express Entry System",
-              //     description:
-              //       "Express Entry manages applications for skilled workers through FSW, CEC, and FST. Candidates are ranked via CRS, with top applicants invited to apply and most receiving PR within six months.",
-              //   },
-              //   {
-              //     icon: FileText,
-              //     title: "Provincial Nominee Programs",
-              //     description:
-              //       "Each Canadian province (except Quebec) offers tailored immigration streams for skilled workers, graduates, semi-skilled workers, and entrepreneurs, accessible through Express Entry or direct provincial nomination pathways.",
-              //   },
-              //   {
-              //     icon: FileText,
-              //     title: "International Graduate Streams",
-              //     description:
-              //       "Canadian post-secondary graduates can fast-track permanent residency through programs like the Canadian Experience Class (CEC) or province-specific International Graduate streams under the Provincial Nominee Program (PNP).",
-              //   },
-              //   {
-              //     icon: FileText,
-              //     title: "Rural & Northern Immigration Pilot (RNIP/RCIP)",
-              //     description:
-              //       "Smaller Canadian towns run community-driven programs like the Rural Community Immigration Pilot, which replaced RNIP, to attract skilled workers with job offers and local support toward permanent residency.",
-              //   },
-              //   {
-              //     icon: Clock,
-              //     title: "Agri‑Food & Home Care Worker Pilots",
-              //     description:
-              //       "Canada offers sector-focused PR streams like the Agri-Food Pilot (for farm workers, extended to 2025) and Home Care Worker Pilots, providing direct permanent residency pathways for eligible caregivers and support workers.",
-              //   },
-              //   {
-              //     icon: Users,
-              //     title: "Humanitarian & Compassionate (H&C) & Public Policy Pathways",
-              //     description:
-              //       "Humanitarian and compassionate (H&C) and policy-based streams offer permanent residency pathways for applicants in exceptional situations, such as hardship or long-term establishment in Canada, outside standard economic immigration programs.",
-              //   },
-              // ]
               pathway.map((feature, index) => (
                 <motion.div
                   key={index}
@@ -416,6 +400,43 @@ export default function PermanentResidencyPage() {
                           </li>
                         ))}
                       </ul>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pathway Section */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">Additional Support</h2>
+
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {
+              additionalSupport.map((feature, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
+                    <CardContent className="p-6">
+                      <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <feature.icon className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+                      <p className="text-gray-600">{feature.description}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
