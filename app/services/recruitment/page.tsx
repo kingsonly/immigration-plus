@@ -1,368 +1,597 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
-  Home,
-  Briefcase,
   Users,
-  GraduationCap,
-  MapPin,
-  Heart,
-  ArrowRight,
-  CheckCircle,
+  Building2,
+  FileCheck,
   Clock,
   DollarSign,
-  FileText,
+  CheckCircle,
+  ArrowRight,
+  Briefcase,
+  Globe,
+  Shield,
+  Target,
+  Calendar,
+  AlertCircle,
+  Phone,
+  Mail,
 } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
 
 export default function RecruitmentPage() {
-  const services = [
+  const [activeStep, setActiveStep] = useState(0)
+
+  const lmiaStreams = [
     {
-      icon: Home,
-      title: "Permanent Residency (PR)",
-      description: "Your pathway to calling Canada home permanently",
-      features: [
-        "Express Entry System",
-        "Federal Skilled Worker Program",
-        "Canadian Experience Class",
-        "Federal Skilled Trades Program",
-      ],
-      processingTime: "6-12 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-500 to-red-600",
-      href: "/services/permanent-residency",
+      name: "High-Wage Stream",
+      description: "Job offers at or above the median provincial wage",
+      processingTime: "61 business days",
+      icon: <DollarSign className="h-6 w-6" />,
+      color: "bg-green-100 text-green-800",
     },
     {
-      icon: Briefcase,
-      title: "Business Immigration",
-      description: "Turn your business expertise into Canadian success",
-      features: [
-        "Start-up Visa Program",
-        "Self-employed Persons Program",
-        "Investor Programs",
-        "Entrepreneur Programs",
-      ],
-      processingTime: "12-24 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-600 to-pink-600",
-      href: "/services/business-immigration",
+      name: "Low-Wage Stream",
+      description: "Job offers below the median provincial wage",
+      processingTime: "61 business days",
+      icon: <Users className="h-6 w-6" />,
+      color: "bg-blue-100 text-blue-800",
     },
     {
-      icon: GraduationCap,
-      title: "Study & Work Permits",
-      description: "Education and career opportunities in Canada",
-      features: [
-        "Study Permit Applications",
-        "Work Permit Applications",
-        "Post-Graduation Work Permits",
-        "Co-op Work Permits",
-      ],
-      processingTime: "4-12 weeks",
-      startingPrice: "Contact for pricing",
-      color: "from-pink-600 to-red-500",
-      href: "/services/study-work-permits",
+      name: "Agricultural Stream",
+      description: "On-farm jobs in livestock, grains, and horticulture",
+      processingTime: "15 business days",
+      icon: <Target className="h-6 w-6" />,
+      color: "bg-amber-100 text-amber-800",
     },
     {
-      icon: Heart,
-      title: "Family Sponsorship",
-      description: "Reunite with your loved ones in Canada",
-      features: [
-        "Spouse/Partner Sponsorship",
-        "Dependent Children Sponsorship",
-        "Parent & Grandparent Program",
-        "Other Eligible Relatives",
-      ],
-      processingTime: "12-24 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-500 to-red-700",
-      href: "/services/family-sponsorship",
+      name: "Global Talent Stream",
+      description: "High-skilled positions in designated occupations",
+      processingTime: "8 business days",
+      icon: <Globe className="h-6 w-6" />,
+      color: "bg-purple-100 text-purple-800",
     },
     {
-      icon: MapPin,
-      title: "Provincial Nominee Program",
-      description: "Find your perfect province to call home",
-      features: [
-        "Ontario Immigrant Nominee Program",
-        "British Columbia PNP",
-        "Alberta Immigrant Nominee Program",
-        "Other Provincial Programs",
-      ],
-      processingTime: "6-18 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-700 to-pink-500",
-      href: "/services/pnp",
-    },
-    {
-      icon: Users,
-      title: "Citizenship Applications",
-      description: "Complete your journey to becoming a Canadian citizen",
-      features: [
-        "Citizenship Applications",
-        "Citizenship Test Preparation",
-        "Citizenship Ceremony Guidance",
-        "Urgent Processing Requests",
-      ],
-      processingTime: "12-18 months",
-      startingPrice: "Contact for pricing",
-      color: "from-pink-500 to-red-600",
-      href: "/services/citizenship",
+      name: "SAWP",
+      description: "Seasonal Agricultural Worker Program for partner countries",
+      processingTime: "8 business days",
+      icon: <Calendar className="h-6 w-6" />,
+      color: "bg-orange-100 text-orange-800",
     },
   ]
 
-  const processSteps = [
+  const applicationSteps = [
     {
-      step: "01",
-      title: "Initial Consultation",
-      description: "We assess your profile and discuss your immigration goals",
+      title: "Eligibility Assessment",
+      description:
+        "We begin by reviewing the job offer, employer profile, and program requirements to confirm whether an LMIA is necessary for your situation.",
+      icon: <FileCheck className="h-8 w-8" />,
     },
     {
-      step: "02",
-      title: "Strategy Development",
-      description: "We create a personalized immigration strategy for your situation",
-    },
-    {
-      step: "03",
       title: "Document Preparation",
-      description: "We help you gather and prepare all required documents",
+      description:
+        "Our team organizes all required documents to establish business legitimacy, verify wage accuracy, and confirm employment conditions outlined in the job offer.",
+      icon: <Building2 className="h-8 w-8" />,
     },
     {
-      step: "04",
+      title: "Stream Selection",
+      description:
+        "Based on the position's wage level and industry, we identify whether you qualify under the high-wage, low-wage, or agricultural streams, ensuring compliance with the latest ESDC guidelines.",
+      icon: <Target className="h-8 w-8" />,
+    },
+    {
       title: "Application Submission",
-      description: "We submit your application and monitor its progress",
+      description:
+        "We file the complete LMIA package through the appropriate channels — either the LMIA Online Portal or a designated ESDC email office — and track its progress.",
+      icon: <ArrowRight className="h-8 w-8" />,
     },
     {
-      step: "05",
-      title: "Ongoing Support",
-      description: "We provide support until you achieve your immigration goals",
+      title: "Recruitment Compliance",
+      description:
+        "We assist you in meeting advertising and recruitment obligations, including drafting job postings and compiling interview records, to prove efforts to hire Canadians first.",
+      icon: <Users className="h-8 w-8" />,
     },
+    {
+      title: "Follow-Up & Inspection Readiness",
+      description:
+        "We manage communication with ESDC officers, respond to document requests, and prepare you for potential on-site inspections to ensure a smooth approval process.",
+      icon: <Shield className="h-8 w-8" />,
+    },
+  ]
+
+  const processingTimes = [
+    { stream: "Global Talent Stream", time: "8 business days", priority: "high" },
+    { stream: "Agricultural Stream", time: "15 business days", priority: "medium" },
+    { stream: "Seasonal Agricultural Worker Program", time: "8 business days", priority: "high" },
+    { stream: "High-Wage Stream", time: "61 business days", priority: "low" },
+    { stream: "Low-Wage Stream", time: "61 business days", priority: "low" },
+  ]
+
+  const sectors = [
+    { name: "Hospitality", icon: "🏨", description: "Hotels, restaurants, tourism" },
+    { name: "Healthcare", icon: "🏥", description: "Nurses, caregivers, support staff" },
+    { name: "Technology", icon: "💻", description: "Software, IT, engineering" },
+    { name: "Agriculture", icon: "🌾", description: "Farm workers, seasonal positions" },
   ]
 
   return (
-    <div className="min-h-screen bg-white pt-16">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 to-white">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-red-50 via-white to-pink-50 relative overflow-hidden">
-        <motion.div
-          className="absolute top-20 right-10 w-32 h-32 bg-gradient-to-r from-red-200 to-pink-200 rounded-full opacity-20"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-        />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Recruitment
-              </span>
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Comprehensive Canadian immigration services tailored to your unique situation. From permanent residency to
-              family reunification, we're here to guide you every step of the way.
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <div className="flex justify-center mb-6">
+              <div className="p-4 bg-gradient-to-r from-red-600 to-red-700 rounded-full">
+                <Briefcase className="h-12 w-12 text-white" />
+              </div>
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">Recruitment Services</h1>
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-8 leading-relaxed">
+              Your pathway to hiring or working in Canada starts here — at TENTACULAR IMMIGRATION SOLUTIONS LTD, we connect skilled and
+              reliable international candidates with Canadian employers across key sectors like hospitality, healthcare,
+              tech, and agriculture. Through compliant, efficient recruitment and immigration support, we ensure every
+              match is tailored to the unique needs of both employers and job seekers.
             </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Services Grid */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
               >
-                <Card className="h-full hover:shadow-xl transition-all duration-300 group">
-                  <CardContent className="p-6">
-                    <div
-                      className={`w-16 h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
-                    >
-                      <service.icon className="w-8 h-8 text-white" />
-                    </div>
-
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">{service.title}</h3>
-                    <p className="text-gray-600 mb-4">{service.description}</p>
-
-                    <div className="space-y-2 mb-6">
-                      {service.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center space-x-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          <span className="text-sm text-gray-600">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="border-t pt-4 space-y-2 mb-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Clock className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-600">Processing Time</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{service.processingTime}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <DollarSign className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-600">Starting From</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{service.startingPrice}</span>
-                      </div>
-                    </div>
-
-                    <Link href={service.href}>
-                      <Button className={`w-full bg-gradient-to-r ${service.color} hover:opacity-90`}>
-                        Learn More
-                        <ArrowRight className="ml-2 w-4 h-4" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Process Section */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Our Process
-              </span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We follow a proven 5-step process to ensure your immigration success
-            </p>
-          </motion.div>
-
-          <div className="relative">
-            {/* Process Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-red-500 to-pink-600 hidden lg:block"></div>
-
-            <div className="space-y-12">
-              {processSteps.map((step, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className={`flex items-center ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} flex-col lg:flex gap-8`}
-                >
-                  <div className="flex-1">
-                    <Card className="hover:shadow-lg transition-shadow duration-300">
-                      <CardContent className="p-6">
-                        <div className="flex items-center space-x-4 mb-4">
-                          <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
-                            <span className="text-white font-bold">{step.step}</span>
-                          </div>
-                          <h3 className="text-xl font-bold text-gray-900">{step.title}</h3>
-                        </div>
-                        <p className="text-gray-600">{step.description}</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  {/* Center Circle for Desktop */}
-                  <div className="hidden lg:block w-6 h-6 bg-gradient-to-r from-red-500 to-red-600 rounded-full border-4 border-white shadow-lg"></div>
-
-                  <div className="flex-1 lg:block hidden"></div>
-                </motion.div>
-              ))}
+                <Phone className="mr-2 h-5 w-5" />
+                Start Hiring Process
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-red-600 text-red-600 hover:bg-red-50 bg-transparent"
+              >
+                <Mail className="mr-2 h-5 w-5" />
+                Find Job Opportunities
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Why Choose Our Services */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">Why Choose Our Services?</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We provide comprehensive support throughout your entire immigration journey
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: FileText,
-                title: "Expert Documentation",
-                description:
-                  "We ensure all your documents are properly prepared and submitted according to the latest requirements.",
-              },
-              {
-                icon: Clock,
-                title: "Timely Processing",
-                description:
-                  "We monitor your application closely and keep you updated on its progress every step of the way.",
-              },
-              {
-                icon: Users,
-                title: "Personalized Support",
-                description:
-                  "Each client receives individual attention and a customized strategy based on their unique situation.",
-              },
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
-                <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
-                  <CardContent className="p-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <feature.icon className="w-8 h-8 text-white" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                    <p className="text-gray-600">{feature.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
+      {/* Key Sectors */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Key Sectors We Serve</h2>
+            <p className="text-lg text-gray-600">Connecting talent across Canada's growing industries</p>
+          </div>
+          <div className="grid md:grid-cols-4 gap-6">
+            {sectors.map((sector, index) => (
+              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <div className="text-4xl mb-4">{sector.icon}</div>
+                  <h3 className="text-xl font-semibold mb-2">{sector.name}</h3>
+                  <p className="text-gray-600">{sector.description}</p>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-red-500 to-pink-600">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h2 className="text-4xl font-bold text-white mb-6">Ready to Get Started?</h2>
-            <p className="text-xl text-white/90 mb-8">
-              Book a free consultation to discuss your immigration goals and find the right service for you.
+      {/* LMIA Support Services */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">LMIA Support Services at TENTACULAR IMMIGRATION SOLUTIONS LTD</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              We specialize in providing Canadian employers with end-to-end support for obtaining a Labour Market Impact
+              Assessment (LMIA) — a key requirement to hire foreign workers under the Temporary Foreign Worker Program
+              (TFWP).
             </p>
-            <Link href="/contact">
+          </div>
+
+          <Tabs defaultValue="what-is-lmia" className="w-full">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="what-is-lmia">What is LMIA?</TabsTrigger>
+              <TabsTrigger value="who-needs">Who Needs It?</TabsTrigger>
+              <TabsTrigger value="support-areas">Support Areas</TabsTrigger>
+              <TabsTrigger value="streams">LMIA Streams</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="what-is-lmia" className="mt-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <FileCheck className="mr-2 h-6 w-6 text-red-600" />
+                    What is an LMIA?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">
+                    An LMIA is a document issued by Employment and Social Development Canada (ESDC) that confirms:
+                  </p>
+                  <div className="space-y-3">
+                    <div className="flex items-start">
+                      <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                      <span>There is a genuine need for a foreign worker</span>
+                    </div>
+                    <div className="flex items-start">
+                      <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                      <span>No qualified Canadians or permanent residents are available to fill the position</span>
+                    </div>
+                  </div>
+                  <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                    <p className="text-blue-800 font-medium">
+                      A positive LMIA enables a foreign worker to apply for a Canadian work permit.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="who-needs" className="mt-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Users className="mr-2 h-6 w-6 text-red-600" />
+                    Who Needs an LMIA?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <h4 className="font-semibold mb-3 text-red-600">You may require an LMIA if hiring:</h4>
+                      <ul className="space-y-2">
+                        <li className="flex items-center">
+                          <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
+                          High-wage or low-wage workers
+                        </li>
+                        <li className="flex items-center">
+                          <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
+                          Agricultural or seasonal workers
+                        </li>
+                        <li className="flex items-center">
+                          <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
+                          Occupations not covered under IMP
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold mb-3 text-green-600">No LMIA required for:</h4>
+                      <ul className="space-y-2">
+                        <li className="flex items-center">
+                          <AlertCircle className="h-4 w-4 text-amber-600 mr-2" />
+                          Francophone Mobility positions
+                        </li>
+                        <li className="flex items-center">
+                          <AlertCircle className="h-4 w-4 text-amber-600 mr-2" />
+                          Certain trade agreement positions
+                        </li>
+                        <li className="flex items-center">
+                          <AlertCircle className="h-4 w-4 text-amber-600 mr-2" />
+                          Other exemption code positions
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="support-areas" className="mt-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Building2 className="mr-2 h-6 w-6 text-red-600" />
+                    LMIA Support in Calgary and Across Canada
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div>
+                      <h4 className="font-semibold mb-4">We help employers who:</h4>
+                      <ul className="space-y-3">
+                        <li className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                          <span>Are legally operating and compliant</span>
+                        </li>
+                        <li className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                          <span>Have a valid business address and operations</span>
+                        </li>
+                        <li className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                          <span>Offer fair wages and stable job conditions</span>
+                        </li>
+                        <li className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                          <span>Can prove genuine recruitment efforts for Canadians first</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold mb-4">We also support with:</h4>
+                      <ul className="space-y-3">
+                        <li className="flex items-start">
+                          <ArrowRight className="h-5 w-5 text-red-600 mr-3 mt-0.5 flex-shrink-0" />
+                          <span>Pre-inspection readiness</span>
+                        </li>
+                        <li className="flex items-start">
+                          <ArrowRight className="h-5 w-5 text-red-600 mr-3 mt-0.5 flex-shrink-0" />
+                          <span>Wage benchmarking</span>
+                        </li>
+                        <li className="flex items-start">
+                          <ArrowRight className="h-5 w-5 text-red-600 mr-3 mt-0.5 flex-shrink-0" />
+                          <span>Offer of employment compliance</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="streams" className="mt-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {lmiaStreams.map((stream, index) => (
+                  <Card key={index} className="hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <div className={`p-2 rounded-lg ${stream.color} mr-3`}>{stream.icon}</div>
+                          <CardTitle className="text-lg">{stream.name}</CardTitle>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600 mb-4">{stream.description}</p>
+                      <div className="flex items-center">
+                        <Clock className="h-4 w-4 text-gray-500 mr-2" />
+                        <span className="text-sm font-medium">{stream.processingTime}</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </section>
+
+      {/* Application Process */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">🛠️ LMIA Application Process</h2>
+            <p className="text-lg text-gray-600">Our comprehensive 6-step approach to LMIA success</p>
+          </div>
+
+          <div className="space-y-8">
+            {applicationSteps.map((step, index) => (
+              <Card
+                key={index}
+                className={`cursor-pointer transition-all duration-300 ${activeStep === index ? "ring-2 ring-red-500 shadow-lg" : "hover:shadow-md"
+                  }`}
+                onClick={() => setActiveStep(index)}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-start">
+                    <div
+                      className={`p-3 rounded-full mr-6 flex-shrink-0 ${activeStep === index
+                        ? "bg-gradient-to-r from-red-600 to-red-700 text-white"
+                        : "bg-gray-100 text-gray-600"
+                        }`}
+                    >
+                      {step.icon}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center mb-2">
+                        <Badge variant="outline" className="mr-3">
+                          Step {index + 1}
+                        </Badge>
+                        <h3 className="text-xl font-semibold">{step.title}</h3>
+                      </div>
+                      <p className="text-gray-600 leading-relaxed">{step.description}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Processing Times */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">⏳ LMIA Processing Times</h2>
+            <p className="text-lg text-gray-600 mb-2">Current processing times as of April 2025</p>
+          </div>
+
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle>LMIA Streams and Duration</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left py-3 px-4 font-semibold">Stream</th>
+                      <th className="text-left py-3 px-4 font-semibold">Processing Time</th>
+                      <th className="text-left py-3 px-4 font-semibold">Priority</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {processingTimes.map((item, index) => (
+                      <tr key={index} className="border-b hover:bg-gray-50">
+                        <td className="py-3 px-4 font-medium">{item.stream}</td>
+                        <td className="py-3 px-4">{item.time}</td>
+                        <td className="py-3 px-4">
+                          <Badge
+                            variant={
+                              item.priority === "high"
+                                ? "default"
+                                : item.priority === "medium"
+                                  ? "secondary"
+                                  : "outline"
+                            }
+                            className={
+                              item.priority === "high"
+                                ? "bg-green-100 text-green-800"
+                                : item.priority === "medium"
+                                  ? "bg-amber-100 text-amber-800"
+                                  : "bg-gray-100 text-gray-800"
+                            }
+                          >
+                            {item.priority === "high"
+                              ? "High Priority"
+                              : item.priority === "medium"
+                                ? "Medium Priority"
+                                : "Standard"}
+                          </Badge>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-blue-50 border-blue-200">
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold mb-4 text-blue-900">🔍 What this means for you</h3>
+              <div className="space-y-2 text-blue-800">
+                <p>
+                  • <strong>Global Talent & SAWP</strong> receive priority processing—expect results in just over a
+                  week.
+                </p>
+                <p>
+                  • <strong>High- and Low-Wage</strong> applications currently average about 3 months (61 business
+                  days).
+                </p>
+                <p>
+                  • <strong>Agricultural LMIAs</strong> are processed in approximately 3 weeks.
+                </p>
+                <p>
+                  • <strong>Planning ahead is crucial</strong>—starting early can help avoid delays if your timeline is
+                  tight.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Fees and Planning */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">🧾 LMIA Fees & Planning</h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="text-center">
+              <CardContent className="p-6">
+                <DollarSign className="h-12 w-12 text-red-600 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Application Fee</h3>
+                <p className="text-3xl font-bold text-red-600 mb-2">$1,000 CAD</p>
+                <p className="text-gray-600">per position (employer-paid)</p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center">
+              <CardContent className="p-6">
+                <Calendar className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Application Window</h3>
+                <p className="text-lg font-medium text-blue-600 mb-2">Up to 6 months</p>
+                <p className="text-gray-600">before the intended hire date</p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center">
+              <CardContent className="p-6">
+                <AlertCircle className="h-12 w-12 text-amber-600 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Exceptions</h3>
+                <p className="text-lg font-medium text-amber-600 mb-2">Special Cases</p>
+                <p className="text-gray-600">Some caregivers and low-income families</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* External Representation */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <Card className="bg-gradient-to-r from-red-600 to-red-700 text-white">
+            <CardContent className="p-8">
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                  <h2 className="text-3xl font-bold mb-4">💼 External Representation You Can Trust</h2>
+                  <p className="text-red-100 mb-6">
+                    As authorized representatives, TENTACULAR IMMIGRATION SOLUTIONS LTD can act on your behalf throughout the LMIA
+                    process. Our licensed consultants ensure:
+                  </p>
+                  <ul className="space-y-3">
+                    <li className="flex items-center">
+                      <CheckCircle className="h-5 w-5 mr-3 flex-shrink-0" />
+                      <span>Proper stream selection</span>
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="h-5 w-5 mr-3 flex-shrink-0" />
+                      <span>Full compliance with federal standards</span>
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="h-5 w-5 mr-3 flex-shrink-0" />
+                      <span>Ongoing advice throughout the hiring and permit stages</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="text-center">
+                  <Shield className="h-24 w-24 mx-auto mb-6 text-red-200" />
+                  <Button size="lg" variant="secondary" className="bg-white text-red-600 hover:bg-red-50">
+                    <Phone className="mr-2 h-5 w-5" />
+                    Get Expert Representation
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Work with TENTACULAR IMMIGRATION SOLUTIONS LTD */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">🌍 Work with TENTACULAR IMMIGRATION SOLUTIONS LTD</h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
+            From small businesses to large employers, we help you build your team through lawful, timely, and
+            well-documented LMIA applications. With deep knowledge of Alberta's labour market and a national reach, we
+            are your trusted partner for compliant hiring.
+          </p>
+          <div className="bg-gradient-to-r from-red-50 to-red-100 rounded-lg p-8 mb-8">
+            <h3 className="text-2xl font-bold text-red-800 mb-4">Ready to hire internationally with confidence?</h3>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold"
+                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
               >
-                Book Free Consultation
+                <Phone className="mr-2 h-5 w-5" />
+                Start Your LMIA Application
               </Button>
-            </Link>
-          </motion.div>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-red-600 text-red-600 hover:bg-red-50 bg-transparent"
+              >
+                <Mail className="mr-2 h-5 w-5" />
+                Schedule Consultation
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
     </div>

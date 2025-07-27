@@ -1,144 +1,216 @@
 "use client"
 
+import { useState } from "react"
 import { motion } from "framer-motion"
 import {
-  Home,
-  Briefcase,
-  Users,
-  GraduationCap,
-  MapPin,
-  Heart,
-  ArrowRight,
-  CheckCircle,
-  Clock,
-  DollarSign,
+  BookOpen,
   FileText,
+  Calculator,
+  Clock,
+  ArrowRight,
+  Search,
+  Filter,
+  Calendar,
+  User,
+  ExternalLink,
+  CheckCircle,
+  AlertCircle,
+  Info,
+  Lightbulb,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Link from "next/link"
 
 export default function ResourcesPage() {
-  const services = [
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("all")
+
+  const categories = [
+    { id: "all", label: "All Resources", count: 24 },
+    { id: "guides", label: "Immigration Guides", count: 8 },
+    { id: "checklists", label: "Checklists", count: 6 },
+    { id: "calculators", label: "Calculators", count: 4 },
+    { id: "news", label: "Immigration News", count: 6 },
+  ]
+
+  const featuredResources = [
     {
-      icon: Home,
-      title: "Permanent Residency (PR)",
-      description: "Your pathway to calling Canada home permanently",
-      features: [
-        "Express Entry System",
-        "Federal Skilled Worker Program",
-        "Canadian Experience Class",
-        "Federal Skilled Trades Program",
-      ],
-      processingTime: "6-12 months",
-      startingPrice: "Contact for pricing",
+      title: "Complete Express Entry Guide 2024",
+      description:
+        "Everything you need to know about Canada's Express Entry system, including CRS calculator, document requirements, and step-by-step application process.",
+      type: "guide",
+      category: "guides",
+      readTime: "15 min read",
+      downloadCount: "2.5K",
+      lastUpdated: "2024-01-15",
+      featured: true,
+      icon: BookOpen,
       color: "from-red-500 to-red-600",
-      href: "/services/permanent-residency",
     },
     {
-      icon: Briefcase,
-      title: "Business Immigration",
-      description: "Turn your business expertise into Canadian success",
-      features: [
-        "Start-up Visa Program",
-        "Self-employed Persons Program",
-        "Investor Programs",
-        "Entrepreneur Programs",
-      ],
-      processingTime: "12-24 months",
-      startingPrice: "Contact for pricing",
+      title: "Provincial Nominee Program Comparison",
+      description:
+        "Compare all Canadian PNP programs side-by-side. Find the best province for your profile with our comprehensive comparison tool.",
+      type: "calculator",
+      category: "calculators",
+      readTime: "Interactive",
+      downloadCount: "1.8K",
+      lastUpdated: "2024-01-10",
+      featured: true,
+      icon: Calculator,
       color: "from-red-600 to-pink-600",
-      href: "/services/business-immigration",
     },
     {
-      icon: GraduationCap,
-      title: "Study & Work Permits",
-      description: "Education and career opportunities in Canada",
-      features: [
-        "Study Permit Applications",
-        "Work Permit Applications",
-        "Post-Graduation Work Permits",
-        "Co-op Work Permits",
-      ],
-      processingTime: "4-12 weeks",
-      startingPrice: "Contact for pricing",
+      title: "Document Checklist for PR Applications",
+      description:
+        "Never miss a document again! Complete checklist for permanent residency applications with tips on how to obtain each document.",
+      type: "checklist",
+      category: "checklists",
+      readTime: "5 min read",
+      downloadCount: "3.2K",
+      lastUpdated: "2024-01-12",
+      featured: true,
+      icon: CheckCircle,
       color: "from-pink-600 to-red-500",
-      href: "/services/study-work-permits",
-    },
-    {
-      icon: Heart,
-      title: "Family Sponsorship",
-      description: "Reunite with your loved ones in Canada",
-      features: [
-        "Spouse/Partner Sponsorship",
-        "Dependent Children Sponsorship",
-        "Parent & Grandparent Program",
-        "Other Eligible Relatives",
-      ],
-      processingTime: "12-24 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-500 to-red-700",
-      href: "/services/family-sponsorship",
-    },
-    {
-      icon: MapPin,
-      title: "Provincial Nominee Program",
-      description: "Find your perfect province to call home",
-      features: [
-        "Ontario Immigrant Nominee Program",
-        "British Columbia PNP",
-        "Alberta Immigrant Nominee Program",
-        "Other Provincial Programs",
-      ],
-      processingTime: "6-18 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-700 to-pink-500",
-      href: "/services/pnp",
-    },
-    {
-      icon: Users,
-      title: "Citizenship Applications",
-      description: "Complete your journey to becoming a Canadian citizen",
-      features: [
-        "Citizenship Applications",
-        "Citizenship Test Preparation",
-        "Citizenship Ceremony Guidance",
-        "Urgent Processing Requests",
-      ],
-      processingTime: "12-18 months",
-      startingPrice: "Contact for pricing",
-      color: "from-pink-500 to-red-600",
-      href: "/services/citizenship",
     },
   ]
 
-  const processSteps = [
+  const resources = [
     {
-      step: "01",
-      title: "Initial Consultation",
-      description: "We assess your profile and discuss your immigration goals",
+      title: "How to Improve Your CRS Score",
+      description: "Proven strategies to boost your Comprehensive Ranking System score and get an ITA faster.",
+      type: "guide",
+      category: "guides",
+      readTime: "8 min read",
+      author: "Sarah Johnson",
+      date: "2024-01-20",
+      tags: ["Express Entry", "CRS", "Tips"],
     },
     {
-      step: "02",
-      title: "Strategy Development",
-      description: "We create a personalized immigration strategy for your situation",
+      title: "Study Permit Application Checklist",
+      description: "Complete list of documents and requirements for Canadian study permit applications.",
+      type: "checklist",
+      category: "checklists",
+      readTime: "3 min read",
+      author: "Michael Chen",
+      date: "2024-01-18",
+      tags: ["Study Permit", "Students", "Documents"],
     },
     {
-      step: "03",
-      title: "Document Preparation",
-      description: "We help you gather and prepare all required documents",
+      title: "Business Immigration Requirements Calculator",
+      description: "Calculate if you meet the requirements for various Canadian business immigration programs.",
+      type: "calculator",
+      category: "calculators",
+      readTime: "Interactive",
+      author: "Priya Patel",
+      date: "2024-01-16",
+      tags: ["Business Immigration", "Calculator", "Requirements"],
     },
     {
-      step: "04",
-      title: "Application Submission",
-      description: "We submit your application and monitor its progress",
+      title: "New Immigration Pathways Announced for 2024",
+      description: "Latest updates on new immigration programs and changes to existing pathways.",
+      type: "news",
+      category: "news",
+      readTime: "6 min read",
+      author: "Immigration Team",
+      date: "2024-01-22",
+      tags: ["News", "2024", "Updates"],
     },
     {
-      step: "05",
-      title: "Ongoing Support",
-      description: "We provide support until you achieve your immigration goals",
+      title: "Family Sponsorship Processing Times",
+      description: "Current processing times for all family sponsorship programs with tips to avoid delays.",
+      type: "guide",
+      category: "guides",
+      readTime: "10 min read",
+      author: "Sarah Johnson",
+      date: "2024-01-14",
+      tags: ["Family Sponsorship", "Processing Times", "Tips"],
+    },
+    {
+      title: "Language Test Preparation Guide",
+      description: "How to prepare for IELTS, CELPIP, TEF, and TCF tests to maximize your language scores.",
+      type: "guide",
+      category: "guides",
+      readTime: "12 min read",
+      author: "Michael Chen",
+      date: "2024-01-10",
+      tags: ["Language Tests", "IELTS", "CELPIP", "Preparation"],
     },
   ]
+
+  const tools = [
+    {
+      name: "CRS Score Calculator",
+      description: "Calculate your Comprehensive Ranking System score for Express Entry",
+      icon: Calculator,
+      color: "from-blue-500 to-blue-600",
+      link: "#",
+    },
+    {
+      name: "Processing Time Tracker",
+      description: "Track current processing times for all immigration programs",
+      icon: Clock,
+      color: "from-green-500 to-green-600",
+      link: "#",
+    },
+    {
+      name: "Document Checklist Generator",
+      description: "Generate personalized document checklists for your application",
+      icon: FileText,
+      color: "from-purple-500 to-purple-600",
+      link: "#",
+    },
+    {
+      name: "Cost Calculator",
+      description: "Calculate total costs for your immigration application",
+      icon: Calculator,
+      color: "from-orange-500 to-orange-600",
+      link: "#",
+    },
+  ]
+
+  const immigrationNews = [
+    {
+      title: "Express Entry Draw Results - January 2024",
+      summary: "Latest Express Entry draw invited 3,500 candidates with a minimum CRS score of 524.",
+      date: "2024-01-24",
+      category: "Express Entry",
+      urgent: false,
+    },
+    {
+      title: "New Provincial Nominee Allocations Announced",
+      summary: "IRCC announces increased PNP allocations for 2024, with Ontario receiving the largest increase.",
+      date: "2024-01-22",
+      category: "PNP",
+      urgent: true,
+    },
+    {
+      title: "Changes to Study Permit Requirements",
+      summary: "New financial requirements and attestation letters now required for study permit applications.",
+      date: "2024-01-20",
+      category: "Study Permits",
+      urgent: true,
+    },
+    {
+      title: "Family Sponsorship Program Updates",
+      summary: "Processing times reduced for spouse sponsorship applications, new online portal launched.",
+      date: "2024-01-18",
+      category: "Family Sponsorship",
+      urgent: false,
+    },
+  ]
+
+  const filteredResources = resources.filter((resource) => {
+    const matchesSearch =
+      resource.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      resource.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      resource.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+    const matchesCategory = selectedCategory === "all" || resource.category === selectedCategory
+    return matchesSearch && matchesCategory
+  })
 
   return (
     <div className="min-h-screen bg-white pt-16">
@@ -159,81 +231,52 @@ export default function ResourcesPage() {
           >
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Business Immigration
+                Immigration Resources
               </span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Comprehensive Canadian immigration services tailored to your unique situation. From permanent residency to
-              family reunification, we're here to guide you every step of the way.
+              Access our comprehensive library of immigration guides, tools, calculators, and up-to-date news to help
+              you navigate your Canadian immigration journey with confidence.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Services Grid */}
-      <section className="py-20 bg-white">
+      {/* Search and Filter */}
+      <section className="py-12 bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
-                <Card className="h-full hover:shadow-xl transition-all duration-300 group">
-                  <CardContent className="p-6">
-                    <div
-                      className={`w-16 h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
-                    >
-                      <service.icon className="w-8 h-8 text-white" />
-                    </div>
-
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">{service.title}</h3>
-                    <p className="text-gray-600 mb-4">{service.description}</p>
-
-                    <div className="space-y-2 mb-6">
-                      {service.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center space-x-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          <span className="text-sm text-gray-600">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="border-t pt-4 space-y-2 mb-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Clock className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-600">Processing Time</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{service.processingTime}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <DollarSign className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-600">Starting From</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{service.startingPrice}</span>
-                      </div>
-                    </div>
-
-                    <Link href={service.href}>
-                      <Button className={`w-full bg-gradient-to-r ${service.color} hover:opacity-90`}>
-                        Learn More
-                        <ArrowRight className="ml-2 w-4 h-4" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Input
+                type="text"
+                placeholder="Search resources..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <div className="flex items-center space-x-4">
+              <Filter className="text-gray-400 w-5 h-5" />
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-48">
+                  <SelectValue placeholder="Filter by category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.label} ({category.count})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Process Section */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      {/* Featured Resources */}
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -243,101 +286,47 @@ export default function ResourcesPage() {
           >
             <h2 className="text-4xl font-bold mb-4">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Our Process
+                Featured Resources
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We follow a proven 5-step process to ensure your immigration success
+              Our most popular and comprehensive immigration resources
             </p>
           </motion.div>
 
-          <div className="relative">
-            {/* Process Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-red-500 to-pink-600 hidden lg:block"></div>
-
-            <div className="space-y-12">
-              {processSteps.map((step, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className={`flex items-center ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} flex-col lg:flex gap-8`}
-                >
-                  <div className="flex-1">
-                    <Card className="hover:shadow-lg transition-shadow duration-300">
-                      <CardContent className="p-6">
-                        <div className="flex items-center space-x-4 mb-4">
-                          <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
-                            <span className="text-white font-bold">{step.step}</span>
-                          </div>
-                          <h3 className="text-xl font-bold text-gray-900">{step.title}</h3>
-                        </div>
-                        <p className="text-gray-600">{step.description}</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  {/* Center Circle for Desktop */}
-                  <div className="hidden lg:block w-6 h-6 bg-gradient-to-r from-red-500 to-red-600 rounded-full border-4 border-white shadow-lg"></div>
-
-                  <div className="flex-1 lg:block hidden"></div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose Our Services */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">Why Choose Our Services?</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We provide comprehensive support throughout your entire immigration journey
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: FileText,
-                title: "Expert Documentation",
-                description:
-                  "We ensure all your documents are properly prepared and submitted according to the latest requirements.",
-              },
-              {
-                icon: Clock,
-                title: "Timely Processing",
-                description:
-                  "We monitor your application closely and keep you updated on its progress every step of the way.",
-              },
-              {
-                icon: Users,
-                title: "Personalized Support",
-                description:
-                  "Each client receives individual attention and a customized strategy based on their unique situation.",
-              },
-            ].map((feature, index) => (
+          <div className="grid lg:grid-cols-3 gap-8">
+            {featuredResources.map((resource, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
+                <Card className="h-full hover:shadow-xl transition-all duration-300 group">
                   <CardContent className="p-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <feature.icon className="w-8 h-8 text-white" />
+                    <div
+                      className={`w-16 h-16 bg-gradient-to-r ${resource.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+                    >
+                      <resource.icon className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                    <p className="text-gray-600">{feature.description}</p>
+
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{resource.title}</h3>
+                    <p className="text-gray-600 mb-4">{resource.description}</p>
+
+                    <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                      <span>{resource.readTime}</span>
+                      <span>{resource.downloadCount} downloads</span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-400">
+                        Updated {new Date(resource.lastUpdated).toLocaleDateString()}
+                      </span>
+                      <Button className={`bg-gradient-to-r ${resource.color} hover:opacity-90`}>
+                        Access Resource
+                        <ArrowRight className="ml-2 w-4 h-4" />
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -346,18 +335,230 @@ export default function ResourcesPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Immigration Tools */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">Immigration Tools</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Interactive tools to help you assess your eligibility and plan your immigration journey
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {tools.map((tool, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <Card className="h-full hover:shadow-lg transition-shadow duration-300 group cursor-pointer">
+                  <CardContent className="p-6 text-center">
+                    <div
+                      className={`w-16 h-16 bg-gradient-to-r ${tool.color} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}
+                    >
+                      <tool.icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-3">{tool.name}</h3>
+                    <p className="text-gray-600 text-sm">{tool.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Latest Immigration News */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                Latest Immigration News
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Stay updated with the latest changes and announcements in Canadian immigration
+            </p>
+          </motion.div>
+
+          <div className="space-y-6">
+            {immigrationNews.map((news, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <Card className="hover:shadow-lg transition-shadow duration-300">
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3 mb-2">
+                          {news.urgent && (
+                            <div className="flex items-center space-x-1 text-red-600">
+                              <AlertCircle className="w-4 h-4" />
+                              <span className="text-xs font-medium">URGENT</span>
+                            </div>
+                          )}
+                          <span className="text-sm text-gray-500">{news.category}</span>
+                          <span className="text-sm text-gray-400">•</span>
+                          <span className="text-sm text-gray-500">{new Date(news.date).toLocaleDateString()}</span>
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">{news.title}</h3>
+                        <p className="text-gray-600">{news.summary}</p>
+                      </div>
+                      <Button variant="outline" size="sm" className="ml-4 bg-transparent">
+                        Read More
+                        <ExternalLink className="ml-2 w-4 h-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
+              View All News
+              <ArrowRight className="ml-2 w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Resource Library */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">Resource Library</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Browse our complete collection of immigration guides, checklists, and helpful resources
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredResources.map((resource, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                  <CardContent className="p-6">
+                    <div className="flex items-center space-x-2 mb-3">
+                      <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-red-600 rounded-lg flex items-center justify-center">
+                        {resource.type === "guide" && <BookOpen className="w-4 h-4 text-white" />}
+                        {resource.type === "checklist" && <CheckCircle className="w-4 h-4 text-white" />}
+                        {resource.type === "calculator" && <Calculator className="w-4 h-4 text-white" />}
+                        {resource.type === "news" && <Info className="w-4 h-4 text-white" />}
+                      </div>
+                      <span className="text-xs text-gray-500 uppercase font-medium">{resource.type}</span>
+                    </div>
+
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">{resource.title}</h3>
+                    <p className="text-gray-600 text-sm mb-4">{resource.description}</p>
+
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {resource.tags.slice(0, 3).map((tag, tagIndex) => (
+                        <span key={tagIndex} className="px-2 py-1 bg-red-50 text-red-600 text-xs rounded-full">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
+                      <div className="flex items-center space-x-1">
+                        <User className="w-3 h-3" />
+                        <span>{resource.author}</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Calendar className="w-3 h-3" />
+                        <span>{new Date(resource.date).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">{resource.readTime}</span>
+                      <Button size="sm" className="bg-gradient-to-r from-red-500 to-red-600 hover:opacity-90">
+                        Read More
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          {filteredResources.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No resources found matching your search criteria.</p>
+              <Button
+                onClick={() => {
+                  setSearchTerm("")
+                  setSelectedCategory("all")
+                }}
+                className="mt-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
+              >
+                Clear Filters
+              </Button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Newsletter Signup */}
       <section className="py-20 bg-gradient-to-r from-red-500 to-pink-600">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h2 className="text-4xl font-bold text-white mb-6">Ready to Get Started?</h2>
+            <h2 className="text-4xl font-bold text-white mb-6">Stay Updated</h2>
             <p className="text-xl text-white/90 mb-8">
-              Book a free consultation to discuss your immigration goals and find the right service for you.
+              Subscribe to our newsletter for the latest immigration news, tips, and resources delivered to your inbox.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <Input type="email" placeholder="Enter your email address" className="flex-1 bg-white" />
+              <Button className="bg-white text-red-600 hover:bg-gray-100 font-semibold">Subscribe</Button>
+            </div>
+            <p className="text-white/70 text-sm mt-4">No spam, unsubscribe at any time. We respect your privacy.</p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <Lightbulb className="w-8 h-8 text-white" />
+            </div>
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Need Personalized Guidance?</h2>
+            <p className="text-xl text-gray-600 mb-8">
+              While our resources provide valuable information, every immigration case is unique. Get personalized
+              advice from our expert consultants.
             </p>
             <Link href="/contact">
               <Button
                 size="lg"
-                className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold"
+                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-lg px-8 py-4 rounded-full"
               >
                 Book Free Consultation
               </Button>

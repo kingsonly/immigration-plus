@@ -1,144 +1,130 @@
 "use client"
 
+import { useState } from "react"
 import { motion } from "framer-motion"
-import {
-  Home,
-  Briefcase,
-  Users,
-  GraduationCap,
-  MapPin,
-  Heart,
-  ArrowRight,
-  CheckCircle,
-  Clock,
-  DollarSign,
-  FileText,
-} from "lucide-react"
+import { Star, Quote, MapPin, Calendar, ChevronLeft, ChevronRight, Play, Users } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
 export default function SuccessStoriesPage() {
-  const services = [
+  const [activeStory, setActiveStory] = useState(0)
+
+  const featuredStories = [
     {
-      icon: Home,
-      title: "Permanent Residency (PR)",
-      description: "Your pathway to calling Canada home permanently",
-      features: [
-        "Express Entry System",
-        "Federal Skilled Worker Program",
-        "Canadian Experience Class",
-        "Federal Skilled Trades Program",
-      ],
-      processingTime: "6-12 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-500 to-red-600",
-      href: "/services/permanent-residency",
+      name: "Sarah & Michael Chen",
+      country: "Singapore",
+      program: "Express Entry - Federal Skilled Worker",
+      timeline: "8 months",
+      image: "/placeholder.svg?height=400&width=400",
+      quote:
+        "TENTACULAR IMMIGRATION made our Canadian dream come true. Their expertise and guidance throughout the Express Entry process was invaluable.",
+      story:
+        "Sarah and Michael were both software engineers working in Singapore when they decided to immigrate to Canada for better opportunities and quality of life. Despite having strong profiles, they were overwhelmed by the complexity of the immigration process. Our team helped them optimize their CRS score, prepare their documents, and navigate the Express Entry system. They received their Invitation to Apply (ITA) within 3 months and landed in Toronto 8 months later. Today, they both work for leading tech companies and have purchased their first home in Canada.",
+      outcome: "Now permanent residents living in Toronto, both employed in their field",
+      category: "skilled-worker",
     },
     {
-      icon: Briefcase,
-      title: "Business Immigration",
-      description: "Turn your business expertise into Canadian success",
-      features: [
-        "Start-up Visa Program",
-        "Self-employed Persons Program",
-        "Investor Programs",
-        "Entrepreneur Programs",
-      ],
-      processingTime: "12-24 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-600 to-pink-600",
-      href: "/services/business-immigration",
+      name: "Priya Patel",
+      country: "India",
+      program: "Provincial Nominee Program - Ontario",
+      timeline: "14 months",
+      image: "/placeholder.svg?height=400&width=400",
+      quote:
+        "The PNP process seemed impossible until I found TENTACULAR IMMIGRATION. They made everything clear and manageable.",
+      story:
+        "Priya was a marketing manager in Mumbai who wanted to immigrate to Canada but didn't meet the Express Entry cut-off scores. Our team identified that she was an excellent candidate for Ontario's Human Capital Priorities stream. We helped her improve her language scores, get her credentials assessed, and prepare a compelling application. After receiving her provincial nomination, her CRS score increased by 600 points, guaranteeing her an ITA in the next draw. She now works for a major marketing agency in Toronto and is planning to bring her parents to Canada.",
+      outcome: "Marketing Director at a Fortune 500 company in Toronto",
+      category: "pnp",
     },
     {
-      icon: GraduationCap,
-      title: "Study & Work Permits",
-      description: "Education and career opportunities in Canada",
-      features: [
-        "Study Permit Applications",
-        "Work Permit Applications",
-        "Post-Graduation Work Permits",
-        "Co-op Work Permits",
-      ],
-      processingTime: "4-12 weeks",
-      startingPrice: "Contact for pricing",
-      color: "from-pink-600 to-red-500",
-      href: "/services/study-work-permits",
+      name: "Ahmed & Fatima Al-Rashid",
+      country: "UAE",
+      program: "Start-up Visa Program",
+      timeline: "18 months",
+      image: "/placeholder.svg?height=400&width=400",
+      quote:
+        "Our innovative fintech startup found its home in Canada thanks to the exceptional guidance from TENTACULAR IMMIGRATION.",
+      story:
+        "Ahmed and Fatima had developed a revolutionary fintech solution in Dubai but wanted to scale their business in Canada's thriving tech ecosystem. The Start-up Visa Program was perfect for them, but the process was complex. Our business immigration specialists helped them connect with a designated organization, refine their business plan, and navigate the application process. Their startup has now raised $2M in Series A funding and employs 15 people in Vancouver.",
+      outcome: "Successfully launched fintech startup with $2M funding",
+      category: "business",
     },
     {
-      icon: Heart,
-      title: "Family Sponsorship",
-      description: "Reunite with your loved ones in Canada",
-      features: [
-        "Spouse/Partner Sponsorship",
-        "Dependent Children Sponsorship",
-        "Parent & Grandparent Program",
-        "Other Eligible Relatives",
-      ],
-      processingTime: "12-24 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-500 to-red-700",
-      href: "/services/family-sponsorship",
-    },
-    {
-      icon: MapPin,
-      title: "Provincial Nominee Program",
-      description: "Find your perfect province to call home",
-      features: [
-        "Ontario Immigrant Nominee Program",
-        "British Columbia PNP",
-        "Alberta Immigrant Nominee Program",
-        "Other Provincial Programs",
-      ],
-      processingTime: "6-18 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-700 to-pink-500",
-      href: "/services/pnp",
-    },
-    {
-      icon: Users,
-      title: "Citizenship Applications",
-      description: "Complete your journey to becoming a Canadian citizen",
-      features: [
-        "Citizenship Applications",
-        "Citizenship Test Preparation",
-        "Citizenship Ceremony Guidance",
-        "Urgent Processing Requests",
-      ],
-      processingTime: "12-18 months",
-      startingPrice: "Contact for pricing",
-      color: "from-pink-500 to-red-600",
-      href: "/services/citizenship",
+      name: "Maria Rodriguez",
+      country: "Mexico",
+      program: "Family Sponsorship - Spouse",
+      timeline: "11 months",
+      image: "/placeholder.svg?height=400&width=400",
+      quote:
+        "Being separated from my husband was heartbreaking. TENTACULAR IMMIGRATION reunited our family faster than we expected.",
+      story:
+        "Maria's husband had immigrated to Canada two years earlier, and they were struggling with the family sponsorship process on their own. The application had been delayed due to incomplete documentation and procedural errors. Our family immigration specialists took over the case, identified the issues, and resubmitted a comprehensive application with all required supporting documents. Maria was reunited with her husband in Calgary and now works as a nurse at a local hospital.",
+      outcome: "Reunited with family, working as a registered nurse in Calgary",
+      category: "family",
     },
   ]
 
-  const processSteps = [
+  const testimonials = [
     {
-      step: "01",
-      title: "Initial Consultation",
-      description: "We assess your profile and discuss your immigration goals",
+      name: "David Kim",
+      country: "South Korea",
+      program: "Canadian Experience Class",
+      rating: 5,
+      text: "Professional, knowledgeable, and always available to answer questions. They made my PR application stress-free.",
     },
     {
-      step: "02",
-      title: "Strategy Development",
-      description: "We create a personalized immigration strategy for your situation",
+      name: "Elena Volkov",
+      country: "Russia",
+      program: "Federal Skilled Trades",
+      rating: 5,
+      text: "I thought my trade skills wouldn't be enough, but they showed me the perfect pathway. Now I'm a permanent resident!",
     },
     {
-      step: "03",
-      title: "Document Preparation",
-      description: "We help you gather and prepare all required documents",
+      name: "James Thompson",
+      country: "UK",
+      program: "Provincial Nominee Program",
+      rating: 5,
+      text: "The team's expertise in PNP programs is outstanding. They found the perfect province match for my profile.",
     },
     {
-      step: "04",
-      title: "Application Submission",
-      description: "We submit your application and monitor its progress",
-    },
-    {
-      step: "05",
-      title: "Ongoing Support",
-      description: "We provide support until you achieve your immigration goals",
+      name: "Aisha Okonkwo",
+      country: "Nigeria",
+      program: "Study Permit to PR",
+      rating: 5,
+      text: "From study permit to permanent residency - they guided me through every step of my Canadian journey.",
     },
   ]
+
+  const statistics = [
+    { number: "500+", label: "Success Stories", icon: Users },
+    { number: "98%", label: "Approval Rate", icon: Star },
+    { number: "50+", label: "Countries", icon: MapPin },
+    { number: "15+", label: "Years Experience", icon: Calendar },
+  ]
+
+  const categories = [
+    { id: "all", label: "All Stories", count: featuredStories.length },
+    { id: "skilled-worker", label: "Skilled Workers", count: 1 },
+    { id: "pnp", label: "Provincial Nominees", count: 1 },
+    { id: "business", label: "Business Immigration", count: 1 },
+    { id: "family", label: "Family Sponsorship", count: 1 },
+  ]
+
+  const [selectedCategory, setSelectedCategory] = useState("all")
+
+  const filteredStories =
+    selectedCategory === "all"
+      ? featuredStories
+      : featuredStories.filter((story) => story.category === selectedCategory)
+
+  const nextStory = () => {
+    setActiveStory((prev) => (prev + 1) % filteredStories.length)
+  }
+
+  const prevStory = () => {
+    setActiveStory((prev) => (prev - 1 + filteredStories.length) % filteredStories.length)
+  }
 
   return (
     <div className="min-h-screen bg-white pt-16">
@@ -159,80 +145,41 @@ export default function SuccessStoriesPage() {
           >
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Business Immigration
+                Success Stories
               </span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Comprehensive Canadian immigration services tailored to your unique situation. From permanent residency to
-              family reunification, we're here to guide you every step of the way.
+              Real stories from real people who achieved their Canadian immigration dreams with our help. These success
+              stories represent the dedication, expertise, and personalized approach we bring to every case.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Services Grid */}
+      {/* Statistics Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {statistics.map((stat, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, scale: 0.5 }}
+                whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="text-center"
               >
-                <Card className="h-full hover:shadow-xl transition-all duration-300 group">
-                  <CardContent className="p-6">
-                    <div
-                      className={`w-16 h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
-                    >
-                      <service.icon className="w-8 h-8 text-white" />
-                    </div>
-
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">{service.title}</h3>
-                    <p className="text-gray-600 mb-4">{service.description}</p>
-
-                    <div className="space-y-2 mb-6">
-                      {service.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center space-x-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          <span className="text-sm text-gray-600">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="border-t pt-4 space-y-2 mb-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Clock className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-600">Processing Time</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{service.processingTime}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <DollarSign className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-600">Starting From</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{service.startingPrice}</span>
-                      </div>
-                    </div>
-
-                    <Link href={service.href}>
-                      <Button className={`w-full bg-gradient-to-r ${service.color} hover:opacity-90`}>
-                        Learn More
-                        <ArrowRight className="ml-2 w-4 h-4" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
+                <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <stat.icon className="w-8 h-8 text-white" />
+                </div>
+                <div className="text-3xl font-bold text-gray-900 mb-2">{stat.number}</div>
+                <div className="text-gray-600">{stat.label}</div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Process Section */}
+      {/* Featured Stories */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -243,53 +190,125 @@ export default function SuccessStoriesPage() {
           >
             <h2 className="text-4xl font-bold mb-4">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Our Process
+                Featured Success Stories
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We follow a proven 5-step process to ensure your immigration success
+              Discover how our clients achieved their Canadian immigration goals
             </p>
           </motion.div>
 
-          <div className="relative">
-            {/* Process Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-red-500 to-pink-600 hidden lg:block"></div>
+          {/* Category Filter */}
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => {
+                  setSelectedCategory(category.id)
+                  setActiveStory(0)
+                }}
+                className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${selectedCategory === category.id
+                  ? "bg-gradient-to-r from-red-500 to-red-600 text-white"
+                  : "bg-white text-gray-600 hover:bg-red-50 hover:text-red-600 border border-gray-200"
+                  }`}
+              >
+                {category.label} ({category.count})
+              </button>
+            ))}
+          </div>
 
-            <div className="space-y-12">
-              {processSteps.map((step, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className={`flex items-center ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} flex-col lg:flex gap-8`}
-                >
-                  <div className="flex-1">
-                    <Card className="hover:shadow-lg transition-shadow duration-300">
-                      <CardContent className="p-6">
-                        <div className="flex items-center space-x-4 mb-4">
-                          <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
-                            <span className="text-white font-bold">{step.step}</span>
-                          </div>
-                          <h3 className="text-xl font-bold text-gray-900">{step.title}</h3>
-                        </div>
-                        <p className="text-gray-600">{step.description}</p>
-                      </CardContent>
-                    </Card>
+          {/* Story Carousel */}
+          <div className="relative">
+            <Card className="overflow-hidden">
+              <CardContent className="p-0">
+                <div className="grid lg:grid-cols-2 gap-0">
+                  {/* Image Section */}
+                  <div className="relative h-96 lg:h-auto">
+                    <img
+                      src={filteredStories[activeStory].image || "/placeholder.svg"}
+                      alt={filteredStories[activeStory].name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    <div className="absolute bottom-6 left-6 text-white">
+                      <h3 className="text-2xl font-bold mb-2">{filteredStories[activeStory].name}</h3>
+                      <p className="text-white/90">From {filteredStories[activeStory].country}</p>
+                    </div>
                   </div>
 
-                  {/* Center Circle for Desktop */}
-                  <div className="hidden lg:block w-6 h-6 bg-gradient-to-r from-red-500 to-red-600 rounded-full border-4 border-white shadow-lg"></div>
+                  {/* Content Section */}
+                  <div className="p-8 lg:p-12">
+                    <div className="flex items-center space-x-4 mb-6">
+                      <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
+                        <Quote className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">Program</p>
+                        <p className="font-semibold text-gray-900">{filteredStories[activeStory].program}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">Timeline</p>
+                        <p className="font-semibold text-gray-900">{filteredStories[activeStory].timeline}</p>
+                      </div>
+                    </div>
 
-                  <div className="flex-1 lg:block hidden"></div>
-                </motion.div>
+                    <blockquote className="text-xl text-gray-700 italic mb-6 leading-relaxed">
+                      "{filteredStories[activeStory].quote}"
+                    </blockquote>
+
+                    <p className="text-gray-600 mb-6 leading-relaxed">{filteredStories[activeStory].story}</p>
+
+                    <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-lg p-4 mb-6">
+                      <p className="text-sm text-gray-600 mb-1">Current Status:</p>
+                      <p className="font-semibold text-gray-900">{filteredStories[activeStory].outcome}</p>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex space-x-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                        ))}
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={prevStory}
+                          className="border-red-200 text-red-600 hover:bg-red-50 bg-transparent"
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={nextStory}
+                          className="border-red-200 text-red-600 hover:bg-red-50 bg-transparent"
+                        >
+                          <ChevronRight className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Story Indicators */}
+            <div className="flex justify-center space-x-2 mt-6">
+              {filteredStories.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveStory(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${index === activeStory ? "bg-red-500" : "bg-gray-300"
+                    }`}
+                />
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Why Choose Our Services */}
+      {/* Testimonials Grid */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -298,46 +317,104 @@ export default function SuccessStoriesPage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">Why Choose Our Services?</h2>
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">What Our Clients Say</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We provide comprehensive support throughout your entire immigration journey
+              Hear from more clients who trusted us with their immigration journey
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: FileText,
-                title: "Expert Documentation",
-                description:
-                  "We ensure all your documents are properly prepared and submitted according to the latest requirements.",
-              },
-              {
-                icon: Clock,
-                title: "Timely Processing",
-                description:
-                  "We monitor your application closely and keep you updated on its progress every step of the way.",
-              },
-              {
-                icon: Users,
-                title: "Personalized Support",
-                description:
-                  "Each client receives individual attention and a customized strategy based on their unique situation.",
-              },
-            ].map((feature, index) => (
+          <div className="grid md:grid-cols-2 gap-8">
+            {testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
+                <Card className="h-full hover:shadow-lg transition-shadow duration-300">
                   <CardContent className="p-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <feature.icon className="w-8 h-8 text-white" />
+                    <div className="flex items-center space-x-1 mb-4">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                      ))}
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                    <p className="text-gray-600">{feature.description}</p>
+                    <p className="text-gray-600 mb-4 italic">"{testimonial.text}"</p>
+                    <div className="border-t pt-4">
+                      <p className="font-semibold text-gray-900">{testimonial.name}</p>
+                      <p className="text-sm text-gray-500">{testimonial.country}</p>
+                      <p className="text-sm text-red-600 font-medium">{testimonial.program}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Video Testimonials */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                Video Testimonials
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Watch our clients share their immigration success stories
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Roberto Silva",
+                country: "Brazil",
+                program: "Express Entry",
+                thumbnail: "/placeholder.svg?height=300&width=400",
+              },
+              {
+                name: "Li Wei",
+                country: "China",
+                program: "PNP - British Columbia",
+                thumbnail: "/placeholder.svg?height=300&width=400",
+              },
+              {
+                name: "Olumide Johnson",
+                country: "Nigeria",
+                program: "Family Sponsorship",
+                thumbnail: "/placeholder.svg?height=300&width=400",
+              },
+            ].map((video, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group cursor-pointer">
+                  <div className="relative">
+                    <img
+                      src={video.thumbnail || "/placeholder.svg"}
+                      alt={video.name}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
+                      <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <Play className="w-8 h-8 text-red-600 ml-1" />
+                      </div>
+                    </div>
+                  </div>
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold text-gray-900 mb-1">{video.name}</h3>
+                    <p className="text-sm text-gray-500 mb-1">{video.country}</p>
+                    <p className="text-sm text-red-600 font-medium">{video.program}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -350,16 +427,17 @@ export default function SuccessStoriesPage() {
       <section className="py-20 bg-gradient-to-r from-red-500 to-pink-600">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h2 className="text-4xl font-bold text-white mb-6">Ready to Get Started?</h2>
+            <h2 className="text-4xl font-bold text-white mb-6">Ready to Write Your Success Story?</h2>
             <p className="text-xl text-white/90 mb-8">
-              Book a free consultation to discuss your immigration goals and find the right service for you.
+              Join hundreds of successful immigrants who trusted us with their Canadian dreams. Your success story could
+              be next!
             </p>
             <Link href="/contact">
               <Button
                 size="lg"
                 className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold"
               >
-                Book Free Consultation
+                Start Your Journey Today
               </Button>
             </Link>
           </motion.div>
