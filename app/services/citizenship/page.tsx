@@ -19,99 +19,50 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
 export default function CitizenshipPage() {
-  const services = [
+  const eligibilityRequirements = [
     {
-      icon: Home,
-      title: "Permanent Residency (PR)",
-      description: "Your pathway to calling Canada home permanently",
-      features: [
-        "Express Entry System",
-        "Federal Skilled Worker Program",
-        "Canadian Experience Class",
-        "Federal Skilled Trades Program",
-      ],
-      processingTime: "6-12 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-500 to-red-600",
-      href: "/services/permanent-residency",
+      icon: Users, // Suggests multi-generational or group support
+      title: "Permanent Resident (PR) Status",
+      description:
+        "You must currently hold PR status and not be under review for fraud or removal.",
     },
     {
-      icon: Briefcase,
-      title: "Business Immigration",
-      description: "Turn your business expertise into Canadian success",
-      features: [
-        "Start-up Visa Program",
-        "Self-employed Persons Program",
-        "Investor Programs",
-        "Entrepreneur Programs",
-      ],
-      processingTime: "12-24 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-600 to-pink-600",
-      href: "/services/business-immigration",
+      icon: Users, // Suggests multi-generational or group support
+      title: "Physical Presence",
+      description:
+        "You must have been physically present in Canada for at least 1,095 days (3 years) during the 5 years before your application. (Time spent in Canada as a temporary resident or protected person may count for half-days, up to 365 total.).",
     },
     {
-      icon: GraduationCap,
-      title: "Study & Work Permits",
-      description: "Education and career opportunities in Canada",
-      features: [
-        "Study Permit Applications",
-        "Work Permit Applications",
-        "Post-Graduation Work Permits",
-        "Co-op Work Permits",
-      ],
-      processingTime: "4-12 weeks",
-      startingPrice: "Contact for pricing",
-      color: "from-pink-600 to-red-500",
-      href: "/services/study-work-permits",
+      icon: Users, // Suggests multi-generational or group support
+      title: "Income Tax Filing",
+      description:
+        "You must have filed Canadian income tax in at least 3 of the last 5 years, if required​.",
     },
     {
-      icon: Heart,
-      title: "Family Sponsorship",
-      description: "Reunite with your loved ones in Canada",
-      features: [
-        "Spouse/Partner Sponsorship",
-        "Dependent Children Sponsorship",
-        "Parent & Grandparent Program",
-        "Other Eligible Relatives",
-      ],
-      processingTime: "12-24 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-500 to-red-700",
-      href: "/services/family-sponsorship",
+      icon: Users, // Suggests multi-generational or group support
+      title: "Language Proficiency (Age 18–54)",
+      description:
+        "Demonstrate your English or French speaking and listening skills at Canadian Language Benchmark Level 4 or higher.",
     },
     {
-      icon: MapPin,
-      title: "Provincial Nominee Program",
-      description: "Find your perfect province to call home",
-      features: [
-        "Ontario Immigrant Nominee Program",
-        "British Columbia PNP",
-        "Alberta Immigrant Nominee Program",
-        "Other Provincial Programs",
-      ],
-      processingTime: "6-18 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-700 to-pink-500",
-      href: "/services/pnp",
+      icon: Users, // Suggests multi-generational or group support
+      title: "Citizenship Test (Age 18–54)",
+      description:
+        "Pass a 20-question multiple-choice test on Canada’s history, values, institutions, and symbols — you must answer at least 15 correctly to meet the 75% passing score.",
     },
     {
-      icon: Users,
-      title: "Citizenship Applications",
-      description: "Complete your journey to becoming a Canadian citizen",
-      features: [
-        "Citizenship Applications",
-        "Citizenship Test Preparation",
-        "Citizenship Ceremony Guidance",
-        "Urgent Processing Requests",
-      ],
-      processingTime: "12-18 months",
-      startingPrice: "Contact for pricing",
-      color: "from-pink-500 to-red-600",
-      href: "/services/citizenship",
+      icon: Users, // Suggests multi-generational or group support
+      title: "Oath of Citizenship",
+      description:
+        "Once approved, you’ll attend a ceremony and take an oath to officially become a Canadian citizen",
     },
-  ]
 
+  ];
+  const otherRequirements = [
+    "First-Generation Limit: Children born abroad to Canadian parents may still need a citizenship certificate—check IRCC’s rules.",
+    "Accommodations & Waivers: You can request help or exemptions for language, testing, or the oath for disabilities or special circumstances.",
+    "Prohibitions: Criminal convictions or being under removal orders may affect eligibility.",
+  ]
   const processSteps = [
     {
       step: "01",
@@ -163,71 +114,170 @@ export default function CitizenshipPage() {
               </span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Comprehensive Canadian immigration services tailored to your unique situation. From permanent residency to
-              family reunification, we're here to guide you every step of the way.
+              Become a citizen and complete your Canadian journey.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Services Grid */}
+      {/* Eligibility Requirements */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">Eligibility Requirements</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              To apply for Canadian citizenship, you must meet the following core criteria .
+            </p>
+          </motion.div>
+
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {
+              eligibilityRequirements.map((feature, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
+                    <CardContent className="p-6">
+                      <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <feature.icon className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+                      <p className="text-gray-600">{feature.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+          </div>
+        </div>
+      </section>
+
+      {/* eligibility Requirements */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                Other Requirements & Notes
+              </span>
+            </h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {otherRequirements.map((item, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="flex items-center space-x-3"
               >
-                <Card className="h-full hover:shadow-xl transition-all duration-300 group">
-                  <CardContent className="p-6">
-                    <div
-                      className={`w-16 h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
-                    >
-                      <service.icon className="w-8 h-8 text-white" />
-                    </div>
-
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">{service.title}</h3>
-                    <p className="text-gray-600 mb-4">{service.description}</p>
-
-                    <div className="space-y-2 mb-6">
-                      {service.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center space-x-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          <span className="text-sm text-gray-600">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="border-t pt-4 space-y-2 mb-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Clock className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-600">Processing Time</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{service.processingTime}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <DollarSign className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-600">Starting From</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{service.startingPrice}</span>
-                      </div>
-                    </div>
-
-                    <Link href={service.href}>
-                      <Button className={`w-full bg-gradient-to-r ${service.color} hover:opacity-90`}>
-                        Learn More
-                        <ArrowRight className="ml-2 w-4 h-4" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
+                <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0" />
+                <span className="text-gray-700 text-lg">{item}</span>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Application Process Section */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl font-bold mb-6 text-gray-900">Application Process</h2>
+              {/* <div className="space-y-4 text-gray-600 text-lg leading-relaxed">
+
+                <p>
+                  Founded with a vision to make Canadian immigration accessible and successful for everyone, TENTACULAR
+                  IMMIGRATION SOLUTIONS LTD has been helping individuals and families achieve their Canadian dreams for
+                  over a decade.
+                </p>
+                <p>
+                  Our journey began when our founder experienced firsthand the challenges of navigating Canada's
+                  immigration system. This personal experience ignited a passion to help others avoid the same pitfalls
+                  and achieve success in their immigration journey.
+                </p>
+                <p>
+                  Today, we're proud to be one of Canada's most trusted immigration consulting firms, with a track
+                  record of success that speaks for itself. Our team of licensed consultants brings together decades of
+                  combined experience and a deep understanding of Canadian immigration law.
+                </p>
+              </div> */}
+
+              <div className="space-y-6 text-gray-700 text-lg leading-relaxed">
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">✔️ Confirm You Meet Eligibility:</h3>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>Use IRCC’s Physical Presence Calculator</li>
+                    <li>Gather language proof and tax records</li>
+                    <li>Complete the citizenship test study materials</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">✔️ Prepare & Submit Your Application:</h3>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>Use the adult PR application package</li>
+                    <li>Include all supporting documents and fees</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">✔️ Take the Citizenship Test and/or Interview (if required):</h3>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>Administered online or in person for applicants aged 18–54</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">✔️ Attend Your Citizenship Ceremony & Take the Oath:</h3>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>Official ceremony where you complete the oath and receive your citizenship</li>
+                  </ul>
+                </div>
+              </div>
+
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="relative"
+            >
+              <div className="w-full h-96 bg-gradient-to-br from-red-500 to-pink-600 rounded-3xl transform rotate-3 flex items-center justify-center relative overflow-hidden">
+                <motion.div
+                  className="absolute inset-0 bg-white/10"
+                  animate={{
+                    background: [
+                      "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                      "radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                      "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                    ],
+                  }}
+                  transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
+                />
+                <FileText className="w-32 h-32 text-white/80" />
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
