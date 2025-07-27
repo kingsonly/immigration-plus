@@ -44,8 +44,8 @@ const Navigation = () => {
         <div className="flex justify-between items-center min-h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-20 h-20 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
-              <Image src="/logo.png" alt="logo" width={100} height={100} className="bg-white" />
+            <div className="w-20 h-20  rounded-full flex items-center justify-center">
+              <Image src="/logo.png" alt="logo" width={100} height={100} />
             </div>
             {/* <span className="font-bold text-xl text-gray-900">Coming2Canada</span> */}
           </Link>
@@ -167,11 +167,11 @@ const Navigation = () => {
                   )}
                 </div>
               ))}
-              <div className="pt-4">
+              {/* <div className="pt-4">
                 <Button className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
                   Free Assessment
                 </Button>
-              </div>
+              </div> */}
             </div>
           </motion.div>
         )}

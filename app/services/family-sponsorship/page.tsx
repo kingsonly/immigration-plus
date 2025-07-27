@@ -13,104 +13,103 @@ import {
   Clock,
   DollarSign,
   FileText,
+  MapPinned,
+  ClipboardCheck,
+  BarChart4,
+  FileSignature,
+  HeartHandshake,
+  Repeat,
+  Star,
+  Baby,
+  UserMinus,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
 export default function FamilySponsorshipPage() {
-  const services = [
+  const sponsor = [
+    {
+      icon: HeartHandshake, // Best fit for spousal or partner support
+      title: "Spouse, Common‑Law, or Conjugal Partners",
+      description:
+        "Sponsor your spouse or partner, whether they’re in Canada or abroad. We support both Inland and Outland applications with eligibility checks, proof of relationship, and dual intent guidance.",
+    },
+    {
+      icon: Baby, // Symbolizes children and dependents
+      title: "Dependent Children",
+      description:
+        "Sponsor biological or adopted children under 22, or older dependents with medical conditions. We assist with guardianship, dependency proof, and family reunification.",
+    },
+    {
+      icon: Users, // Suggests multi-generational or group support
+      title: "Parents and Grandparents",
+      description:
+        "Support your PGP sponsorship with help on ITA response, income proof, and medical/financial documentation. We guide you through IRCC’s intake and income eligibility process.",
+    },
+    {
+      icon: UserMinus, // Reflects orphaned/unsupported individuals
+      title: "Orphaned Siblings, Nieces/Nephews, or Other Relatives",
+      description:
+        "Sponsor eligible orphaned relatives under compassionate family reunification grounds. We help confirm eligibility and complete documentation for lesser-known pathways.",
+    },
+  ];
+
+  const eligibilityRequirements = [
+    "Be at least 18 years old",
+    "Be a Canadian citizen, permanent resident, or Registered Indian",
+    "Live in Canada throughout the sponsorship process",
+    "Meet financial requirements only for dependent children who themselves sponsor children ",
+    "Not have sponsorship obligations in the past 3–5 years or be party to active undertakings​​​",
+  ]
+
+
+  const waysToApply = [
     {
       icon: Home,
-      title: "Permanent Residency (PR)",
-      description: "Your pathway to calling Canada home permanently",
+      title: "Outland",
+      description: "Your loved one applies from outside Canada ",
       features: [
-        "Express Entry System",
-        "Federal Skilled Worker Program",
-        "Canadian Experience Class",
-        "Federal Skilled Trades Program",
+        "Complete sponsorship forms and include your spouse’s / child’s PR application",
+
+        "Submit online via IRCC portal",
+
+        "Acknowledge receipt & pay biometrics within 30 days",
+
+        "Undergo medical, security, and background checks",
+
+        "Receive a decision and(if approved) a Confirmation of Permanent Residence(COPR)",
       ],
-      processingTime: "6-12 months",
+      processingTime: "12 months for 80% of cases",
       startingPrice: "Contact for pricing",
       color: "from-red-500 to-red-600",
-      href: "/services/permanent-residency",
+      href: "/contact#consultation",
+      extra: "Interim options: Your partner may receive a visitor visa or open work permit as the sponsorship proceeds",
+
     },
     {
       icon: Briefcase,
-      title: "Business Immigration",
-      description: "Turn your business expertise into Canadian success",
+      title: "Inland ",
+      description: "They applied from within Canada",
       features: [
-        "Start-up Visa Program",
-        "Self-employed Persons Program",
-        "Investor Programs",
-        "Entrepreneur Programs",
+        "Complete sponsorship forms and include your spouse’s / child’s PR application",
+
+        "Submit online via IRCC portal",
+
+        "Acknowledge receipt & pay biometrics within 30 days",
+
+        "Undergo medical, security, and background checks",
+
+        "Receive a decision and(if approved) a Confirmation of Permanent Residence(COPR)",
       ],
-      processingTime: "12-24 months",
+      processingTime: "12 months for 80% of cases",
       startingPrice: "Contact for pricing",
       color: "from-red-600 to-pink-600",
-      href: "/services/business-immigration",
-    },
-    {
-      icon: GraduationCap,
-      title: "Study & Work Permits",
-      description: "Education and career opportunities in Canada",
-      features: [
-        "Study Permit Applications",
-        "Work Permit Applications",
-        "Post-Graduation Work Permits",
-        "Co-op Work Permits",
-      ],
-      processingTime: "4-12 weeks",
-      startingPrice: "Contact for pricing",
-      color: "from-pink-600 to-red-500",
-      href: "/services/study-work-permits",
-    },
-    {
-      icon: Heart,
-      title: "Family Sponsorship",
-      description: "Reunite with your loved ones in Canada",
-      features: [
-        "Spouse/Partner Sponsorship",
-        "Dependent Children Sponsorship",
-        "Parent & Grandparent Program",
-        "Other Eligible Relatives",
-      ],
-      processingTime: "12-24 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-500 to-red-700",
-      href: "/services/family-sponsorship",
-    },
-    {
-      icon: MapPin,
-      title: "Provincial Nominee Program",
-      description: "Find your perfect province to call home",
-      features: [
-        "Ontario Immigrant Nominee Program",
-        "British Columbia PNP",
-        "Alberta Immigrant Nominee Program",
-        "Other Provincial Programs",
-      ],
-      processingTime: "6-18 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-700 to-pink-500",
-      href: "/services/pnp",
-    },
-    {
-      icon: Users,
-      title: "Citizenship Applications",
-      description: "Complete your journey to becoming a Canadian citizen",
-      features: [
-        "Citizenship Applications",
-        "Citizenship Test Preparation",
-        "Citizenship Ceremony Guidance",
-        "Urgent Processing Requests",
-      ],
-      processingTime: "12-18 months",
-      startingPrice: "Contact for pricing",
-      color: "from-pink-500 to-red-600",
-      href: "/services/citizenship",
+      href: "/contact#consultation",
+      extra: "Interim options: Your partner may receive a visitor visa or open work permit as the sponsorship proceeds",
     },
   ]
+
 
   const processSteps = [
     {
@@ -163,8 +162,8 @@ export default function FamilySponsorshipPage() {
               </span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Comprehensive Canadian immigration services tailored to your unique situation. From permanent residency to
-              family reunification, we're here to guide you every step of the way.
+              At Coming2Canada, we help reunite families by guiding Canadian citizens and permanent residents through the sponsorship process for spouses, children, and parents.
+              From eligibility to IRCC follow-up, we ensure a smooth path to bringing your loved ones home — because family belongs together in Canada.
             </p>
           </motion.div>
         </div>
@@ -173,8 +172,100 @@ export default function FamilySponsorshipPage() {
       {/* Services Grid */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">Who You Can Sponsor</h2>
+
+          </motion.div>
+
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {
+              sponsor.map((feature, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
+                    <CardContent className="p-6">
+                      <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <feature.icon className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+                      <p className="text-gray-600">{feature.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process Section */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                Sponsorship of Adopted Children
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Adopting a child—whether internationally or within Canada—requires meeting both immigration and provincial legal standards. At Coming2Canada, we provide compassionate guidance through every step, helping you navigate complex adoption and sponsorship requirements with clarity and care, so your family can grow legally and lovingly.
+            </p>
+          </motion.div>
+
+        </div>
+      </section>
+      {/* eligibility Requirements */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                Sponsor Eligibility Requirements
+              </span>
+            </h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {eligibilityRequirements.map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="flex items-center space-x-3"
+              >
+                <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0" />
+                <span className="text-gray-700 text-lg">{item}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Ways to Apply */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+            {waysToApply.map((service, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
@@ -193,12 +284,19 @@ export default function FamilySponsorshipPage() {
                     <p className="text-gray-600 mb-4">{service.description}</p>
 
                     <div className="space-y-2 mb-6">
+                      <h5 className="font-semibold text-gray-900 text-sm">Application Process:</h5>
                       {service.features.map((feature, idx) => (
                         <div key={idx} className="flex items-center space-x-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
                           <span className="text-sm text-gray-600">{feature}</span>
                         </div>
                       ))}
+                      {service?.extra && (
+                        <p className="text-sm text-gray-500">
+                          {service.extra}
+                        </p>
+                      )}
+
                     </div>
 
                     <div className="border-t pt-4 space-y-2 mb-6">
@@ -220,7 +318,7 @@ export default function FamilySponsorshipPage() {
 
                     <Link href={service.href}>
                       <Button className={`w-full bg-gradient-to-r ${service.color} hover:opacity-90`}>
-                        Learn More
+                        Book Free Consultation
                         <ArrowRight className="ml-2 w-4 h-4" />
                       </Button>
                     </Link>
@@ -231,6 +329,7 @@ export default function FamilySponsorshipPage() {
           </div>
         </div>
       </section>
+
 
       {/* Process Section */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">

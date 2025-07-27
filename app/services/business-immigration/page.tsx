@@ -25,10 +25,7 @@ export default function BusinessImmigrationPage() {
       title: "Permanent Residency (PR)",
       description: "Your pathway to calling Canada home permanently",
       features: [
-        "Express Entry System",
-        "Federal Skilled Worker Program",
-        "Canadian Experience Class",
-        "Federal Skilled Trades Program",
+
       ],
       processingTime: "6-12 months",
       startingPrice: "Contact for pricing",
@@ -40,10 +37,7 @@ export default function BusinessImmigrationPage() {
       title: "Business Immigration",
       description: "Turn your business expertise into Canadian success",
       features: [
-        "Start-up Visa Program",
-        "Self-employed Persons Program",
-        "Investor Programs",
-        "Entrepreneur Programs",
+
       ],
       processingTime: "12-24 months",
       startingPrice: "Contact for pricing",
@@ -55,10 +49,7 @@ export default function BusinessImmigrationPage() {
       title: "Study & Work Permits",
       description: "Education and career opportunities in Canada",
       features: [
-        "Study Permit Applications",
-        "Work Permit Applications",
-        "Post-Graduation Work Permits",
-        "Co-op Work Permits",
+
       ],
       processingTime: "4-12 weeks",
       startingPrice: "Contact for pricing",
@@ -70,10 +61,7 @@ export default function BusinessImmigrationPage() {
       title: "Family Sponsorship",
       description: "Reunite with your loved ones in Canada",
       features: [
-        "Spouse/Partner Sponsorship",
-        "Dependent Children Sponsorship",
-        "Parent & Grandparent Program",
-        "Other Eligible Relatives",
+
       ],
       processingTime: "12-24 months",
       startingPrice: "Contact for pricing",
@@ -85,10 +73,7 @@ export default function BusinessImmigrationPage() {
       title: "Provincial Nominee Program",
       description: "Find your perfect province to call home",
       features: [
-        "Ontario Immigrant Nominee Program",
-        "British Columbia PNP",
-        "Alberta Immigrant Nominee Program",
-        "Other Provincial Programs",
+
       ],
       processingTime: "6-18 months",
       startingPrice: "Contact for pricing",
@@ -100,10 +85,7 @@ export default function BusinessImmigrationPage() {
       title: "Citizenship Applications",
       description: "Complete your journey to becoming a Canadian citizen",
       features: [
-        "Citizenship Applications",
-        "Citizenship Test Preparation",
-        "Citizenship Ceremony Guidance",
-        "Urgent Processing Requests",
+
       ],
       processingTime: "12-18 months",
       startingPrice: "Contact for pricing",
