@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { use, useEffect, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import {
   ChevronDown,
@@ -29,9 +29,22 @@ import {
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
+import { homepageModule } from "@/lib/contentfulModules/homePageModeule"
+import { LucideIcon } from "@/components/LucideIcon/LucideIcon"
 
 export default function HomePage() {
-  const [activeSection, setActiveSection] = useState(0)
+  const [homepageContent, setHomepageContent] = useState<any>()
+  useEffect(() => {
+    const loadHomepage = async () => {
+      const { props } = await homepageModule();
+      console.log("i am the props ", props);
+      setHomepageContent(props);
+    };
+    loadHomepage();
+  }, []);
+
+
+  // const [activeSection, setActiveSection] = useState(0)
   const { scrollYProgress } = useScroll()
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
 
@@ -161,7 +174,7 @@ export default function HomePage() {
 
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
           <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
+            {/* <h1 className="text-5xl md:text-7xl font-bold mb-6">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
                 Welcome to
               </span>
@@ -170,27 +183,39 @@ export default function HomePage() {
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
               TENTACULAR IMMIGRATION SOLUTIONS LTD guides you through every step of your Canadian immigration journey
+            </p> */}
+            <h1 className="text-5xl md:text-7xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                {homepageContent?.hero?.titleTop}
+              </span>
+              <br />
+              <span className="text-gray-900">
+                {homepageContent?.hero?.titleBottom || "Your Canadian Dream"}
+              </span>
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
+              {homepageContent?.hero?.description || "TENTACULAR IMMIGRATION SOLUTIONS LTD guides you..."}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link href="/services">
+                <Link href={homepageContent?.hero?.ctaPrimaryLink || "/services"}>
                   <Button
                     size="lg"
                     className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-lg px-8 py-4 rounded-full"
                   >
-                    Start Your Journey
+                    {homepageContent?.hero?.ctaPrimaryText || "Start Your Journey"}
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
                 </Link>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link href="/contact">
+                <Link href={homepageContent?.hero?.ctaSecondaryLink || "/about"}>
                   <Button
                     size="lg"
                     variant="outline"
                     className="border-red-500 text-red-600 hover:bg-red-50 text-lg px-8 py-4 rounded-full"
                   >
-                    Free Consultation
+                    {homepageContent?.hero?.ctaSecondaryText || "About Us"}
                   </Button>
                 </Link>
               </motion.div>
@@ -251,67 +276,75 @@ export default function HomePage() {
           </motion.div>
 
           <div className="space-y-32">
-            {services.map((service, index) => (
-              <motion.div
-                key={index}
-                className={`service-section relative ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} flex flex-col lg:flex items-center gap-12`}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                {/* Content */}
-                <div className="flex-1 space-y-6">
-                  <div className="flex items-center space-x-4">
-                    <div
-                      className={`w-16 h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center transform rotate-12`}
-                    >
-                      <service.icon className="w-8 h-8 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-3xl font-bold text-gray-900">{service.title}</h3>
-                      <p className="text-lg text-red-600 font-medium">{service.description}</p>
-                    </div>
-                  </div>
-                  <p className="text-gray-600 text-lg leading-relaxed">{service.details}</p>
-                  <div className="flex items-center space-x-4">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span className="text-gray-700">Expert guidance throughout the process</span>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span className="text-gray-700">Personalized strategy for your situation</span>
-                  </div>
-                  <Link href={service.href}>
-                    <Button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
-                      Learn More
-                      <ArrowRight className="ml-2 w-4 h-4" />
-                    </Button>
-                  </Link>
-                </div>
+            {homepageContent && homepageContent.services?.map((newService: any, index: number) => {
+              const service = newService;
+              return (
 
-                {/* Visual Element */}
-                <div className="flex-1 flex justify-center">
-                  <motion.div
-                    className={`w-80 h-80 bg-gradient-to-br ${service.color} rounded-3xl transform rotate-6 flex items-center justify-center relative overflow-hidden`}
-                    whileHover={{ rotate: 0, scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
-                  >
+                <motion.div
+                  key={index}
+                  className={`service-section relative ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} flex flex-col lg:flex items-center gap-12`}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                >
+                  {/* Content */}
+                  <div className="flex-1 space-y-6">
+                    <div className="flex items-center space-x-4">
+                      <div
+                        className={`w-16 h-16 bg-gradient-to-r ${service.colorClass} rounded-2xl flex items-center justify-center transform rotate-12`}
+                      >
+                        <LucideIcon name={service.iconName} className="w-8 h-8 text-white" />
+
+                      </div>
+                      <div>
+                        <h3 className="text-3xl font-bold text-gray-900">{service.title}</h3>
+                        <p className="text-lg text-red-600 font-medium">{service.description}</p>
+                      </div>
+                    </div>
+                    <p className="text-gray-600 text-lg leading-relaxed">{service.details}</p>
+                    <div className="flex items-center space-x-4">
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <span className="text-gray-700">Expert guidance throughout the process</span>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <span className="text-gray-700">Personalized strategy for your situation</span>
+                    </div>
+                    <Link href={service.slug}>
+                      <Button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
+                        Learn More
+                        <ArrowRight className="ml-2 w-4 h-4" />
+                      </Button>
+                    </Link>
+                  </div>
+
+                  {/* Visual Element */}
+                  <div className="flex-1 flex justify-center">
                     <motion.div
-                      className="absolute inset-0 bg-white/10"
-                      animate={{
-                        background: [
-                          "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-                          "radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-                          "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-                        ],
-                      }}
-                      transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
-                    />
-                    <service.icon className="w-32 h-32 text-white/80" />
-                  </motion.div>
-                </div>
-              </motion.div>
-            ))}
+                      className={`w-80 h-80 bg-gradient-to-br ${service.colorClass} rounded-3xl transform rotate-6 flex items-center justify-center relative overflow-hidden`}
+                      whileHover={{ rotate: 0, scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <motion.div
+                        className="absolute inset-0 bg-white/10"
+                        animate={{
+                          background: [
+                            "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                            "radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                            "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                          ],
+                        }}
+                        transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
+                      />
+                      <LucideIcon name={service.iconName} className="w-32 h-32 text-white/80" />
+
+                    </motion.div>
+                  </div>
+                </motion.div>
+              )
+            }
+            )
+            }
           </div>
         </div>
       </section>

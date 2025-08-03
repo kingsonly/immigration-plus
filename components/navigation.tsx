@@ -32,7 +32,6 @@ const Navigation = () => {
         { name: "Recruitment", href: "/services/recruitment" },
       ],
     },
-    { name: "Immigration Programs", href: "/programs" },
     { name: "Resources", href: "/resources" },
     { name: "Success Stories", href: "/success-stories" },
     { name: "Contact", href: "/contact" },
