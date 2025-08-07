@@ -1,0 +1,435 @@
+{
+  "entries": [
+    {
+      "sys": { "contentType": { "sys": { "id": "heroSection" } } },
+      "fields": {
+        "icon": "Briefcase",
+        "title": "Business Immigration",
+        "subtitle": "Empowering Entrepreneurs, Investors & Self-Employed Professionals to Launch and Grow in Canada",
+        "body": "At TENTACULAR IMMIGRATION SOLUTIONS LTD, we guide ambitious business-minded individuals through Canada's federal and provincial business immigration streams—helping you transition from startup idea to permanent residency, legally and strategically.",
+        "primaryCTA": { "label": "Book Free Business Consultation", "href": "/contact" },
+        "secondaryCTA": { "label": "Request Quote", "href": null }
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "businessProgram" } } },
+      "fields": {
+        "title": "Start-Up Visa Program",
+        "subtitle": "For visionary entrepreneurs with innovative business ideas",
+        "description": "Canada's Start-Up Visa Program is designed for visionary entrepreneurs who have the potential to build innovative businesses in Canada that can compete globally, create jobs for Canadians, and drive long-term economic growth.",
+        "iconName": "Rocket",
+        "color": "from-red-500 to-red-600",
+        "requirements": [
+          "Innovative business concept",
+          "Letter of Support from designated organization",
+          "CLB 5 in English or French",
+          "Sufficient settlement funds"
+        ],
+        "href": "#startup-visa"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "businessProgram" } } },
+      "fields": {
+        "title": "Provincial Entrepreneur Streams",
+        "subtitle": "Tailored pathways for regional business builders",
+        "description": "Each province offers entrepreneur streams under the PNP, providing permanent residence pathways to qualified businesspeople ready to invest, settle, and contribute to the local economy.",
+        "iconName": "MapPin",
+        "color": "from-red-600 to-pink-600",
+        "requirements": [
+          "Minimum net worth $300K-$800K",
+          "Investment $100K-$600K",
+          "Business management experience",
+          "Job creation for Canadians"
+        ],
+        "href": "#provincial-streams"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "businessProgram" } } },
+      "fields": {
+        "title": "C11 Work Permit",
+        "subtitle": "Launch or acquire a Canadian business without LMIA",
+        "description": "The C11 work permit allows entrepreneurs to enter Canada to actively manage their own business, owning at least 50% and demonstrating significant economic benefit to the country.",
+        "iconName": "Building",
+        "color": "from-pink-600 to-red-500",
+        "requirements": [
+          "Own at least 50% of Canadian business",
+          "Active management role",
+          "Economic benefit to Canada",
+          "Solid business plan"
+        ],
+        "href": "#c11-permit"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "businessProgram" } } },
+      "fields": {
+        "title": "Self-Employed Persons Program",
+        "subtitle": "For cultural professionals, athletes, and artists",
+        "description": "Direct pathway to permanent residency for individuals with relevant experience in cultural or athletic activities who intend to continue working independently in Canada.",
+        "iconName": "Award",
+        "color": "from-red-500 to-red-700",
+        "requirements": [
+          "2+ years self-employment experience",
+          "Cultural or athletic background",
+          "Intent to be self-employed in Canada",
+          "Meet selection criteria"
+        ],
+        "href": "#self-employed"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "howItWorksStep" } } },
+      "fields": {
+        "stepNumber": 1,
+        "heading": "Pitch to a Designated Organization",
+        "text": "Submit your business idea to a designated incubator, angel investor group, or venture capital fund. If approved, you'll receive a required Letter of Support."
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "howItWorksStep" } } },
+      "fields": {
+        "stepNumber": 2,
+        "heading": "Meet Language Requirements",
+        "text": "Achieve CLB 5 in English or French."
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "howItWorksStep" } } },
+      "fields": {
+        "stepNumber": 3,
+        "heading": "Prove Settlement Funds",
+        "text": "Demonstrate you can support yourself and your dependents in Canada (per IRCC guidelines)."
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "howItWorksStep" } } },
+      "fields": {
+        "stepNumber": 4,
+        "heading": "Launch While You Wait",
+        "text": "Eligible applicants may apply for a temporary work permit to begin operations in Canada while awaiting permanent residence approval."
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "startUpService" } } },
+      "fields": {
+        "title": "Eligibility Assessment",
+        "description": "We evaluate your business concept, background, and investor readiness",
+        "iconName": "Target"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "startUpService" } } },
+      "fields": {
+        "title": "Letter of Support",
+        "description": "We guide you in securing endorsement from designated organizations",
+        "iconName": "FileText"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "startUpService" } } },
+      "fields": {
+        "title": "Application Strategy",
+        "description": "We help craft a strong immigration application that meets IRCC requirements",
+        "iconName": "Briefcase"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "startUpService" } } },
+      "fields": {
+        "title": "Business Advisory",
+        "description": "Expert support in business plan development and pitch preparation",
+        "iconName": "Lightbulb"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "feeCategory" } } },
+      "fields": {
+        "category": "Startup Team Participation",
+        "range": "CAD 75,000 – CAD 250,000",
+        "description": "For entrepreneurs joining existing startup groups",
+        "details": [
+          "Access to eligible startup",
+          "Document preparation",
+          "Founder alignment",
+          "Business role allocation"
+        ],
+        "note": "Private-market fees, not charged by IRCC"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "feeCategory" } } },
+      "fields": {
+        "category": "Designated Organization Support",
+        "range": "CAD 10,000 – CAD 200,000",
+        "description": "Business incubators, angel investors, or venture capital funds",
+        "details": [
+          "Business plan development",
+          "Pitch coaching",
+          "Due diligence",
+          "Letter of Support"
+        ],
+        "note": "Varies based on business stage and potential"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "feeCategory" } } },
+      "fields": {
+        "category": "Business Investment Capital",
+        "range": "CAD 50,000 – CAD 250,000",
+        "description": "Funding the actual launch of your startup",
+        "details": [
+          "Business setup costs",
+          "Hiring and operations",
+          "Development expenses",
+          "Customer acquisition"
+        ],
+        "note": "IRCC expects genuine business activity"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "governmentFee" } } },
+      "fields": {
+        "category": "Principal Applicant",
+        "amount": "$1,625 + $515 (RPRF)"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "governmentFee" } } },
+      "fields": {
+        "category": "Spouse or Partner",
+        "amount": "$850 + $515 (RPRF)"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "governmentFee" } } },
+      "fields": {
+        "category": "Dependent Child (each)",
+        "amount": "$230"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "governmentFee" } } },
+      "fields": {
+        "category": "Biometrics (individual)",
+        "amount": "$85"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "governmentFee" } } },
+      "fields": {
+        "category": "Biometrics (family)",
+        "amount": "$170 (max)"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "quoteCTA" } } },
+      "fields": {
+        "iconName": "Briefcase",
+        "heading": "Start-Up Visa – Request a Quote",
+        "body": "Canada's Start-Up Visa Program offers permanent residence to entrepreneurs with innovative business ideas supported by a designated organization.",
+        "primaryCTA": { "label": "Book Consultation", "href": "/contact" },
+        "secondaryCTA": { "label": "Request Quote", "href": "mailto:info@coming2canada.co?subject=Canada Start-Up Visa Quote Request" },
+        "emailSubject": "Canada Start-Up Visa Quote Request"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "programOverviewTile" } } },
+      "fields": { "label": "Minimum Net Worth", "value": "CAD $300,000 to $800,000" }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "programOverviewTile" } } },
+      "fields": { "label": "Investment Amount", "value": "CAD $100,000 to $600,000" }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "programOverviewTile" } } },
+      "fields": { "label": "Business Management", "value": "Experience Required" }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "programOverviewTile" } } },
+      "fields": { "label": "Job Creation", "value": "For Canadians" }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "programOverviewTile" } } },
+      "fields": { "label": "Business Performance", "value": "Agreement Required" }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "programOverviewTile" } } },
+      "fields": { "label": "Work Permit", "value": "Temporary (prior to nomination)" }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "provincialStream" } } },
+      "fields": {
+        "province": "British Columbia",
+        "program": "Entrepreneur Immigration",
+        "netWorth": "≥ CAD $600,000",
+        "investment": "≥ CAD $200,000",
+        "jobs": "1+ Canadian job",
+        "streams": ["Base Stream", "Regional Pilot", "Strategic Projects"],
+        "color": "from-blue-500 to-blue-600"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "provincialStream" } } },
+      "fields": {
+        "province": "Ontario",
+        "program": "Entrepreneur Stream (OINP)",
+        "netWorth": "$800K (GTA) / $400K (outside)",
+        "investment": "$600K (GTA) / $200K (outside)",
+        "jobs": "1–2 full-time positions",
+        "streams": ["GTA Stream", "Outside GTA/ICT"],
+        "color": "from-green-500 to-green-600"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "provincialStream" } } },
+      "fields": {
+        "province": "Alberta",
+        "program": "Foreign Graduate Entrepreneur",
+        "netWorth": "Investment-focused",
+        "investment": "$100K (urban) / $50K (rural)",
+        "jobs": "Job creation required",
+        "streams": ["Urban Stream", "Rural Stream"],
+        "color": "from-orange-500 to-orange-600"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "provincialStream" } } },
+      "fields": {
+        "province": "Manitoba",
+        "program": "Entrepreneur Pathway",
+        "netWorth": "≥ CAD $500,000",
+        "investment": "$250K (Winnipeg) / $150K (outside)",
+        "jobs": "1+ full-time job",
+        "streams": ["Business Stream", "Farm Stream"],
+        "color": "from-purple-500 to-purple-600"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "c11Benefit" } } },
+      "fields": {
+        "iconName": "Users",
+        "title": "Create or maintain jobs for Canadians",
+        "description": "Demonstrate employment opportunities for local workforce"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "c11Benefit" } } },
+      "fields": {
+        "iconName": "Lightbulb",
+        "title": "Introduce innovative goods or services",
+        "description": "Bring new technologies or solutions to Canadian market"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "c11Benefit" } } },
+      "fields": {
+        "iconName": "TrendingUp",
+        "title": "Expand regional economic opportunities",
+        "description": "Contribute to local economic development and growth"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "c11Benefit" } } },
+      "fields": {
+        "iconName": "Globe",
+        "title": "Increase exports or develop international markets",
+        "description": "Help Canada expand its global trade relationships"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "timelineStep" } } },
+      "fields": {
+        "order": 1,
+        "iconName": "Clock",
+        "title": "Initial C11 Work Permit",
+        "text": "Typically issued for 1–2 years"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "timelineStep" } } },
+      "fields": {
+        "order": 2,
+        "iconName": "ArrowRight",
+        "title": "Extension",
+        "text": "Possible based on continued business operation"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "timelineStep" } } },
+      "fields": {
+        "order": 3,
+        "iconName": "Target",
+        "title": "PR Pathway",
+        "text": "Available after establishing business and Canadian work experience"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "selfEmployedService" } } },
+      "fields": {
+        "title": "Eligibility Assessments",
+        "description": "Profile scoring and qualification evaluation",
+        "iconName": "Target"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "selfEmployedService" } } },
+      "fields": {
+        "title": "Narrative Building",
+        "description": "Showcase cultural or athletic contributions",
+        "iconName": "FileText"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "selfEmployedService" } } },
+      "fields": {
+        "title": "Document Preparation",
+        "description": "Proof of self-employment and achievements",
+        "iconName": "Briefcase"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "selfEmployedService" } } },
+      "fields": {
+        "title": "Full Representation",
+        "description": "Throughout the entire application process",
+        "iconName": "Users"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "postInvestmentRequirement" } } },
+      "fields": {
+        "iconName": "Building",
+        "title": "Continuous Business Ownership",
+        "description": "Maintain active ownership or management of your Canadian business"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "postInvestmentRequirement" } } },
+      "fields": {
+        "iconName": "Users",
+        "title": "Job Creation for Canadians",
+        "description": "Demonstrate employment opportunities created for Canadian workers"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "postInvestmentRequirement" } } },
+      "fields": {
+        "iconName": "CheckCircle",
+        "title": "Program Compliance",
+        "description": "Stay compliant with all program rules and performance agreements"
+      }
+    },
+    {
+      "sys": { "contentType": { "sys": { "id": "finalCTA" } } },
+      "fields": {
+        "iconName": "Rocket",
+        "heading": "Ready to Scale Your Business in Canada?",
+        "body": "Let's map your path—whether you're looking to launch a startup, invest, or self-employ. We're here to help you make your Canadian business dreams a reality.",
+        "primaryCTA": { "label": "Book Free Business Immigration Consultation", "href": "/contact" },
+        "tagline": "Start smart. Start strong. Start with TENTACULAR IMMIGRATION SOLUTIONS LTD."
+      }
+    }
+  ]
+}
