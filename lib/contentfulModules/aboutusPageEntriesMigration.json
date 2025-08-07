@@ -1,7 +1,7 @@
 {
   "entries": [
     {
-      "sys": {"contentType": {"sys": {"id": "heroSection"}}},
+      "sys": {"contentType": {"sys": {"id": "aboutUsHeroSection"}}},
       "fields": {
         "heading": {"en-US": "About Us"},
         "body":    {"en-US": "TENTACULAR IMMIGRATION SOLUTIONS LTD is your trusted partner in navigating the complex world of Canadian immigration. With years of experience and a passion for helping dreams come true, we're here to guide you every step of the way."}
