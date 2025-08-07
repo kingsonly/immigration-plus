@@ -1,0 +1,66 @@
+{
+  "contentTypes": [
+    {
+      "sys": {"id": "aboutUsHeroSection", "type": "ContentType"},
+      "name": "Hero Section",
+      "fields": [
+        {"id": "heading", "name": "Heading", "type": "Text", "localized": true},
+        {"id": "body",    "name": "Body",    "type": "RichText", "localized": true}
+      ]
+    },
+    {
+      "sys": {"id": "ourStorySection", "type": "ContentType"},
+      "name": "Our Story Section",
+      "fields": [
+        {"id": "title",      "name": "Title",      "type": "Text",  "localized": true},
+        {"id": "paragraphs", "name": "Paragraphs","type": "Array", "items": {"type": "Text"}, "localized": true}
+      ]
+    },
+    {
+      "sys": {"id": "valueCard", "type": "ContentType"},
+      "name": "Value Card",
+      "fields": [
+        {"id": "iconName",    "name": "Icon Name",    "type": "Symbol","localized": true},
+        {"id": "title",       "name": "Title",        "type": "Text",  "localized": true},
+        {"id": "description", "name": "Description",  "type": "Text",  "localized": true}
+      ]
+    },
+    {
+      "sys": {"id": "teamMember", "type": "ContentType"},
+      "name": "Team Member",
+      "fields": [
+        {"id": "name",           "name": "Name",           "type": "Text",   "localized": true},
+        {"id": "role",           "name": "Role",           "type": "Text",   "localized": true},
+        {"id": "credentials",    "name": "Credentials",    "type": "Text",   "localized": true},
+        {"id": "experience",     "name": "Experience",     "type": "Text",   "localized": true},
+        {"id": "specialization", "name": "Specialization", "type": "Text",   "localized": true},
+        {"id": "headshot",       "name": "Headshot",       "type": "Link",   "linkType": "Asset", "localized": true}
+      ]
+    },
+    {
+      "sys": {"id": "achievement", "type": "ContentType"},
+      "name": "Achievement",
+      "fields": [
+        {"id": "number", "name": "Number", "type": "Symbol", "localized": true},
+        {"id": "label",  "name": "Label",  "type": "Text",   "localized": true}
+      ]
+    },
+    {
+      "sys": {"id": "featureItem", "type": "ContentType"},
+      "name": "Feature Item",
+      "fields": [
+        {"id": "text",  "name": "Text",  "type": "Text", "localized": true}
+      ]
+    },
+    {
+      "sys": {"id": "ctaSection", "type": "ContentType"},
+      "name": "Call to Action",
+      "fields": [
+        {"id": "heading",    "name": "Heading",    "type": "Text",   "localized": true},
+        {"id": "body",       "name": "Body",       "type": "Text",   "localized": true},
+        {"id": "buttonText", "name": "Button Text","type": "Text",   "localized": true},
+        {"id": "buttonLink", "name": "Button Link","type": "Symbol", "localized": true}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "entries": [
+    {
+      "sys": {"contentType": {"sys": {"id": "heroSection"}}},
+      "fields": {
+        "heading": {"en-US": "About Us"},
+        "body":    {"en-US": "TENTACULAR IMMIGRATION SOLUTIONS LTD is your trusted partner in navigating the complex world of Canadian immigration. With years of experience and a passion for helping dreams come true, we're here to guide you every step of the way."}
+      }
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "ourStorySection"}}},
+      "fields": {
+        "title":      {"en-US": "Our Story"},
+        "paragraphs": {"en-US": [
+          "Founded with a vision to make Canadian immigration accessible and successful for everyone, TENTACULAR IMMIGRATION SOLUTIONS LTD has been helping individuals and families achieve their Canadian dreams for over a decade.",
+          "Our journey began when our founder experienced firsthand the challenges of navigating Canada's immigration system. This personal experience ignited a passion to help others avoid the same pitfalls and achieve success in their immigration journey.",
+          "Today, we're proud to be one of Canada's most trusted immigration consulting firms, with a track record of success that speaks for itself. Our team of licensed consultants brings together decades of combined experience and a deep understanding of Canadian immigration law."
+        ]}
+      }
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "valueCard"}}},
+      "fields": {"iconName": {"en-US": "Shield"}, "title": {"en-US": "Integrity"}, "description": {"en-US": "We maintain the highest ethical standards in all our dealings, ensuring transparency and honesty throughout your immigration journey."}}
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "valueCard"}}},
+      "fields": {"iconName": {"en-US": "Heart"}, "title": {"en-US": "Compassion"}, "description": {"en-US": "We understand that immigration is a life-changing decision. We approach each case with empathy and genuine care for your success."}}
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "valueCard"}}},
+      "fields": {"iconName": {"en-US": "Target"}, "title": {"en-US": "Excellence"}, "description": {"en-US": "Our commitment to excellence drives us to stay updated with the latest immigration laws and provide superior service quality."}}
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "valueCard"}}},
+      "fields": {"iconName": {"en-US": "Clock"}, "title": {"en-US": "Reliability"}, "description": {"en-US": "We respect your time and deadlines, ensuring timely responses and efficient processing of your immigration applications."}}
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "teamMember"}}},
+      "fields": {
+        "name":          {"en-US": "Sarah Johnson"},
+        "role":          {"en-US": "Senior Immigration Consultant"},
+        "credentials":   {"en-US": "RCIC, MBA"},
+        "experience":    {"en-US": "12+ years"},
+        "specialization":{"en-US": "Express Entry, PNP Programs"},
+        "headshot":      {"en-US": null}
+      }
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "teamMember"}}},
+      "fields": {
+        "name":          {"en-US": "Michael Chen"},
+        "role":          {"en-US": "Business Immigration Specialist"},
+        "credentials":   {"en-US": "RCIC, CPA"},
+        "experience":    {"en-US": "10+ years"},
+        "specialization":{"en-US": "Start-up Visa, Investor Programs"},
+        "headshot":      {"en-US": null}
+      }
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "teamMember"}}},
+      "fields": {
+        "name":          {"en-US": "Priya Patel"},
+        "role":          {"en-US": "Family Sponsorship Expert"},
+        "credentials":   {"en-US": "RCIC, LLB"},
+        "experience":    {"en-US": "8+ years"},
+        "specialization":{"en-US": "Spouse, Parent & Grandparent Sponsorship"},
+        "headshot":      {"en-US": null}
+      }
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "achievement"}}},
+      "fields": {"number": {"en-US": "500+"}, "label": {"en-US": "Successful Applications"}}
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "achievement"}}},
+      "fields": {"number": {"en-US": "50+"},  "label": {"en-US": "Countries Served"}}
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "achievement"}}},
+      "fields": {"number": {"en-US": "15+"},  "label": {"en-US": "Years Combined Experience"}}
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "achievement"}}},
+      "fields": {"number": {"en-US": "98%"},  "label": {"en-US": "Client Satisfaction Rate"}}
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "featureItem"}}},
+      "fields": {"text": {"en-US": "Licensed and regulated immigration consultants"}}
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "featureItem"}}},
+      "fields": {"text": {"en-US": "Personalized approach to each case"}}
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "featureItem"}}},
+      "fields": {"text": {"en-US": "Up-to-date knowledge of immigration laws"}}
+    },
+    {
+      "sys": {"contentType": {"sys": {"id": "featureItem"}}},
+      "fields": {"text": {"en-US": "Transparent fee structure with no hidden costs"}}
+    }
+]
+}
