@@ -93,19 +93,7 @@ jobs:
             exit $exit_code
           fi
 
-      - name: Ensure startup file (app.js) exists
-        run: |
-          ssh remote << 'EOF'
-          set -e
-          cd "${{ secrets.APP_ROOT }}"
-          if [ ! -f app.js ]; then
-            cat > app.js << 'EOT'
-            const strapi = require('@strapi/strapi');
-            strapi().start();
-            EOT
-          fi
-          EOF
-
+     
       - name: Install production deps on server & restart app
         run: |
           ssh remote << 'EOF'
