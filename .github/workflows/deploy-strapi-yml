@@ -4,8 +4,9 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
-    types: [ closed ]
+    branches:
+      - main
+    types: [closed]
   workflow_dispatch:
 
 jobs:
@@ -24,48 +25,29 @@ jobs:
       - name: Install deps (CI)
         run: npm ci
 
-      - name: Ensure app.js (Strapi v4/v5 aware) - create locally to rsync
-        shell: bash
-        run: |
-          set -euo pipefail
-          MAJOR="$(node -p "require('@strapi/strapi/package.json').version.split('.')[0]")"
-          if [ "$MAJOR" -ge 5 ]; then
-            echo "Detected Strapi v$MAJOR -> using dist/server.js entry"
-            printf "require('./dist/server.js');\n" > app.js
-          else
-            echo "Detected Strapi v$MAJOR -> using programmatic start"
-            cat > app.js <<'EOT'
-            const strapi = require('@strapi/strapi');
-            strapi().start();
-            EOT
-          fi
-          test -s app.js && head -n1 app.js
-
-      - name: Build Strapi (production)
+      - name: Build Strapi admin (production)
         env:
           NODE_ENV: production
           PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
         run: npm run build
 
       - name: Prepare .env (from secrets)
-        shell: bash
         run: |
-          set -euo pipefail
           cat > .env << 'EOF'
           NODE_ENV=production
           HOST=0.0.0.0
-          # Passenger will provide PORT; keep a safe fallback:
+          # Strapi reads PORT from env/Passenger automatically, 1337 fallback:
           PORT=1337
           PUBLIC_URL=${{ secrets.PUBLIC_URL }}
 
-          # Security
+          # Security — make sure these are strong, comma-separated keys for APP_KEYS
           APP_KEYS=${{ secrets.APP_KEYS }}
           API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}
           ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}
           JWT_SECRET=${{ secrets.JWT_SECRET }}
           TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}
 
-          # Database (prod = MySQL)
+          # Database
           DATABASE_CLIENT=${{ secrets.DATABASE_CLIENT }}
           DATABASE_HOST=${{ secrets.DATABASE_HOST }}
           DATABASE_PORT=${{ secrets.DATABASE_PORT }}
@@ -92,26 +74,18 @@ jobs:
           EOF
 
       - name: Add SSH key
-        shell: bash
         run: |
-          set -euo pipefail
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          {
-            echo "Host remote"
-            echo "  HostName ${{ secrets.SSH_HOST }}"
-            echo "  Port ${{ secrets.SSH_PORT }}"
-            echo "  User ${{ secrets.SSH_USER }}"
-            echo "  IdentityFile ~/.ssh/id_rsa"
-            echo "  StrictHostKeyChecking no"
-          } > ~/.ssh/config
+          printf "Host remote\n  HostName %s\n  Port %s\n  User %s\n  IdentityFile ~/.ssh/id_rsa\n  StrictHostKeyChecking no\n" \
+            "${{ secrets.SSH_HOST }}" "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_USER }}" > ~/.ssh/config
 
-      - name: Rsync to server (mirror, preserve .env & uploads)
-        shell: bash
+      - name: Rsync to server
         run: |
-          set -euo pipefail
+          # Ensure remote app root exists
           ssh remote "mkdir -p ${{ secrets.APP_ROOT }}"
+          # Sync repo (without node_modules, .git, and without deleting uploads)
           rsync -az --delete --exclude-from='.rsync-exclude' \
             ./ remote:${{ secrets.APP_ROOT }}/ || exit_code=$?
           # rsync exit 24 = "some files vanished" (ignore)
@@ -119,30 +93,25 @@ jobs:
             exit $exit_code
           fi
 
-      - name: Install prod deps on server & restart app
-        shell: bash
+     
+      - name: Install production deps on server & restart app
         run: |
-          set -euo pipefail
-          ssh -T remote "bash --noprofile --norc -se" <<'EOF'
-          set -euo pipefail
+          ssh remote << 'EOF'
+          set -e
           cd "${{ secrets.APP_ROOT }}"
+          # Clean any previous lock issues
+          rm -f package-lock.json
+          npm i --package-lock-only
+          npm ci --omit=dev
+          # We already built admin on CI; no need to rebuild here.
 
-          # Prefer CloudLinux Node.js Selector environment if available
+          # Restart Node app (CloudLinux/Passenger)
+          # If cloudlinux-selector is available (Namecheap Shared):
           if command -v cloudlinux-selector >/dev/null 2>&1; then
-            # Install production deps inside the selector env
-            cloudlinux-selector run --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}" -- npm ci --omit=dev
-            # Restart app
             cloudlinux-selector stop  --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}" || true
             cloudlinux-selector start --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}"
           else
-            # Fallback: try nodevenv path for Node 20, else system npm
-            NPM="$HOME/nodevenv/${{ secrets.APP_ROOT }}/20/bin/npm"
-            if [ -x "$NPM" ]; then
-              "$NPM" ci --omit=dev
-            else
-              npm ci --omit=dev
-            fi
-            # Passenger restart fallback
+            # Fallback Passenger restart (if available)
             mkdir -p tmp && touch tmp/restart.txt
           fi
           EOF
