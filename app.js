@@ -1,2 +1,1 @@
-const strapi = require('@strapi/strapi');
-strapi().start();
+require('./dist/server.js')
