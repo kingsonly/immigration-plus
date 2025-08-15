@@ -1,117 +1,117 @@
-name: deploy-strapi-namecheap
+# name: deploy-strapi-namecheap
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches:
-      - main
-    types: [closed]
-  workflow_dispatch:
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches:
+#       - main
+#     types: [closed]
+#   workflow_dispatch:
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
 
-      - name: Use Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+#       - name: Use Node.js 20
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '20'
 
-      - name: Install deps (CI)
-        run: npm ci
+#       - name: Install deps (CI)
+#         run: npm ci
 
-      - name: Build Strapi admin (production)
-        env:
-          NODE_ENV: production
-          PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
-        run: npm run build
+#       - name: Build Strapi admin (production)
+#         env:
+#           NODE_ENV: production
+#           PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
+#         run: npm run build
 
-      - name: Prepare .env (from secrets)
-        run: |
-          cat > .env << 'EOF'
-          NODE_ENV=production
-          HOST=0.0.0.0
-          # Strapi reads PORT from env/Passenger automatically, 1337 fallback:
-          PORT=1337
-          PUBLIC_URL=${{ secrets.PUBLIC_URL }}
+#       - name: Prepare .env (from secrets)
+#         run: |
+#           cat > .env << 'EOF'
+#           NODE_ENV=production
+#           HOST=0.0.0.0
+#           # Strapi reads PORT from env/Passenger automatically, 1337 fallback:
+#           PORT=1337
+#           PUBLIC_URL=${{ secrets.PUBLIC_URL }}
 
-          # Security — make sure these are strong, comma-separated keys for APP_KEYS
-          APP_KEYS=${{ secrets.APP_KEYS }}
-          API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}
-          ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}
-          JWT_SECRET=${{ secrets.JWT_SECRET }}
-          TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}
+#           # Security — make sure these are strong, comma-separated keys for APP_KEYS
+#           APP_KEYS=${{ secrets.APP_KEYS }}
+#           API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}
+#           ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}
+#           JWT_SECRET=${{ secrets.JWT_SECRET }}
+#           TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}
 
-          # Database
-          DATABASE_CLIENT=${{ secrets.DATABASE_CLIENT }}
-          DATABASE_HOST=${{ secrets.DATABASE_HOST }}
-          DATABASE_PORT=${{ secrets.DATABASE_PORT }}
-          DATABASE_NAME=${{ secrets.DATABASE_NAME }}
-          DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}
-          DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
-          DATABASE_SSL=false
-          EOF
+#           # Database
+#           DATABASE_CLIENT=${{ secrets.DATABASE_CLIENT }}
+#           DATABASE_HOST=${{ secrets.DATABASE_HOST }}
+#           DATABASE_PORT=${{ secrets.DATABASE_PORT }}
+#           DATABASE_NAME=${{ secrets.DATABASE_NAME }}
+#           DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}
+#           DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
+#           DATABASE_SSL=false
+#           EOF
 
-      - name: Create rsync exclude file
-        run: |
-          cat > .rsync-exclude << 'EOF'
-          node_modules
-          .git
-          .github
-          .cache
-          tmp
-          build-server
-          Dockerfile
-          docker-compose.yml
-          rsync.log
-          # Keep uploads on the server
-          public/uploads
-          EOF
+#       - name: Create rsync exclude file
+#         run: |
+#           cat > .rsync-exclude << 'EOF'
+#           node_modules
+#           .git
+#           .github
+#           .cache
+#           tmp
+#           build-server
+#           Dockerfile
+#           docker-compose.yml
+#           rsync.log
+#           # Keep uploads on the server
+#           public/uploads
+#           EOF
 
-      - name: Add SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          printf "Host remote\n  HostName %s\n  Port %s\n  User %s\n  IdentityFile ~/.ssh/id_rsa\n  StrictHostKeyChecking no\n" \
-            "${{ secrets.SSH_HOST }}" "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_USER }}" > ~/.ssh/config
+#       - name: Add SSH key
+#         run: |
+#           mkdir -p ~/.ssh
+#           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+#           chmod 600 ~/.ssh/id_rsa
+#           printf "Host remote\n  HostName %s\n  Port %s\n  User %s\n  IdentityFile ~/.ssh/id_rsa\n  StrictHostKeyChecking no\n" \
+#             "${{ secrets.SSH_HOST }}" "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_USER }}" > ~/.ssh/config
 
-      - name: Rsync to server
-        run: |
-          # Ensure remote app root exists
-          ssh remote "mkdir -p ${{ secrets.APP_ROOT }}"
-          # Sync repo (without node_modules, .git, and without deleting uploads)
-          rsync -az --delete --exclude-from='.rsync-exclude' \
-            ./ remote:${{ secrets.APP_ROOT }}/ || exit_code=$?
-          # rsync exit 24 = "some files vanished" (ignore)
-          if [ "${exit_code:-0}" -ne 0 ] && [ "$exit_code" -ne 24 ]; then
-            exit $exit_code
-          fi
+#       - name: Rsync to server
+#         run: |
+#           # Ensure remote app root exists
+#           ssh remote "mkdir -p ${{ secrets.APP_ROOT }}"
+#           # Sync repo (without node_modules, .git, and without deleting uploads)
+#           rsync -az --delete --exclude-from='.rsync-exclude' \
+#             ./ remote:${{ secrets.APP_ROOT }}/ || exit_code=$?
+#           # rsync exit 24 = "some files vanished" (ignore)
+#           if [ "${exit_code:-0}" -ne 0 ] && [ "$exit_code" -ne 24 ]; then
+#             exit $exit_code
+#           fi
 
      
-      - name: Install production deps on server & restart app
-        run: |
-          ssh remote << 'EOF'
-          set -e
-          cd "${{ secrets.APP_ROOT }}"
-          # Clean any previous lock issues
-          rm -f package-lock.json
-          npm i --package-lock-only
-          npm ci --omit=dev
-          # We already built admin on CI; no need to rebuild here.
+#       - name: Install production deps on server & restart app
+#         run: |
+#           ssh remote << 'EOF'
+#           set -e
+#           cd "${{ secrets.APP_ROOT }}"
+#           # Clean any previous lock issues
+#           rm -f package-lock.json
+#           npm i --package-lock-only
+#           npm ci --omit=dev
+#           # We already built admin on CI; no need to rebuild here.
 
-          # Restart Node app (CloudLinux/Passenger)
-          # If cloudlinux-selector is available (Namecheap Shared):
-          if command -v cloudlinux-selector >/dev/null 2>&1; then
-            cloudlinux-selector stop  --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}" || true
-            cloudlinux-selector start --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}"
-          else
-            # Fallback Passenger restart (if available)
-            mkdir -p tmp && touch tmp/restart.txt
-          fi
-          EOF
+#           # Restart Node app (CloudLinux/Passenger)
+#           # If cloudlinux-selector is available (Namecheap Shared):
+#           if command -v cloudlinux-selector >/dev/null 2>&1; then
+#             cloudlinux-selector stop  --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}" || true
+#             cloudlinux-selector start --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}"
+#           else
+#             # Fallback Passenger restart (if available)
+#             mkdir -p tmp && touch tmp/restart.txt
+#           fi
+#           EOF
