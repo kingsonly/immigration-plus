@@ -82,7 +82,7 @@ export interface SharedNavLink extends Struct.ComponentSchema {
     icon: Schema.Attribute.String;
     image: Schema.Attribute.Media<'images'>;
     label: Schema.Attribute.String;
-    url: Schema.Attribute.String & Schema.Attribute.Required;
+    url: Schema.Attribute.String;
   };
 }
 
