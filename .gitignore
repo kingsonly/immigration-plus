@@ -19,6 +19,7 @@ pnpm-lock.yaml
 Thumbs.db
 .vscode/
 .idea/
+AGENTS.md
 
 # uploads (keep out of git; store on S3/Cloudinary or persist on server)
 public/uploads/

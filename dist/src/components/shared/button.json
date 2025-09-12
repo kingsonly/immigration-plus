@@ -1,0 +1,35 @@
+{
+    "collectionName": "components_shared_buttons",
+    "info": {
+        "displayName": "Button",
+        "icon": "external-link",
+        "description": "Reusable button with type, label, and link"
+    },
+    "attributes": {
+        "label": {
+            "type": "string",
+            "required": true
+        },
+        "url": {
+            "type": "string",
+            "required": true
+        },
+        "variant": {
+            "type": "enumeration",
+            "default": "default",
+            "enum": [
+                "default",
+                "secondary",
+                "destructive",
+                "link",
+                "outline"
+            ]
+        },
+        "icon": {
+            "type": "string"
+        },
+        "newTab": {
+            "type": "boolean"
+        }
+    }
+}

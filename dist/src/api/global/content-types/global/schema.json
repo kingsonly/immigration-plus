@@ -1,4 +1,5 @@
 {
+    "kind": "singleType",
     "collectionName": "globals",
     "info": {
         "singularName": "global",
@@ -10,6 +11,7 @@
         "draftAndPublish": true,
         "singular": true
     },
+    "pluginOptions": {},
     "attributes": {
         "siteTitle": {
             "type": "string",
@@ -18,24 +20,23 @@
         "siteDescription": {
             "type": "text"
         },
-        "heroTitle": {
-            "type": "string"
-        },
-        "heroSubtitle": {
-            "type": "string"
-        },
-        "heroImage": {
-            "type": "media",
-            "multiple": false,
-            "required": false
-        },
         "contactEmail": {
             "type": "email"
         },
         "socialLinks": {
             "type": "component",
-            "repeatable": true,
-            "component": "shared.social-link"
+            "component": "shared.social-link",
+            "repeatable": true
+        },
+        "Header": {
+            "type": "component",
+            "component": "layout.header",
+            "repeatable": false
+        },
+        "Footer": {
+            "type": "component",
+            "component": "layout.footer",
+            "repeatable": false
         }
     }
 }
