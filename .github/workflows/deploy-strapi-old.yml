@@ -25,11 +25,7 @@ jobs:
       - name: Install deps (CI)
         run: npm ci
 
-      - name: Build Strapi admin (production)
-        env:
-          NODE_ENV: production
-          PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
-        run: npm run build
+      
 
       - name: Prepare .env (from secrets)
         run: |
@@ -38,7 +34,7 @@ jobs:
           HOST=0.0.0.0
           # Strapi reads PORT from env/Passenger automatically, 1337 fallback:
           PORT=1337
-          PUBLIC_URL=${{ secrets.PUBLIC_URL }}
+          PUBLIC_URL=https://c2c.skillzserver.com/admin
 
           # Security — make sure these are strong, comma-separated keys for APP_KEYS
           APP_KEYS=${{ secrets.APP_KEYS }}
@@ -56,7 +52,12 @@ jobs:
           DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
           DATABASE_SSL=false
           EOF
-
+      
+      - name: Build Strapi admin (production)
+        env:
+          NODE_ENV: production
+          PUBLIC_URL: https://c2c.skillzserver.com/admin
+        run: npm run build
       - name: Create rsync exclude file
         run: |
           cat > .rsync-exclude << 'EOF'
