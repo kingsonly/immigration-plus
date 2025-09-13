@@ -17,8 +17,10 @@ export interface BlocksHeadingSection extends Struct.ComponentSchema {
     displayName: 'Heading Section';
   };
   attributes: {
+    cta: Schema.Attribute.Component<'shared.button', false>;
     description: Schema.Attribute.Text;
     Heading: Schema.Attribute.String;
+    icon: Schema.Attribute.String;
   };
 }
 
@@ -34,6 +36,19 @@ export interface BlocksHero extends Struct.ComponentSchema {
     image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     Subtitle: Schema.Attribute.String;
     Title: Schema.Attribute.String;
+  };
+}
+
+export interface BlocksProcessStepsBlock extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_process_steps_blocks';
+  info: {
+    displayName: 'Process Steps Block';
+    icon: 'bold';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    Steps: Schema.Attribute.Component<'shared.process-step', true>;
+    title: Schema.Attribute.String;
   };
 }
 
@@ -151,6 +166,19 @@ export interface SharedNavLink extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedProcessStep extends Struct.ComponentSchema {
+  collectionName: 'components_shared_process_steps';
+  info: {
+    displayName: 'Process Step';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.Media<'images' | 'files'>;
+    stepNumber: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface SharedSocialLink extends Struct.ComponentSchema {
   collectionName: 'components_shared_social_links';
   info: {
@@ -171,6 +199,7 @@ declare module '@strapi/strapi' {
       'blocks.card-grid': BlocksCardGrid;
       'blocks.heading-section': BlocksHeadingSection;
       'blocks.hero': BlocksHero;
+      'blocks.process-steps-block': BlocksProcessStepsBlock;
       'blocks.services': BlocksServices;
       'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;
@@ -179,6 +208,7 @@ declare module '@strapi/strapi' {
       'shared.list-item': SharedListItem;
       'shared.nav-dropdown-link': SharedNavDropdownLink;
       'shared.nav-link': SharedNavLink;
+      'shared.process-step': SharedProcessStep;
       'shared.social-link': SharedSocialLink;
     }
   }

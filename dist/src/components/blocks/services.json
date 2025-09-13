@@ -5,14 +5,14 @@
     },
     "options": {},
     "attributes": {
-        "icon": {
-            "type": "string"
-        },
         "title": {
             "type": "string"
         },
         "description": {
             "type": "text"
+        },
+        "icon": {
+            "type": "string"
         },
         "details": {
             "type": "richtext"

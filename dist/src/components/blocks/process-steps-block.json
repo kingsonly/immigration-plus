@@ -1,7 +1,8 @@
 {
-    "collectionName": "components_shared_cards",
+    "collectionName": "components_blocks_process_steps_blocks",
     "info": {
-        "displayName": "Card"
+        "displayName": "Process Steps Block",
+        "icon": "bold"
     },
     "options": {},
     "attributes": {
@@ -11,13 +12,10 @@
         "description": {
             "type": "text"
         },
-        "icon": {
-            "type": "string"
-        },
-        "link": {
+        "Steps": {
             "type": "component",
-            "component": "shared.button",
-            "repeatable": false
+            "component": "shared.process-step",
+            "repeatable": true
         }
     },
     "config": {}
