@@ -1,0 +1,40 @@
+{
+  "collectionName": "components_blocks_services",
+  "info": {
+    "displayName": "Services"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "details": {
+      "type": "richtext"
+    },
+    "listItem": {
+      "type": "component",
+      "component": "shared.list-item",
+      "repeatable": true
+    },
+    "link": {
+      "type": "component",
+      "component": "shared.button",
+      "repeatable": false
+    },
+    "color": {
+      "type": "string"
+    },
+    "isReverse": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    }
+  },
+  "config": {}
+}

@@ -1,5 +1,27 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface BlocksCardGrid extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_card_grids';
+  info: {
+    displayName: 'Card Grid';
+  };
+  attributes: {
+    Cards: Schema.Attribute.Component<'shared.card', true>;
+    link: Schema.Attribute.Component<'shared.button', false>;
+  };
+}
+
+export interface BlocksHeadingSection extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_heading_sections';
+  info: {
+    displayName: 'Heading Section';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    Heading: Schema.Attribute.String;
+  };
+}
+
 export interface BlocksHero extends Struct.ComponentSchema {
   collectionName: 'components_blocks_heroes';
   info: {
@@ -12,6 +34,25 @@ export interface BlocksHero extends Struct.ComponentSchema {
     image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     Subtitle: Schema.Attribute.String;
     Title: Schema.Attribute.String;
+  };
+}
+
+export interface BlocksServices extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_services';
+  info: {
+    displayName: 'Services';
+  };
+  attributes: {
+    color: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    details: Schema.Attribute.RichText;
+    icon: Schema.Attribute.String;
+    isReverse: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    link: Schema.Attribute.Component<'shared.button', false>;
+    listItem: Schema.Attribute.Component<'shared.list-item', true>;
+    title: Schema.Attribute.String;
   };
 }
 
@@ -53,6 +94,30 @@ export interface SharedButton extends Struct.ComponentSchema {
       ['default', 'secondary', 'destructive', 'link', 'outline']
     > &
       Schema.Attribute.DefaultTo<'default'>;
+  };
+}
+
+export interface SharedCard extends Struct.ComponentSchema {
+  collectionName: 'components_shared_cards';
+  info: {
+    displayName: 'Card';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.String;
+    link: Schema.Attribute.Component<'shared.button', false>;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface SharedListItem extends Struct.ComponentSchema {
+  collectionName: 'components_shared_list_items';
+  info: {
+    displayName: 'List Item';
+  };
+  attributes: {
+    icon: Schema.Attribute.String;
+    listItem: Schema.Attribute.Text;
   };
 }
 
@@ -103,10 +168,15 @@ export interface SharedSocialLink extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'blocks.card-grid': BlocksCardGrid;
+      'blocks.heading-section': BlocksHeadingSection;
       'blocks.hero': BlocksHero;
+      'blocks.services': BlocksServices;
       'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;
       'shared.button': SharedButton;
+      'shared.card': SharedCard;
+      'shared.list-item': SharedListItem;
       'shared.nav-dropdown-link': SharedNavDropdownLink;
       'shared.nav-link': SharedNavLink;
       'shared.social-link': SharedSocialLink;
