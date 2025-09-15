@@ -7,34 +7,7 @@ const strapi_1 = require("@strapi/strapi");
 exports.default = strapi_1.factories.createCoreController("api::services-landing.services-landing", ({ strapi }) => ({
     async find(ctx) {
         const populate = {
-            blocks: {
-                populate: {
-                    ctas: true,
-                    image: true,
-                    listItem: true,
-                    link: true,
-                    steps: true,
-                },
-                on: {
-                    "blocks.services": {},
-                    "blocks.hero": {},
-                    "blocks.heading-section": {},
-                    "blocks.card-grid": {
-                        populate: {
-                            Cards: {
-                                populate: {
-                                    link: true,
-                                },
-                            },
-                        },
-                    },
-                    "blocks.process-steps-block": {
-                        populate: {
-                            Steps: true,
-                        },
-                    },
-                },
-            },
+            blocks: true, // Deeply populate all blocks and their nested components
         };
         try {
             const entity = await strapi.entityService.findMany("api::services-landing.services-landing", {
@@ -47,5 +20,5 @@ exports.default = strapi_1.factories.createCoreController("api::services-landing
             console.error(error);
             return this.transformResponse(null);
         }
-    }
+    },
 }));

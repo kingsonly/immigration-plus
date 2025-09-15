@@ -5,6 +5,12 @@
   },
   "options": {},
   "attributes": {
+    "Heading": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
     "Cards": {
       "type": "component",
       "component": "shared.card",

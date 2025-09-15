@@ -12,7 +12,7 @@
     "description": {
       "type": "text"
     },
-    "Steps": {
+    "steps": {
       "type": "component",
       "component": "shared.process-step",
       "repeatable": true

@@ -18,6 +18,11 @@
             "type": "component",
             "component": "shared.button",
             "repeatable": false
+        },
+        "lists": {
+            "type": "component",
+            "component": "shared.list-item",
+            "repeatable": true
         }
     },
     "config": {}

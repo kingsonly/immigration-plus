@@ -9,34 +9,7 @@ export default factories.createCoreController(
   ({ strapi }) => ({
     async find(ctx) {
       const populate = {
-        blocks: {
-          populate: {
-            ctas: true,
-            image: true,
-            listItem: true,
-            link: true,
-            steps: true,
-          },
-          on: {
-            "blocks.services": {},
-            "blocks.hero": {},
-            "blocks.heading-section": {},
-            "blocks.card-grid": {
-              populate: {
-                Cards: {
-                  populate: {
-                    link: true,
-                  },
-                },
-              },
-            },
-            "blocks.process-steps-block": {
-              populate: {
-                Steps: true,
-              },
-            },
-          },
-        },
+        blocks: true, // Deeply populate all blocks and their nested components
       };
 
       try {
@@ -53,6 +26,6 @@ export default factories.createCoreController(
         console.error(error);
         return this.transformResponse(null);
       }
-    }
+    },
   })
 );

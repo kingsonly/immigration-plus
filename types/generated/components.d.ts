@@ -7,6 +7,8 @@ export interface BlocksCardGrid extends Struct.ComponentSchema {
   };
   attributes: {
     Cards: Schema.Attribute.Component<'shared.card', true>;
+    description: Schema.Attribute.Text;
+    Heading: Schema.Attribute.String;
     link: Schema.Attribute.Component<'shared.button', false>;
   };
 }
@@ -47,7 +49,7 @@ export interface BlocksProcessStepsBlock extends Struct.ComponentSchema {
   };
   attributes: {
     description: Schema.Attribute.Text;
-    Steps: Schema.Attribute.Component<'shared.process-step', true>;
+    steps: Schema.Attribute.Component<'shared.process-step', true>;
     title: Schema.Attribute.String;
   };
 }
@@ -121,6 +123,7 @@ export interface SharedCard extends Struct.ComponentSchema {
     description: Schema.Attribute.Text;
     icon: Schema.Attribute.String;
     link: Schema.Attribute.Component<'shared.button', false>;
+    lists: Schema.Attribute.Component<'shared.list-item', true>;
     title: Schema.Attribute.String;
   };
 }
