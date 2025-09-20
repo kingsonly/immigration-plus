@@ -1,0 +1,8 @@
+{
+  "collectionName": "components_business_kv",
+  "info": { "displayName": "Key Value" },
+  "attributes": {
+    "label": { "type": "string" },
+    "value": { "type": "string" }
+  }
+}

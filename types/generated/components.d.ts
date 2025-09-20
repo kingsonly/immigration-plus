@@ -1,5 +1,26 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface BlocksBusinessImmigration extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_business_immigration';
+  info: {
+    description: 'Full business-immigration page block to be used inside Service.blocks dynamic zone';
+    displayName: 'Business Immigration Block';
+  };
+  attributes: {
+    c11Benefits: Schema.Attribute.Component<'business.benefit', true>;
+    fees: Schema.Attribute.Component<'business.fee', true>;
+    govFees: Schema.Attribute.Component<'business.gov-fee', true>;
+    hero: Schema.Attribute.Component<'business.hero', false>;
+    howItWorks: Schema.Attribute.Component<'business.step', true>;
+    pnpOverview: Schema.Attribute.Component<'business.kv', true>;
+    postInvestmentCards: Schema.Attribute.Component<'business.card', true>;
+    programs: Schema.Attribute.Component<'business.program', true>;
+    quoteCTA: Schema.Attribute.Component<'business.cta-button', false>;
+    seServices: Schema.Attribute.Component<'business.service', true>;
+    streams: Schema.Attribute.Component<'business.stream', true>;
+  };
+}
+
 export interface BlocksCardGrid extends Struct.ComponentSchema {
   collectionName: 'components_blocks_card_grids';
   info: {
@@ -73,6 +94,149 @@ export interface BlocksServices extends Struct.ComponentSchema {
   };
 }
 
+export interface BusinessBenefit extends Struct.ComponentSchema {
+  collectionName: 'components_business_benefit';
+  info: {
+    displayName: 'Benefit';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    iconName: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface BusinessCard extends Struct.ComponentSchema {
+  collectionName: 'components_business_card';
+  info: {
+    displayName: 'Card';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    iconName: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface BusinessCtaButton extends Struct.ComponentSchema {
+  collectionName: 'components_business_cta_button';
+  info: {
+    displayName: 'CTA Button';
+  };
+  attributes: {
+    emailSubject: Schema.Attribute.String;
+    href: Schema.Attribute.String;
+    label: Schema.Attribute.String;
+  };
+}
+
+export interface BusinessFee extends Struct.ComponentSchema {
+  collectionName: 'components_business_fee';
+  info: {
+    displayName: 'Fee';
+  };
+  attributes: {
+    category: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    details: Schema.Attribute.JSON;
+    note: Schema.Attribute.String;
+    range: Schema.Attribute.String;
+  };
+}
+
+export interface BusinessGovFee extends Struct.ComponentSchema {
+  collectionName: 'components_business_gov_fee';
+  info: {
+    displayName: 'Government Fee';
+  };
+  attributes: {
+    amount: Schema.Attribute.String;
+    category: Schema.Attribute.String;
+  };
+}
+
+export interface BusinessHero extends Struct.ComponentSchema {
+  collectionName: 'components_business_hero';
+  info: {
+    displayName: 'Hero';
+  };
+  attributes: {
+    body: Schema.Attribute.Text;
+    iconName: Schema.Attribute.String;
+    primaryCTA: Schema.Attribute.Component<'business.cta-button', false>;
+    secondaryCTA: Schema.Attribute.Component<'business.cta-button', false>;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface BusinessKv extends Struct.ComponentSchema {
+  collectionName: 'components_business_kv';
+  info: {
+    displayName: 'Key Value';
+  };
+  attributes: {
+    label: Schema.Attribute.String;
+    value: Schema.Attribute.String;
+  };
+}
+
+export interface BusinessProgram extends Struct.ComponentSchema {
+  collectionName: 'components_business_program';
+  info: {
+    displayName: 'Program';
+  };
+  attributes: {
+    color: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    href: Schema.Attribute.String;
+    iconName: Schema.Attribute.String;
+    requirements: Schema.Attribute.Component<'shared.list-item', true>;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface BusinessService extends Struct.ComponentSchema {
+  collectionName: 'components_business_service';
+  info: {
+    displayName: 'Service List Item';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    iconName: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface BusinessStep extends Struct.ComponentSchema {
+  collectionName: 'components_business_step';
+  info: {
+    displayName: 'How Step';
+  };
+  attributes: {
+    heading: Schema.Attribute.String;
+    stepNumber: Schema.Attribute.Integer;
+    text: Schema.Attribute.Text;
+  };
+}
+
+export interface BusinessStream extends Struct.ComponentSchema {
+  collectionName: 'components_business_stream';
+  info: {
+    displayName: 'Stream';
+  };
+  attributes: {
+    color: Schema.Attribute.String;
+    investment: Schema.Attribute.String;
+    jobs: Schema.Attribute.String;
+    netWorth: Schema.Attribute.String;
+    program: Schema.Attribute.String;
+    province: Schema.Attribute.String;
+    streams: Schema.Attribute.JSON;
+  };
+}
+
 export interface LayoutFooter extends Struct.ComponentSchema {
   collectionName: 'components_layout_footers';
   info: {
@@ -95,6 +259,45 @@ export interface LayoutHeader extends Struct.ComponentSchema {
   };
 }
 
+export interface ServiceCta extends Struct.ComponentSchema {
+  collectionName: 'components_service_ctas';
+  info: {
+    description: 'Call to action block';
+    displayName: 'CTA';
+  };
+  attributes: {
+    buttonLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    buttonLink: Schema.Attribute.String & Schema.Attribute.Required;
+    text: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface ServiceHero extends Struct.ComponentSchema {
+  collectionName: 'components_service_heroes';
+  info: {
+    description: 'Hero section for a service';
+    displayName: 'Hero';
+  };
+  attributes: {
+    image: Schema.Attribute.Media & Schema.Attribute.Required;
+    subtitle: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface ServiceSection extends Struct.ComponentSchema {
+  collectionName: 'components_service_sections';
+  info: {
+    description: 'A section with title and description';
+    displayName: 'Section';
+  };
+  attributes: {
+    content: Schema.Attribute.RichText;
+    icon: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface SharedButton extends Struct.ComponentSchema {
   collectionName: 'components_shared_buttons';
   info: {
@@ -103,6 +306,7 @@ export interface SharedButton extends Struct.ComponentSchema {
     icon: 'external-link';
   };
   attributes: {
+    emailSubject: Schema.Attribute.String;
     icon: Schema.Attribute.String;
     label: Schema.Attribute.String & Schema.Attribute.Required;
     newTab: Schema.Attribute.Boolean;
@@ -199,13 +403,28 @@ export interface SharedSocialLink extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'blocks.business-immigration': BlocksBusinessImmigration;
       'blocks.card-grid': BlocksCardGrid;
       'blocks.heading-section': BlocksHeadingSection;
       'blocks.hero': BlocksHero;
       'blocks.process-steps-block': BlocksProcessStepsBlock;
       'blocks.services': BlocksServices;
+      'business.benefit': BusinessBenefit;
+      'business.card': BusinessCard;
+      'business.cta-button': BusinessCtaButton;
+      'business.fee': BusinessFee;
+      'business.gov-fee': BusinessGovFee;
+      'business.hero': BusinessHero;
+      'business.kv': BusinessKv;
+      'business.program': BusinessProgram;
+      'business.service': BusinessService;
+      'business.step': BusinessStep;
+      'business.stream': BusinessStream;
       'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;
+      'service.cta': ServiceCta;
+      'service.hero': ServiceHero;
+      'service.section': ServiceSection;
       'shared.button': SharedButton;
       'shared.card': SharedCard;
       'shared.list-item': SharedListItem;

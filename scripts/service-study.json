@@ -1,0 +1,38 @@
+{
+  "data": {
+    "title": "Study in Canada",
+    "slug": "study",
+    "summary": "Study permits and student pathways",
+    "blocks": [
+      {
+        "__component": "blocks.hero",
+        "iconName": "GraduationCap",
+        "title": "Study in Canada",
+        "subtitle": "Educational opportunities await"
+      },
+      {
+        "__component": "blocks.process-steps-block",
+        "title": "Application Process",
+        "description": "From acceptance letter to study permit",
+        "steps": [
+          { "stepNumber": "01", "title": "Program Selection", "description": "Choose a designated learning institution" },
+          { "stepNumber": "02", "title": "Gather Documents", "description": "Prepare required forms and proofs" },
+          { "stepNumber": "03", "title": "Submit Application", "description": "Apply for your study permit" },
+          { "stepNumber": "04", "title": "Biometrics & Review", "description": "Complete biometrics and wait for decision" },
+          { "stepNumber": "05", "title": "Arrival & Compliance", "description": "Arrive and follow permit conditions" }
+        ]
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Why Study With Us?",
+        "description": "Support from application to arrival",
+        "Cards": [
+          { "icon": "Target", "title": "Program Matching", "description": "Find the best-fit program and school" },
+          { "icon": "FileText", "title": "Application Support", "description": "Complete and compliant applications" },
+          { "icon": "Clock", "title": "Timely Guidance", "description": "Stay on track with deadlines" }
+        ]
+      }
+    ]
+  }
+}
+

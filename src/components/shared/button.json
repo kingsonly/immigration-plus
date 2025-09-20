@@ -30,6 +30,9 @@
     },
     "newTab": {
       "type": "boolean"
+    },
+    "emailSubject": {
+      "type": "string"
     }
   }
 }

@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_business_stream",
+  "info": { "displayName": "Stream" },
+  "attributes": {
+    "province": { "type": "string" },
+    "program": { "type": "string" },
+    "netWorth": { "type": "string" },
+    "investment": { "type": "string" },
+    "jobs": { "type": "string" },
+    "streams": { "type": "json" },
+    "color": { "type": "string" }
+  }
+}

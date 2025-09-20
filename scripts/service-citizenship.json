@@ -1,0 +1,38 @@
+{
+  "data": {
+    "title": "Citizenship",
+    "slug": "citizenship",
+    "summary": "Canadian citizenship overview and process",
+    "blocks": [
+      {
+        "__component": "blocks.hero",
+        "iconName": "Award",
+        "title": "Canadian Citizenship",
+        "subtitle": "Become a citizen and complete your Canadian journey."
+      },
+      {
+        "__component": "blocks.process-steps-block",
+        "title": "Our Process",
+        "description": "A clear five-step path to your goal",
+        "steps": [
+          { "stepNumber": "01", "title": "Initial Consultation", "description": "We assess your profile and goals" },
+          { "stepNumber": "02", "title": "Strategy Development", "description": "Personalized strategy for your case" },
+          { "stepNumber": "03", "title": "Document Preparation", "description": "Gather and prepare required documents" },
+          { "stepNumber": "04", "title": "Application Submission", "description": "Submit and monitor your application" },
+          { "stepNumber": "05", "title": "Ongoing Support", "description": "Support until you reach your goal" }
+        ]
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Why Choose Our Services?",
+        "description": "We provide comprehensive support throughout your entire journey",
+        "Cards": [
+          { "icon": "FileText", "title": "Expert Documentation", "description": "We prepare and submit according to latest requirements." },
+          { "icon": "Clock", "title": "Timely Processing", "description": "We keep you updated on progress every step of the way." },
+          { "icon": "Users", "title": "Personalized Support", "description": "Individual attention and customized strategy for your situation." }
+        ]
+      }
+    ]
+  }
+}
+

@@ -1,0 +1,8 @@
+{
+  "collectionName": "components_business_gov_fee",
+  "info": { "displayName": "Government Fee" },
+  "attributes": {
+    "category": { "type": "string" },
+    "amount": { "type": "string" }
+  }
+}

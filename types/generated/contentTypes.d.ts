@@ -520,6 +520,7 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
         'blocks.hero',
         'blocks.heading-section',
         'blocks.card-grid',
+        'blocks.business-immigration',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
