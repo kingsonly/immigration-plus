@@ -30,29 +30,31 @@ export default factories.createCoreController(
     async findOneBySlug(ctx) {
       const { slug } = ctx.params;
 
-      const results = await strapi.entityService.findMany(
-        "api::service.service",
-        {
-          filters: { slug },
-          populate: {
-            featuredImage: true,
-            documents: true,
-            ogImage: true,
-            category: true,
-            // Per Strapi v5: for dynamic zones (polymorphic), nested populate must be '*'
-            blocks: "*",
+      // Drive population and filtering through ctx.query so Strapi's sanitizer keeps nested relations.
+      // For dynamic zones in Strapi v5, use fragment-based populate (on) to deep-populate components safely.
+      ctx.query = {
+        ...(ctx.query || {}),
+        filters: { slug: { $eq: slug } },
+        populate: {
+          featuredImage: true,
+          documents: true,
+          ogImage: true,
+          category: true,
+          // Only deep-populate the business-immigration block to avoid invalid nested keys
+          blocks: {
+            on: {
+              'blocks.business-immigration': { populate: '*' },
+            },
           },
-        }
-      );
+        } as any,
+      } as any;
 
-      const entity = Array.isArray(results) ? results[0] : results;
-
-      if (!entity) {
-        return ctx.notFound("Service not found");
-      }
-
-      const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
-      return this.transformResponse(sanitizedEntity);
+      // Use the core controller find so the whole pipeline (sanitizer/transformer) respects ctx.query
+      const { data } = await super.find(ctx);
+      const entity = Array.isArray(data) ? data[0] : data;
+      if (!entity) return ctx.notFound("Service not found");
+      // Already transformed by super.find; return single entity
+      return { data: entity, meta: {} };
     },
 
     // Update a service by slug (custom action)

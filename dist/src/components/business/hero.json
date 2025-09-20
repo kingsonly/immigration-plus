@@ -1,0 +1,12 @@
+{
+    "collectionName": "components_business_hero",
+    "info": { "displayName": "Hero" },
+    "attributes": {
+        "iconName": { "type": "string" },
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "body": { "type": "text" },
+        "primaryCTA": { "type": "component", "component": "business.cta-button" },
+        "secondaryCTA": { "type": "component", "component": "business.cta-button" }
+    }
+}

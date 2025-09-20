@@ -36,7 +36,7 @@ export default factories.createCoreController(
             "blocks.heading-section": {},
           },
         },
-      };
+      } as const;
 
       const entity = await strapi.entityService.findMany(
         "api::homepage.homepage",

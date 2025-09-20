@@ -1,0 +1,50 @@
+{
+    "kind": "singleType",
+    "collectionName": "services_landings",
+    "info": {
+        "singularName": "services-landing",
+        "pluralName": "services-landings",
+        "displayName": "Services Landing"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {
+        "i18n": {
+            "localized": true
+        }
+    },
+    "attributes": {
+        "title": {
+            "type": "string",
+            "pluginOptions": {
+                "i18n": {
+                    "localized": true
+                }
+            }
+        },
+        "description": {
+            "type": "text",
+            "pluginOptions": {
+                "i18n": {
+                    "localized": true
+                }
+            }
+        },
+        "blocks": {
+            "type": "dynamiczone",
+            "pluginOptions": {
+                "i18n": {
+                    "localized": true
+                }
+            },
+            "components": [
+                "blocks.services",
+                "blocks.hero",
+                "blocks.heading-section",
+                "blocks.card-grid",
+                "blocks.process-steps-block"
+            ]
+        }
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "collectionName": "components_business_card",
+    "info": { "displayName": "Card" },
+    "attributes": {
+        "iconName": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "text" }
+    }
+}

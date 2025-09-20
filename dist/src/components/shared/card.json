@@ -1,0 +1,29 @@
+{
+    "collectionName": "components_shared_cards",
+    "info": {
+        "displayName": "Card"
+    },
+    "options": {},
+    "attributes": {
+        "title": {
+            "type": "string"
+        },
+        "description": {
+            "type": "text"
+        },
+        "icon": {
+            "type": "string"
+        },
+        "link": {
+            "type": "component",
+            "component": "shared.button",
+            "repeatable": false
+        },
+        "lists": {
+            "type": "component",
+            "component": "shared.list-item",
+            "repeatable": true
+        }
+    },
+    "config": {}
+}

@@ -11,8 +11,15 @@
           "title": "Business Immigration",
           "subtitle": "Empowering Entrepreneurs, Investors & Self-Employed Professionals to Launch and Grow in Canada",
           "body": "At TENTACULAR IMMIGRATION SOLUTIONS LTD, we guide ambitious business-minded individuals through Canada's federal and provincial business immigration streams — helping you transition from startup idea to permanent residency, legally and strategically.",
-          "primaryCTA": { "label": "Book Free Business Consultation", "href": "/contact" },
-          "secondaryCTA": { "label": "Request Quote", "href": "mailto:info@coming2canada.co", "emailSubject": "Canada Start-Up Visa" }
+          "primaryCTA": {
+            "label": "Book Free Business Consultation",
+            "href": "/contact"
+          },
+          "secondaryCTA": {
+            "label": "Request Quote",
+            "href": "mailto:info@coming2canada.co",
+            "emailSubject": "Canada Start-Up Visa"
+          }
         },
         "programs": [
           {
@@ -73,38 +80,113 @@
           }
         ],
         "howItWorks": [
-          { "stepNumber": 1, "heading": "Idea & Team", "text": "Solidify business idea and team alignment." },
-          { "stepNumber": 2, "heading": "Get Support", "text": "Secure Letter of Support from designated organization." },
-          { "stepNumber": 3, "heading": "Apply", "text": "Submit application and supporting documents." }
+          {
+            "stepNumber": 1,
+            "heading": "Our Start-Up Visa Services",
+            "text": "Submit your business idea to a designated incubator, angel investor group, or venture capital fund. If approved, you'll receive a required Letter of Support."
+          },
+          {
+            "stepNumber": 2,
+            "heading": "Meet Language Requirements",
+            "text": "Achieve CLB 5 in English or French."
+          },
+          {
+            "stepNumber": 3,
+            "heading": "Prove Settlement Funds",
+            "text": "Demonstrate you can support yourself and your dependents in Canada (per IRCC guidelines)."
+          },
+          {
+            "stepNumber": 4,
+            "heading": "Launch While You Wait",
+            "text": "Eligible applicants may apply for a temporary work permit to begin operations in Canada while awaiting permanent residence approval."
+          }
         ],
         "seServices": [
-          { "iconName": "Target", "title": "Eligibility Assessments", "description": "Profile scoring and qualification evaluation" },
-          { "iconName": "FileText", "title": "Document Preparation", "description": "Proof of self-employment and achievements" }
+          {
+            "iconName": "Target",
+            "title": "Eligibility Assessments",
+            "description": "Profile scoring and qualification evaluation"
+          },
+          {
+            "iconName": "Briefcase",
+            "title": "Document Preparation",
+            "description": "Proof of self-employment and achievements"
+          },
+          {
+            "iconName": "Users",
+            "title": "Full Representation",
+            "description": "Throughout the entire application process"
+          },
+          {
+            "iconName": "FileText",
+            "title": "Narrative Building",
+            "description": "Showcase cultural or athletic contributions"
+          }
         ],
         "fees": [
           {
             "category": "Startup Team Participation",
             "range": "CAD 75,000 – CAD 250,000",
             "description": "For entrepreneurs joining existing startup groups",
-            "details": ["Access to eligible startup", "Document preparation", "Founder alignment", "Business role allocation"],
+            "details": [
+              "Access to eligible startup",
+              "Document preparation",
+              "Founder alignment",
+              "Business role allocation"
+            ],
             "note": "Private-market fees, not charged by IRCC"
           },
           {
             "category": "Designated Organization Support",
             "range": "CAD 10,000 – CAD 200,000",
             "description": "Business incubators, angel investors, or venture capital funds",
-            "details": ["Business plan development", "Pitch coaching", "Due diligence", "Letter of Support"],
+            "details": [
+              "Business plan development",
+              "Pitch coaching",
+              "Due diligence",
+              "Letter of Support"
+            ],
             "note": "Varies based on business stage and potential"
+          },
+          {
+            "category": "Business Investment Capital",
+            "range": "CAD 50,000 – CAD 250,000",
+            "description": "Funding the actual launch of your startup",
+            "details": [
+              "Business setup costs",
+              "Hiring and operations",
+              "Development expenses",
+              "Customer acquisition"
+            ],
+            "note": "IRCC expects genuine business activity"
           }
         ],
         "govFees": [
-          { "category": "Principal Applicant", "amount": "$1,625 + $515 (RPRF)" },
+          {
+            "category": "Principal Applicant",
+            "amount": "$1,625 + $515 (RPRF)"
+          },
           { "category": "Spouse or Partner", "amount": "$850 + $515 (RPRF)" },
-          { "category": "Dependent Child (each)", "amount": "$230" }
+          { "category": "Dependent Child (each)", "amount": "$230" },
+          { "category": "Biometrics (individual)", "amount": "$85" },
+          { "category": "Biometrics (family)", "amount": "$170 (max)" }
         ],
         "pnpOverview": [
-          { "label": "British Columbia - Entrepreneur Immigration", "value": "Net worth ≥ CAD $600,000, Investment ≥ CAD $200,000" },
-          { "label": "Ontario - Entrepreneur Stream (OINP)", "value": "Net worth $800K (GTA) / $400K (outside), Investment $600K (GTA) / $200K (outside)" }
+          { "label": "Investment Amount", "value": "CAD $100,000 to $600,000" },
+          {
+            "label": "Work Permit",
+            "value": "Temporary (prior to nomination)"
+          },
+          {
+            "label": "Permanent Residency",
+            "value": "Via provincial nomination"
+          },
+          { "label": "Business Experience", "value": "Typically 2+ years" },
+          {
+            "label": "Net Worth Requirement",
+            "value": "CAD $300,000 to $800,000"
+          },
+          { "label": "Job Creation", "value": "1–2+ Canadian jobs" }
         ],
         "streams": [
           {
@@ -124,19 +206,66 @@
             "jobs": "1–2 full-time positions",
             "streams": ["GTA Stream", "Outside GTA/ICT"],
             "color": "from-green-500 to-green-600"
+          },
+          {
+            "province": "Alberta",
+            "program": "Foreign Graduate Entrepreneur",
+            "netWorth": "Investment-focused",
+            "investment": "$100K (urban) / $50K (rural)",
+            "jobs": "Job creation required",
+            "streams": ["Urban Stream", "Rural Stream"],
+            "color": "from-orange-500 to-orange-600"
+          },
+          {
+            "province": "Manitoba",
+            "program": "Entrepreneur Pathway",
+            "netWorth": "≥ CAD $500,000",
+            "investment": "$250K (Winnipeg) / $150K (outside)",
+            "jobs": "1+ full-time job",
+            "streams": ["Business Stream", "Farm Stream"],
+            "color": "from-purple-500 to-purple-600"
           }
         ],
         "c11Benefits": [
-          { "iconName": "Users", "title": "Create or maintain jobs for Canadians", "description": "Demonstrate employment opportunities for local workforce" },
-          { "iconName": "Lightbulb", "title": "Introduce innovative goods or services", "description": "Bring new technologies or solutions to the Canadian market" }
+          {
+            "iconName": "Users",
+            "title": "Create or maintain jobs for Canadians",
+            "description": "Demonstrate employment opportunities for local workforce"
+          },
+          {
+            "iconName": "Lightbulb",
+            "title": "Introduce innovative goods or services",
+            "description": "Bring new technologies or solutions to the Canadian market"
+          },
+          {
+            "iconName": "TrendingUp",
+            "title": "Expand regional economic opportunities",
+            "description": "Contribute to local economic development and growth"
+          },
+          {
+            "iconName": "Globe",
+            "title": "Increase exports or develop international markets",
+            "description": "Help Canada expand its global trade relationships"
+          }
         ],
-        "quoteCTA": { "label": "Book Consultation", "href": "/contact", "emailSubject": "Canada Start-Up Visa" },
+        "quoteCTA": {
+          "label": "Book Consultation",
+          "href": "/contact",
+          "emailSubject": "Canada Start-Up Visa"
+        },
         "postInvestmentCards": [
-          { "iconName": "Building", "title": "Continuous Business Ownership", "description": "Maintain active ownership or management of your Canadian business" },
-          { "iconName": "Users", "title": "Job Creation for Canadians", "description": "Demonstrate employment opportunities created for Canadian workers" }
+          {
+            "iconName": "Building",
+            "title": "Continuous Business Ownership",
+            "description": "Maintain active ownership or management of your Canadian business"
+          },
+          {
+            "iconName": "Users",
+            "title": "Job Creation for Canadians",
+            "description": "Demonstrate employment opportunities created for Canadian workers"
+          }
         ]
       }
     ]
   }
 }
-
