@@ -1,4 +1,4 @@
-import type React from "react"
+﻿import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
@@ -7,7 +7,7 @@ import Link from "next/link"
 import { MapPin } from "lucide-react"
 import Image from "next/image"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"], display: "swap", adjustFontFallback: true, preload: false })
 
 export const metadata: Metadata = {
   title: "Coming2Canada - Immigration Consulting Services",
@@ -24,7 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body >
         <Navigation />
         {children}
         <footer className="bg-gray-900 text-white py-12">
@@ -89,9 +89,9 @@ export default function RootLayout({
               <div>
                 <h3 className="font-semibold text-lg mb-4">Contact</h3>
                 <div className="space-y-2 text-gray-400">
-                  <p>📧 info@coming2canada.ca</p>
-                  <p>📞 +1 (613) 371-6611</p>
-                  <p>📍 Canada</p>
+                  <p>ðŸ“§ info@coming2canada.ca</p>
+                  <p>ðŸ“ž +1 (613) 371-6611</p>
+                  <p>ðŸ“ Canada</p>
                 </div>
               </div>
 
@@ -115,3 +115,5 @@ export default function RootLayout({
     </html>
   )
 }
+
+
