@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_blocks_application_process",
+  "info": {
+    "displayName": "Application Process"
+  },
+  "options": {},
+  "attributes": {
+    "title": { "type": "string" },
+    "icon": { "type": "string" },
+    "items": {
+      "type": "component",
+      "component": "shared.list-item",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}
+

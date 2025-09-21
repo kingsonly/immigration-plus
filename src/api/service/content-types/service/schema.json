@@ -67,7 +67,8 @@
         "blocks.hero",
         "blocks.heading-section",
         "blocks.card-grid",
-        "blocks.business-immigration"
+        "blocks.business-immigration",
+        "blocks.application-process"
       ]
     },
     "documents": {

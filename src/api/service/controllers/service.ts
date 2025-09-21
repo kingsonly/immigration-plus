@@ -3,17 +3,29 @@
  */
 import { factories } from "@strapi/strapi";
 
+const getServicePopulate = () => ({
+  featuredImage: true,
+  documents: true,
+  ogImage: true,
+  category: true,
+  blocks: {
+    on: {
+      'blocks.business-immigration': { populate: '*' },
+      'blocks.hero': { populate: '*' },
+      'blocks.heading-section': { populate: '*' },
+      'blocks.card-grid': { populate: '*' },
+      'blocks.process-steps-block': { populate: '*' },
+      'blocks.services': { populate: '*' },
+      'blocks.application-process': { populate: '*' },
+    },
+  },
+});
+
 export default factories.createCoreController(
   "api::service.service",
   ({ strapi }) => ({
     async find(ctx) {
-      const populate = {
-        featuredImage: true,
-        documents: true,
-        ogImage: true,
-        category: true,
-        blocks: true, // Deeply populate all blocks and their nested components
-      };
+      const populate = getServicePopulate();
 
       const entities = await strapi.entityService.findMany(
         "api::service.service",
@@ -26,34 +38,18 @@ export default factories.createCoreController(
       return this.transformResponse(sanitizedEntities);
     },
 
-    // ✅ Custom action to fetch service by slug
     async findOneBySlug(ctx) {
       const { slug } = ctx.params;
 
-      // Drive population and filtering through ctx.query so Strapi's sanitizer keeps nested relations.
-      // For dynamic zones in Strapi v5, use fragment-based populate (on) to deep-populate components safely.
       ctx.query = {
         ...(ctx.query || {}),
         filters: { slug: { $eq: slug } },
-        populate: {
-          featuredImage: true,
-          documents: true,
-          ogImage: true,
-          category: true,
-          // Only deep-populate the business-immigration block to avoid invalid nested keys
-          blocks: {
-            on: {
-              'blocks.business-immigration': { populate: '*' },
-            },
-          },
-        } as any,
+        populate: getServicePopulate(),
       } as any;
 
-      // Use the core controller find so the whole pipeline (sanitizer/transformer) respects ctx.query
       const { data } = await super.find(ctx);
       const entity = Array.isArray(data) ? data[0] : data;
       if (!entity) return ctx.notFound("Service not found");
-      // Already transformed by super.find; return single entity
       return { data: entity, meta: {} };
     },
 

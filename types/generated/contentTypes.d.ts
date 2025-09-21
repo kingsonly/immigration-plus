@@ -521,6 +521,7 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
         'blocks.heading-section',
         'blocks.card-grid',
         'blocks.business-immigration',
+        'blocks.application-process',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

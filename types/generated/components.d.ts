@@ -1,5 +1,17 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface BlocksApplicationProcess extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_application_process';
+  info: {
+    displayName: 'Application Process';
+  };
+  attributes: {
+    icon: Schema.Attribute.String;
+    items: Schema.Attribute.Component<'shared.list-item', true>;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface BlocksBusinessImmigration extends Struct.ComponentSchema {
   collectionName: 'components_blocks_business_immigration';
   info: {
@@ -403,6 +415,7 @@ export interface SharedSocialLink extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'blocks.application-process': BlocksApplicationProcess;
       'blocks.business-immigration': BlocksBusinessImmigration;
       'blocks.card-grid': BlocksCardGrid;
       'blocks.heading-section': BlocksHeadingSection;

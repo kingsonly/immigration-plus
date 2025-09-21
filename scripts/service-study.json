@@ -6,20 +6,36 @@
     "blocks": [
       {
         "__component": "blocks.hero",
-        "iconName": "GraduationCap",
-        "title": "Study in Canada",
-        "subtitle": "Educational opportunities await"
+        "Title": "Study in Canada",
+        "Subtitle": "Educational opportunities await"
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Application Process",
+        "description": "From acceptance letter to study permit"
       },
       {
         "__component": "blocks.process-steps-block",
-        "title": "Application Process",
-        "description": "From acceptance letter to study permit",
+        "title": "",
+        "description": "",
         "steps": [
-          { "stepNumber": "01", "title": "Program Selection", "description": "Choose a designated learning institution" },
-          { "stepNumber": "02", "title": "Gather Documents", "description": "Prepare required forms and proofs" },
-          { "stepNumber": "03", "title": "Submit Application", "description": "Apply for your study permit" },
-          { "stepNumber": "04", "title": "Biometrics & Review", "description": "Complete biometrics and wait for decision" },
-          { "stepNumber": "05", "title": "Arrival & Compliance", "description": "Arrive and follow permit conditions" }
+          { "stepNumber": "01", "title": "Program Selection", "description": "Choose a designated learning institution (DLI)." },
+          { "stepNumber": "02", "title": "Gather Documents", "description": "Prepare required forms and proofs." },
+          { "stepNumber": "03", "title": "Submit Application", "description": "Apply for your study permit." },
+          { "stepNumber": "04", "title": "Biometrics & Review", "description": "Complete biometrics and wait for decision." },
+          { "stepNumber": "05", "title": "Arrival & Compliance", "description": "Arrive and follow permit conditions." }
+        ]
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Required Documents",
+        "description": "Key documents for a strong application",
+        "Cards": [
+          { "icon": "FileText", "title": "Letter of Acceptance", "description": "From a Designated Learning Institution (DLI)." },
+          { "icon": "User", "title": "Proof of Identity", "description": "Valid passport or travel document." },
+          { "icon": "Building", "title": "Proof of Funds", "description": "Tuition, living costs, and return travel." },
+          { "icon": "Mail", "title": "Letter of Explanation", "description": "Statement of purpose, if applicable." },
+          { "icon": "Shield", "title": "PAL/TAL", "description": "Provincial/Territorial Attestation Letter if required." }
         ]
       },
       {
@@ -27,12 +43,16 @@
         "Heading": "Why Study With Us?",
         "description": "Support from application to arrival",
         "Cards": [
-          { "icon": "Target", "title": "Program Matching", "description": "Find the best-fit program and school" },
-          { "icon": "FileText", "title": "Application Support", "description": "Complete and compliant applications" },
-          { "icon": "Clock", "title": "Timely Guidance", "description": "Stay on track with deadlines" }
+          { "icon": "Target", "title": "Program Matching", "description": "Find the best-fit program and school." },
+          { "icon": "FileText", "title": "Application Support", "description": "Complete and compliant applications." },
+          { "icon": "Clock", "title": "Timely Guidance", "description": "Stay on track with deadlines." }
         ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Ready to Begin Your Journey?",
+        "description": "Book a consultation and get expert guidance from our RCIC."
       }
     ]
   }
 }
-
