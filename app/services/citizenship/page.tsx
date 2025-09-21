@@ -1,6 +1,7 @@
-"use client"
+﻿"use client"
 
-import { motion } from "framer-motion"
+import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import {
   Home,
   Briefcase,
@@ -16,10 +17,36 @@ import {
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import Link from 'next/link'
+import ServiceBlocks from '@/components/page/ServiceBlocks'
+
+async function fetchServiceBlocks(slug: string) {
+  try {
+    const base = (process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337').replace(/\/$/, '')
+    const params = new URLSearchParams()
+    if (process.env.NEXT_PUBLIC_STRAPI_PREVIEW === '1') params.set('publicationState', 'preview')
+    if (process.env.NEXT_PUBLIC_STRAPI_LOCALE) params.set('locale', process.env.NEXT_PUBLIC_STRAPI_LOCALE)
+    const qs = params.toString()
+    const url = base + '/api/services/slug/' + encodeURIComponent(slug) + (qs ? ('?' + qs) : '')
+    const res = await fetch(url, { cache: 'no-store' })
+    if (!res.ok) return null
+    const json = await res.json()
+    const data = json?.data
+    return (data?.blocks || data?.attributes?.blocks) ?? null
+  } catch (_) {
+    return null
+  }
+}
+
 
 export default function CitizenshipPage() {
-  const eligibilityRequirements = [
+  const [blocks, setBlocks] = useState<any[] | null>(null)
+  useEffect(() => { fetchServiceBlocks('citizenship').then(setBlocks) }, [])
+
+  if (Array.isArray(blocks) && blocks.length > 0) {
+    return <ServiceBlocks blocks={blocks} />
+  }
+const eligibilityRequirements = [
     {
       icon: Users, // Suggests multi-generational or group support
       title: "Permanent Resident (PR) Status",
@@ -36,30 +63,30 @@ export default function CitizenshipPage() {
       icon: Users, // Suggests multi-generational or group support
       title: "Income Tax Filing",
       description:
-        "You must have filed Canadian income tax in at least 3 of the last 5 years, if required​.",
+        "You must have filed Canadian income tax in at least 3 of the last 5 years, if requiredâ€‹.",
     },
     {
       icon: Users, // Suggests multi-generational or group support
-      title: "Language Proficiency (Age 18–54)",
+      title: "Language Proficiency (Age 18â€“54)",
       description:
         "Demonstrate your English or French speaking and listening skills at Canadian Language Benchmark Level 4 or higher.",
     },
     {
       icon: Users, // Suggests multi-generational or group support
-      title: "Citizenship Test (Age 18–54)",
+      title: "Citizenship Test (Age 18â€“54)",
       description:
-        "Pass a 20-question multiple-choice test on Canada’s history, values, institutions, and symbols — you must answer at least 15 correctly to meet the 75% passing score.",
+        "Pass a 20-question multiple-choice test on Canadaâ€™s history, values, institutions, and symbols â€” you must answer at least 15 correctly to meet the 75% passing score.",
     },
     {
       icon: Users, // Suggests multi-generational or group support
       title: "Oath of Citizenship",
       description:
-        "Once approved, you’ll attend a ceremony and take an oath to officially become a Canadian citizen",
+        "Once approved, youâ€™ll attend a ceremony and take an oath to officially become a Canadian citizen",
     },
 
   ];
   const otherRequirements = [
-    "First-Generation Limit: Children born abroad to Canadian parents may still need a citizenship certificate—check IRCC’s rules.",
+    "First-Generation Limit: Children born abroad to Canadian parents may still need a citizenship certificateâ€”check IRCCâ€™s rules.",
     "Accommodations & Waivers: You can request help or exemptions for language, testing, or the oath for disabilities or special circumstances.",
     "Prohibitions: Criminal convictions or being under removal orders may affect eligibility.",
   ]
@@ -224,16 +251,16 @@ export default function CitizenshipPage() {
 
               <div className="space-y-6 text-gray-700 text-lg leading-relaxed">
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">✔️ Confirm You Meet Eligibility:</h3>
+                  <h3 className="font-semibold text-gray-900 mb-2"> Confirm You Meet Eligibility:</h3>
                   <ul className="list-disc list-inside space-y-1">
-                    <li>Use IRCC’s Physical Presence Calculator</li>
+                    <li>Use IRCC's Physical Presence Calculator</li>
                     <li>Gather language proof and tax records</li>
                     <li>Complete the citizenship test study materials</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">✔️ Prepare & Submit Your Application:</h3>
+                  <h3 className="font-semibold text-gray-900 mb-2">âœ”ï¸ Prepare & Submit Your Application:</h3>
                   <ul className="list-disc list-inside space-y-1">
                     <li>Use the adult PR application package</li>
                     <li>Include all supporting documents and fees</li>
@@ -241,14 +268,14 @@ export default function CitizenshipPage() {
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">✔️ Take the Citizenship Test and/or Interview (if required):</h3>
+                  <h3 className="font-semibold text-gray-900 mb-2">âœ”ï¸ Take the Citizenship Test and/or Interview (if required):</h3>
                   <ul className="list-disc list-inside space-y-1">
-                    <li>Administered online or in person for applicants aged 18–54</li>
+                    <li>Administered online or in person for applicants aged 18-54</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">✔️ Attend Your Citizenship Ceremony & Take the Oath:</h3>
+                  <h3 className="font-semibold text-gray-900 mb-2">Attend Your Citizenship Ceremony & Take the Oath:</h3>
                   <ul className="list-disc list-inside space-y-1">
                     <li>Official ceremony where you complete the oath and receive your citizenship</li>
                   </ul>
