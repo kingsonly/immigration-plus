@@ -1,357 +1,401 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import {
-  Briefcase,
-  Users,
-  Globe,
-  Building,
-  Rocket,
-  CheckCircle,
-  Calendar,
-  MapPin,
-  Award,
-  FileText,
-  Shield,
-  AlertCircle,
-  Star,
-  Heart,
-  Zap,
-  ArrowRight,
-  Phone,
-  Mail,
-  X,
+  Briefcase, Users, Globe, Building, Rocket, CheckCircle, Calendar, MapPin,
+  Award, FileText, Shield, AlertCircle, Star, Heart, Zap, ArrowRight, Phone, Mail,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
-export default function WorkPermitPage() {
-  const [activePermitType, setActivePermitType] = useState(0)
+/* ---------------- fetch from Strapi ---------------- */
+async function fetchBlocks(slug: string) {
+  try {
+    const base = (process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337").replace(/\/$/, "")
+    const params = new URLSearchParams()
+    if (process.env.NEXT_PUBLIC_STRAPI_PREVIEW === "1") params.set("publicationState", "preview")
+    if (process.env.NEXT_PUBLIC_STRAPI_LOCALE) params.set("locale", process.env.NEXT_PUBLIC_STRAPI_LOCALE)
+    const qs = params.toString()
+    const url = `${base}/api/services/slug/${encodeURIComponent(slug)}${qs ? `?${qs}` : ""}`
+    const res = await fetch(url, { cache: "no-store" })
+    if (!res.ok) return null
+    const json = await res.json()
+    return json?.data?.blocks ?? null
+  } catch {
+    return null
+  }
+}
 
-  const workPermitTypes = [
+/* ---------------- helpers to adapt Strapi blocks to local shapes ---------------- */
+const IconMap: Record<string, any> = {
+  Briefcase, Users, Globe, Building, Rocket, CheckCircle, Calendar, MapPin, Award,
+  FileText, Shield, AlertCircle, Star, Heart, Zap, ArrowRight, Phone, Mail,
+}
+const pickIcon = (name?: string) => (name && IconMap[name]) || Briefcase
+
+function adaptWorkContent(blocks: any[] | null) {
+  if (!Array.isArray(blocks)) return null
+  const byType = (t: string) => blocks.filter((b) => b?.__component === t)
+  const findHeading = (text: string) =>
+    byType("blocks.heading-section").find((b: any) => (b?.Heading || "").toLowerCase() === text.toLowerCase())
+  const findCardGrid = (text: string) =>
+    byType("blocks.card-grid").find((b: any) => (b?.Heading || "").toLowerCase() === text.toLowerCase())
+  const findAppProc = (title: string) =>
+    byType("blocks.application-process").find((b: any) => (b?.title || "").toLowerCase() === title.toLowerCase())
+  const findCompare = () => byType("blocks.comparison-grid")[0]
+
+  /* Hero */
+  const heroBlock = byType("blocks.hero")[0]
+  const hero = heroBlock
+    ? {
+        title: heroBlock.Title || "Work in Canada",
+        subtitle: heroBlock.Subtitle || "Empowering Skilled Workers, Entrepreneurs & Professionals",
+        html: heroBlock.description || "",
+        ctas: Array.isArray(heroBlock.ctas) ? heroBlock.ctas : [],
+      }
+    : null
+
+  /* Headings */
+  const H = {
+    types: findHeading("Work Permit Types"),
+    openWho: findHeading("Who Can Apply for Open Work Permits?"),
+    iec: findHeading("International Experience Canada (IEC)"),
+    other: findHeading("Other Work Permit Options"),
+    ready: findHeading("Ready to Start Working in Canada?"),
+    compare: findHeading("Compare Your Path") || { Heading: "Compare Your Path", description: "Quick comparison of work permit options to help you choose the right pathway." },
+  }
+
+  /* Work Permit Types (card-grid) */
+  const typesGrid = findCardGrid("Work Permit Types")
+  const workPermitTypes = Array.isArray(typesGrid?.Cards)
+    ? typesGrid.Cards.map((c: any) => ({
+        title: c.title,
+        subtitle: c.subtitle || (c.title?.includes("Open") ? "Work Without Job Restrictions" : "Ideal for individuals with a single Canadian employer"),
+        description: c.description,
+        icon: pickIcon(c.icon),
+        color:
+          (c.icon === "Building" && "from-red-500 to-red-600") ||
+          (c.icon === "Globe" && "from-red-600 to-pink-600") ||
+          "from-red-500 to-red-600",
+        requirements: Array.isArray(c.lists) ? c.lists.map((l: any) => l.listItem).filter(Boolean) : [],
+        bestFor:
+          c.title?.includes("Open")
+            ? "Graduates, spouses of students/workers, PR applicants, and vulnerable workers."
+            : "Skilled workers hired for specific roles where designated employment is required.",
+        locked: !c.title?.includes("Open"),
+      }))
+    : null
+
+  /* Open Work Permit Eligibility (card-grid) */
+  const openGrid = findCardGrid("Open Work Permit Eligibility")
+  const openEligibility = Array.isArray(openGrid?.Cards)
+    ? openGrid.Cards.map((c: any) => ({
+        category: c.title,
+        description: c.description,
+        icon: pickIcon(c.icon),
+      }))
+    : null
+
+  /* IEC (card-grid) */
+  const iecGrid = findCardGrid("IEC Categories")
+  const iecCategories = Array.isArray(iecGrid?.Cards)
+    ? iecGrid.Cards.map((c: any) => ({
+        category: c.title,
+        type:
+          c.title?.includes("Holiday")
+            ? "Open work permit"
+            : "Employer-specific work permit",
+        description: c.description,
+        details:
+          c.title?.includes("Holiday")
+            ? "Great for those without a job offer in advance"
+            : c.title?.includes("Young")
+            ? "Requires a valid job offer in Canada"
+            : "Must be registered in a post-secondary institution",
+        icon: pickIcon(c.icon),
+        color:
+          (c.title?.includes("Holiday") && "from-blue-500 to-blue-600") ||
+          (c.title?.includes("Young") && "from-green-500 to-green-600") ||
+          (c.title?.includes("Co-op") && "from-purple-500 to-purple-600") ||
+          "from-red-500 to-red-600",
+      }))
+    : null
+
+  /* Other Work Permit Options (card-grid) — simplified cards */
+  const otherGrid = findCardGrid("Other Work Permit Options")
+  const otherPermits = Array.isArray(otherGrid?.Cards)
+    ? otherGrid.Cards.map((c: any) => ({
+        title: c.title,
+        subtitle:
+          c.title?.includes("GSS")
+            ? "Fast-track your work permit with GSS"
+            : c.title?.includes("Intra-Company")
+            ? "Transfer key personnel within your multinational company"
+            : c.title?.includes("C11")
+            ? "Launch or manage your own business in Canada"
+            : c.title?.includes("C10")
+            ? "For individuals who contribute to Canada's broader interests"
+            : "",
+        description: c.description,
+        features: [], // (optional) could come from a separate component if you add it later
+        idealFor:
+          c.title?.includes("GSS")
+            ? "Tech professionals and specialized talent"
+            : c.title?.includes("Intra-Company")
+            ? "Relocating leadership and experts"
+            : c.title?.includes("C11")
+            ? "Entrepreneurs and business buyers"
+            : "Innovators and professionals",
+        icon: pickIcon(c.icon),
+        color:
+          (c.title?.includes("GSS") && "from-yellow-500 to-orange-500") ||
+          (c.title?.includes("Intra-Company") && "from-blue-500 to-indigo-500") ||
+          (c.title?.includes("C11") && "from-red-500 to-pink-500") ||
+          (c.title?.includes("C10") && "from-purple-500 to-pink-500") ||
+          "from-red-500 to-red-600",
+        lmiaRequired:
+          c.title?.includes("GSS") ? "No (If Exempt)" :
+          c.title?.includes("Intra-Company") ? "No" :
+          c.title?.includes("C11") ? "No" :
+          c.title?.includes("C10") ? "No" : "Varies",
+        duration:
+          c.title?.includes("GSS") ? "≈ 2 weeks processing" :
+          c.title?.includes("Intra-Company") ? "1–3 years (up to 7)" :
+          c.title?.includes("C11") ? "Up to 2 years" :
+          c.title?.includes("C10") ? "1 year (renewable)" : "Varies",
+      }))
+    : null
+
+  /* Application steps (application-process) */
+  const stepsEmployer = findAppProc("How to Apply for Employer-Specific Work Permits")
+  const stepsOpen = findAppProc("How to Apply for Open Work Permits")
+  const applicationSteps = [
+    stepsEmployer
+      ? { type: "Employer-Specific Work Permits", steps: stepsEmployer.items?.map((i: any) => i.listItem).filter(Boolean) || [] }
+      : null,
+    stepsOpen
+      ? { type: "Open Work Permits", steps: stepsOpen.items?.map((i: any) => i.listItem).filter(Boolean) || [] }
+      : null,
+  ].filter(Boolean) as { type: string; steps: string[] }[]
+
+  /* Comparison grid (blocks.comparison-grid) */
+  const cmp = findCompare()
+  const comparison = cmp
+    ? {
+        heading: H.compare?.Heading,
+        description: H.compare?.description,
+        columns: Array.isArray(cmp.columns) ? cmp.columns.map((c: any) => c.listItem) : ["Permit Type", "LMIA Required", "Best For", "Typical Duration"],
+        rows: Array.isArray(cmp.rows)
+          ? cmp.rows.map((r: any) => ({
+              icon: pickIcon(r.icon || "Briefcase"),
+              color: r.color || "from-red-500 to-red-600",
+              permitType: r.permitType,
+              lmiaRequired: r.lmiaRequired,
+              bestFor: r.bestFor,
+              duration: r.duration,
+            }))
+          : [],
+      }
+    : null
+
+  /* Final CTA */
+  const readyCTA = H.ready
+    ? {
+        heading: H.ready.Heading,
+        description: H.ready.description,
+        cta: H.ready.cta || null,
+      }
+    : null
+
+  return {
+    hero,
+    H,
+    workPermitTypes,
+    openEligibility,
+    iecCategories,
+    otherPermits,
+    applicationSteps,
+    comparison,
+    readyCTA,
+  }
+}
+
+/* ------------------------------- Page ------------------------------- */
+export default function WorkPermitPage() {
+  const [cms, setCms] = useState<ReturnType<typeof adaptWorkContent> | null>(null)
+
+  /* ---------------- local fallbacks (kept concise) ---------------- */
+  const workPermitTypesLocal = [
     {
       title: "Employer-Specific Work Permits",
       subtitle: "Ideal for individuals with a job offer from a single Canadian employer",
-      description: "This permit type is tied to the specific job, employer, and location listed in the application.",
-      icon: Building,
-      color: "from-red-500 to-red-600",
+      description: "This permit is tied to the specific job, employer, and location listed in the application.",
+      icon: Building, color: "from-red-500 to-red-600",
       requirements: [
-        "Valid Labour Market Impact Assessment (LMIA) or employer offer number",
+        "Valid LMIA or employer offer number",
         "Formal employment offer from a Canadian employer",
-        "Compliance with conditions regarding employer, job role, and location",
+        "Compliance with employer, job role, and location",
       ],
-      bestFor:
-        "Skilled workers hired for specific roles in sectors like agriculture, hospitality, tech, and caregiving where designated employment is required.",
+      bestFor: "Skilled workers hired for specific roles in sectors like agriculture, hospitality, tech, and caregiving.",
       locked: true,
     },
     {
       title: "Open Work Permits",
       subtitle: "Work Without Job Restrictions",
-      description:
-        "Open work permits allow eligible individuals to work for almost any employer in Canada without needing a specific job offer or a Labour Market Impact Assessment (LMIA).",
-      icon: Globe,
-      color: "from-red-600 to-pink-600",
-      requirements: [
-        "No job offer required — enjoy flexibility in choosing employers and industries",
-        "Online application process — most eligible applicants apply from within Canada",
-        "Pathway support — open work permits often serve as stepping stones to permanent residency",
-      ],
+      description: "Work for almost any employer in Canada without needing an LMIA.",
+      icon: Globe, color: "from-red-600 to-pink-600",
+      requirements: ["No job offer required", "Online application process", "Often a bridge to PR"],
       bestFor: "Graduates, spouses of students/workers, PR applicants, and vulnerable workers.",
       locked: false,
     },
   ]
 
-  const openWorkPermitEligible = [
-    {
-      category: "Post-Graduation Work Permit (PGWP)",
-      description: "Graduates applying for a Post-Graduation Work Permit",
-      icon: Award,
-    },
-    {
-      category: "Spouses of International Students",
-      description: "Spouses/partners of eligible students in master's, doctoral, or select professional programs",
-      icon: Heart,
-    },
-    {
-      category: "Spouses of High-Skilled Workers",
-      description:
-        "Spouses/partners of high-skilled foreign workers in TEER 0–1 jobs or designated TEER 2–3 occupations",
-      icon: Users,
-    },
-    {
-      category: "PR Applicants from Inside Canada",
-      description:
-        "Individuals applying for permanent residence from inside Canada (family sponsorship or Express Entry)",
-      icon: MapPin,
-    },
-    {
-      category: "Vulnerable Workers",
-      description: "Workers under employer-specific permits experiencing abuse or risk of abuse",
-      icon: Shield,
-    },
+  const openEligibilityLocal = [
+    { category: "Post-Graduation Work Permit (PGWP)", description: "Graduates applying for a PGWP", icon: Award },
+    { category: "Spouses of International Students", description: "Spouses/partners of eligible graduate students", icon: Heart },
+    { category: "Spouses of High-Skilled Workers", description: "Partners of TEER 0–3 skilled workers", icon: Users },
+    { category: "PR Applicants from Inside Canada", description: "Family sponsorship or Express Entry applicants", icon: MapPin },
+    { category: "Vulnerable Workers", description: "Workers experiencing abuse or risk of abuse", icon: Shield },
   ]
 
-  const iecCategories = [
-    {
-      category: "Working Holiday",
-      type: "Open work permit",
-      description: "Flexible job opportunities to help fund your travel",
-      details: "Great for those without a job offer in advance",
-      icon: Globe,
-      color: "from-blue-500 to-blue-600",
-    },
-    {
-      category: "Young Professionals",
-      type: "Employer-specific work permit",
-      description: "For career-related experience in your field of study or training",
-      details: "Requires a valid job offer in Canada",
-      icon: Briefcase,
-      color: "from-green-500 to-green-600",
-    },
-    {
-      category: "International Co-op (Internship)",
-      type: "Employer-specific work permit",
-      description: "For students seeking work placements related to their academic program",
-      details: "Must be registered in a post-secondary institution",
-      icon: Users,
-      color: "from-purple-500 to-purple-600",
-    },
+  const iecCategoriesLocal = [
+    { category: "Working Holiday", type: "Open work permit", description: "Flexible jobs to fund your travel", details: "Great without a job offer", icon: Globe, color: "from-blue-500 to-blue-600" },
+    { category: "Young Professionals", type: "Employer-specific work permit", description: "Career-related experience", details: "Requires a valid job offer", icon: Briefcase, color: "from-green-500 to-green-600" },
+    { category: "International Co-op", type: "Employer-specific work permit", description: "Student internships", details: "Must be registered in a post-secondary institution", icon: Users, color: "from-purple-500 to-purple-600" },
   ]
 
-  const otherWorkPermits = [
-    {
-      title: "Global Skills Strategy (GSS)",
-      subtitle: "Fast-track your work permit with GSS",
-      description: "Designed for high-skilled workers in TEER 0 or 1 occupations",
-      features: [
-        "Available with or without an LMIA (based on exemption eligibility)",
-        "Employers submit the job offer through the Employer Portal",
-        "Processing time: 2 weeks for eligible applications",
-      ],
-      idealFor: "Tech professionals and specialized talent in fast-paced sectors",
-      icon: Zap,
-      color: "from-yellow-500 to-orange-500",
-      lmiaRequired: "No (If Exempt)",
-      duration: "2 weeks processing",
-    },
-    {
-      title: "Intra-Company Transfer (ICT)",
-      subtitle: "Transfer key personnel within your multinational company",
-      description: "For executives, senior managers, and specialized knowledge workers",
-      features: [
-        "Requires a qualifying relationship between the foreign and Canadian entities",
-        "Must have 1+ year full-time experience with the company abroad",
-        "Valid for 1–3 years, renewable up to 7 years total",
-      ],
-      idealFor: "Relocating leadership and experts—LMIA-exempt under IMP",
-      icon: Building,
-      color: "from-blue-500 to-indigo-500",
-      lmiaRequired: "No",
-      duration: "1-3 years (Up to 7)",
-    },
-    {
-      title: "C11 Entrepreneur Work Permit",
-      subtitle: "Launch or manage your own business in Canada",
-      description: "For entrepreneurs, business buyers, and investors",
-      features: [
-        "Must have 50%+ ownership and active role in business operations",
-        "Must demonstrate a significant benefit to Canada",
-        "LMIA not required (applied under R205(a), C11 of the IMP)",
-      ],
-      idealFor: "Supports long-term PR plans while building your business",
-      icon: Rocket,
-      color: "from-red-500 to-pink-500",
-      lmiaRequired: "No",
-      duration: "Up to 2 years",
-    },
-    {
-      title: "C10 Significant Benefit Work Permit",
-      subtitle: "For individuals who contribute to Canada's broader interests",
-      description: "Applies to entrepreneurs, researchers, and professionals",
-      features: [
-        "Must demonstrate cultural, social, or economic value to Canada",
-        "Typically issued for 1 year and can be renewed",
-        "Also LMIA-exempt, under R205(a), C10",
-      ],
-      idealFor: "Innovators and non-traditional professionals making an impact",
-      icon: Star,
-      color: "from-purple-500 to-pink-500",
-      lmiaRequired: "No",
-      duration: "1 year (renewable)",
-    },
+  const otherPermitsLocal = [
+    { title: "Global Skills Strategy (GSS)", subtitle: "Fast-track your work permit with GSS", description: "Designed for high-skilled workers", features: [], idealFor: "Tech and specialized talent", icon: Zap, color: "from-yellow-500 to-orange-500", lmiaRequired: "No (If Exempt)", duration: "≈ 2 weeks processing" },
+    { title: "Intra-Company Transfer (ICT)", subtitle: "Transfer key personnel", description: "For executives, managers, and specialists", features: [], idealFor: "Multinationals relocating leaders", icon: Building, color: "from-blue-500 to-indigo-500", lmiaRequired: "No", duration: "1–3 years (up to 7)" },
+    { title: "C11 Entrepreneur Work Permit", subtitle: "Launch or buy a business", description: "For entrepreneurs and investors", features: [], idealFor: "Business builders eyeing PR", icon: Rocket, color: "from-red-500 to-pink-500", lmiaRequired: "No", duration: "Up to 2 years" },
+    { title: "C10 Significant Benefit", subtitle: "Broader benefits to Canada", description: "For innovators and professionals", features: [], idealFor: "High-impact contributors", icon: Star, color: "from-purple-500 to-pink-500", lmiaRequired: "No", duration: "1 year (renewable)" },
   ]
 
-  const familyPermitChanges = {
-    effectiveDate: "January 21, 2025",
-    newLimitations: [
-      "Spouses/common-law partners of students in graduate-level or professional programs",
-      "Spouses/common-law partners of workers in high-demand occupations",
+  const applicationStepsLocal = [
+    { type: "Employer-Specific Work Permits", steps: ["Obtain a valid LMIA or offer number", "Receive contract & supporting docs", "Submit your application online / in-Canada"] },
+    { type: "Open Work Permits", steps: ["Prepare eligibility docs (PGWP / spouse / PR)", "Apply online via IRCC", "Get tailored assistance to ensure compliance"] },
+  ]
+
+  const comparisonLocal = {
+    heading: "Compare Your Path",
+    description: "Quick comparison of work permit options to help you choose the right pathway.",
+    columns: ["Permit Type", "LMIA Required", "Best For", "Typical Duration"],
+    rows: [
+      { icon: Briefcase, color: "from-yellow-500 to-orange-500", permitType: "GSS", lmiaRequired: "No (If Exempt)", bestFor: "High-Skilled Talent", duration: "≈ 2 weeks processing" },
+      { icon: Briefcase, color: "from-blue-500 to-indigo-500", permitType: "ICT", lmiaRequired: "No", bestFor: "Intra-Company", duration: "1–3 years (up to 7)" },
+      { icon: Briefcase, color: "from-red-500 to-pink-500", permitType: "C11", lmiaRequired: "No", bestFor: "Entrepreneurs/Business", duration: "Up to 2 years" },
+      { icon: Briefcase, color: "from-purple-500 to-pink-500", permitType: "C10", lmiaRequired: "No", bestFor: "Significant Benefits", duration: "1 year (renewable)" },
+      { icon: Briefcase, color: "from-green-500 to-blue-500", permitType: "IEC & FTA-based", lmiaRequired: "No", bestFor: "Youth, Professionals", duration: "Varies" },
     ],
-    highDemandOccupations: ["Science and technology", "Health care and education", "Skilled trades and construction"],
-    importantNote:
-      "Dependent children are no longer eligible for open work permits unless they were included in applications submitted before January 21, 2025.",
   }
 
-  const comparisonData = [
-    {
-      permitType: "GSS",
-      lmiaRequired: "No (If Exempt)",
-      bestFor: "High-Skilled Talent",
-      duration: "2 weeks processing",
-      color: "from-yellow-500 to-orange-500",
-    },
-    {
-      permitType: "ICT",
-      lmiaRequired: "No",
-      bestFor: "Intra-Company",
-      duration: "1-3 years (Up to 7)",
-      color: "from-blue-500 to-indigo-500",
-    },
-    {
-      permitType: "C11",
-      lmiaRequired: "No",
-      bestFor: "Entrepreneurs/Business",
-      duration: "Up to 2 years",
-      color: "from-red-500 to-pink-500",
-    },
-    {
-      permitType: "C10",
-      lmiaRequired: "No",
-      bestFor: "Significant Benefits",
-      duration: "1 year (renewable)",
-      color: "from-purple-500 to-pink-500",
-    },
-    {
-      permitType: "IEC & FTA-based",
-      lmiaRequired: "No",
-      bestFor: "Youth, Professionals",
-      duration: "Varies",
-      color: "from-green-500 to-blue-500",
-    },
-  ]
+  const readyCTALocal = {
+    heading: "Ready to Start Working in Canada?",
+    description:
+      "Whether you need an employer-specific permit, open permit, or specialized pathway, we're here to guide you through the process with expert knowledge.",
+    cta: { label: "Book Work Permit Consultation", url: "/contact", variant: "default" },
+  }
 
-  const applicationSteps = [
-    {
-      type: "Employer-Specific Work Permits",
-      steps: [
-        "Obtain a valid LMIA or employer offer number",
-        "Receive signed employment contract and supporting documents",
-        "Submit your work permit application online or from within Canada",
-      ],
-    },
-    {
-      type: "Open Work Permits",
-      steps: [
-        "Prepare your eligibility documents (e.g., PGWP, spouse status, PR application)",
-        "Apply online through the IRCC portal",
-        "We provide tailored assistance at every stage to ensure compliance and success",
-      ],
-    },
-  ]
+  /* fetch CMS */
+  useEffect(() => {
+    fetchBlocks("work-permit").then((blocks) => setCms(adaptWorkContent(blocks)))
+  }, [])
+
+  /* choose CMS or fallbacks */
+  const hero = cms?.hero
+  const H = cms?.H
+  const workPermitTypes = cms?.workPermitTypes || workPermitTypesLocal
+  const openEligibility = cms?.openEligibility || openEligibilityLocal
+  const iecCategories = cms?.iecCategories || iecCategoriesLocal
+  const otherPermits = cms?.otherPermits || otherPermitsLocal
+  const applicationSteps = cms?.applicationSteps || applicationStepsLocal
+  const comparison = cms?.comparison || comparisonLocal
+  const readyCTA = cms?.readyCTA || readyCTALocal
 
   return (
     <div className="min-h-screen bg-white pt-16">
-      {/* Hero Section */}
+      {/* ---------------- Hero ---------------- */}
       <section className="py-20 bg-gradient-to-br from-red-50 via-white to-pink-50 relative overflow-hidden">
         <motion.div
           className="absolute top-20 right-10 w-32 h-32 bg-gradient-to-r from-red-200 to-pink-200 rounded-full opacity-20"
           animate={{ rotate: 360 }}
           transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
         />
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center">
             <div className="w-20 h-20 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Briefcase className="w-10 h-10 text-white" />
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Work in Canada
+                {hero?.title || "Work in Canada"}
               </span>
             </h1>
             <p className="text-2xl md:text-3xl font-semibold text-gray-800 mb-6">
-              Empowering Skilled Workers, Entrepreneurs & Professionals to Build a Future in Canada
+              {hero?.subtitle || "Empowering Skilled Workers, Entrepreneurs & Professionals"}
             </p>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
-              At TENTACULAR IMMIGRATION SOLUTIONS LTD, we provide regulated, strategic guidance for skilled workers,
-              entrepreneurs, investors, and self-employed individuals seeking to contribute meaningfully to the Canadian
-              economy. Whether you're pursuing a temporary work permit or aiming for permanent residency, we help you
-              navigate federal and provincial immigration pathways with clarity and compliance.
-            </p>
-            <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
-              Let us support your transition — from global talent to Canadian resident — with legal insight,
-              personalized planning, and care at every step.
-            </p>
+            {hero?.html ? (
+              <div className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8 prose prose-lg" dangerouslySetInnerHTML={{ __html: hero.html }} />
+            ) : (
+              <>
+                <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
+                  We provide regulated, strategic guidance for skilled workers, entrepreneurs, investors, and self-employed individuals.
+                </p>
+                <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
+                  From temporary permits to PR, we help you navigate federal and provincial pathways with clarity.
+                </p>
+              </>
+            )}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-lg px-8 py-4 rounded-full"
-                >
-                  <Calendar className="mr-2 w-5 h-5" />
-                  Book Work Permit Consultation
-                </Button>
-              </Link>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-red-500 text-red-600 hover:bg-red-50 text-lg px-8 py-4 rounded-full bg-transparent"
-              >
-                <FileText className="mr-2 w-5 h-5" />
-                Compare Permit Types
-              </Button>
+              {(hero?.ctas?.length ? hero.ctas : [{ label: "Book Work Permit Consultation", url: "/contact" }, { label: "Compare Permit Types", url: "#compare", variant: "outline" }]).map(
+                (cta: any, i: number) => (
+                  <Link key={i} href={cta.url || cta.href || "/contact"} target={cta?.newTab ? "_blank" : undefined}>
+                    <Button
+                      size="lg"
+                      {...(String(cta.variant).toLowerCase() === "outline"
+                        ? { variant: "outline", className: "border-red-500 text-red-600 hover:bg-red-50 text-lg px-8 py-4 rounded-full bg-transparent" }
+                        : { className: "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-lg px-8 py-4 rounded-full" })}
+                    >
+                      {i === 0 ? <Calendar className="mr-2 w-5 h-5" /> : <FileText className="mr-2 w-5 h-5" />}
+                      {cta.label || "Learn more"}
+                    </Button>
+                  </Link>
+                )
+              )}
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Work Permit Types Overview */}
+      {/* ---------------- Work Permit Types ---------------- */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Work Permit Types
+                {(H?.types?.Heading as string) || "Work Permit Types"}
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Choose the right work permit pathway based on your situation and career goals
+              {H?.types?.description || "Choose the right work permit pathway based on your situation and career goals"}
             </p>
           </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-8">
             {workPermitTypes.map((permit, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
                 <Card className="h-full hover:shadow-xl transition-all duration-300 group">
                   <CardContent className="p-8">
                     <div className="flex items-center space-x-4 mb-6">
-                      <div
-                        className={`w-16 h-16 bg-gradient-to-r ${permit.color} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 relative`}
-                      >
+                      <div className={`w-16 h-16 bg-gradient-to-r ${permit.color} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 relative`}>
                         <permit.icon className="w-8 h-8 text-white" />
-                        {permit.locked && (
+                        {permit.locked ? (
                           <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
                             <Building className="w-3 h-3 text-white" />
                           </div>
-                        )}
-                        {!permit.locked && (
+                        ) : (
                           <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                             <Globe className="w-3 h-3 text-white" />
                           </div>
@@ -359,26 +403,30 @@ export default function WorkPermitPage() {
                       </div>
                       <div>
                         <h3 className="text-2xl font-bold text-gray-900">{permit.title}</h3>
-                        <p className="text-lg text-red-600 font-medium">{permit.subtitle}</p>
+                        {permit.subtitle && <p className="text-lg text-red-600 font-medium">{permit.subtitle}</p>}
                       </div>
                     </div>
 
                     <p className="text-gray-600 mb-6 leading-relaxed">{permit.description}</p>
 
-                    <div className="space-y-3 mb-6">
-                      <h4 className="font-semibold text-gray-900">Key Requirements:</h4>
-                      {permit.requirements.map((req, reqIndex) => (
-                        <div key={reqIndex} className="flex items-start space-x-2">
-                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-600">{req}</span>
-                        </div>
-                      ))}
-                    </div>
+                    {Array.isArray(permit.requirements) && permit.requirements.length > 0 && (
+                      <div className="space-y-3 mb-6">
+                        <h4 className="font-semibold text-gray-900">Key Requirements:</h4>
+                        {permit.requirements.map((req: string, reqIndex: number) => (
+                          <div key={reqIndex} className="flex items-start space-x-2">
+                            <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-sm text-gray-600">{req}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
-                    <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                      <h4 className="font-semibold text-gray-900 mb-2">Best For:</h4>
-                      <p className="text-gray-600 text-sm">{permit.bestFor}</p>
-                    </div>
+                    {permit.bestFor && (
+                      <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 className="font-semibold text-gray-900 mb-2">Best For:</h4>
+                        <p className="text-gray-600 text-sm">{permit.bestFor}</p>
+                      </div>
+                    )}
 
                     <Button className={`w-full bg-gradient-to-r ${permit.color} hover:opacity-90`}>
                       Learn More
@@ -392,32 +440,24 @@ export default function WorkPermitPage() {
         </div>
       </section>
 
-      {/* Open Work Permit Eligibility */}
+      {/* ---------------- Open Work Permit Eligibility ---------------- */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
             <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Globe className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">Who Can Apply for Open Work Permits?</h2>
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">
+              {(H?.openWho?.Heading as string) || "Who Can Apply for Open Work Permits?"}
+            </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Open work permits provide flexibility to work for almost any employer in Canada
+              {H?.openWho?.description || "Open work permits provide flexibility to work for almost any employer in Canada"}
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            {openWorkPermitEligible.map((category, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
+            {openEligibility.map((category, index) => (
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
                 <Card className="h-full hover:shadow-lg transition-shadow duration-300">
                   <CardContent className="p-6 text-center">
                     <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -431,126 +471,36 @@ export default function WorkPermitPage() {
             ))}
           </div>
 
-          {/* Family Permit Update */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16"
-          >
-            <Card className="bg-gradient-to-r from-orange-50 to-red-50 border-orange-200">
-              <CardContent className="p-8">
-                <div className="flex items-center space-x-4 mb-6">
-                  <AlertCircle className="w-8 h-8 text-orange-600" />
-                  <h3 className="text-2xl font-bold text-gray-900">
-                    Family Permit Update (Effective {familyPermitChanges.effectiveDate})
-                  </h3>
-                </div>
-                <p className="text-gray-700 mb-6">
-                  Recent changes limit open work permit eligibility for family members to:
-                </p>
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-4">New Limitations:</h4>
-                    <ul className="space-y-2">
-                      {familyPermitChanges.newLimitations.map((limitation, index) => (
-                        <li key={index} className="flex items-start space-x-2">
-                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700 text-sm">{limitation}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <h4 className="font-semibold text-gray-900 mb-2 mt-4">High-Demand Occupations:</h4>
-                    <ul className="space-y-1">
-                      {familyPermitChanges.highDemandOccupations.map((occupation, index) => (
-                        <li key={index} className="flex items-start space-x-2">
-                          <Star className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700 text-sm">{occupation}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="bg-white rounded-lg p-6 border border-orange-200">
-                    <div className="flex items-start space-x-3">
-                      <X className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-2">Important Note:</h4>
-                        <p className="text-gray-700 text-sm">{familyPermitChanges.importantNote}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+          {/* Family update note — optional: keep static copy here or create a CMS block later */}
+          {/* You can insert your “Family Permit Update” section here if you want it CMS-driven later */}
         </div>
       </section>
 
-      {/* International Experience Canada (IEC) */}
+      {/* ---------------- IEC ---------------- */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
             <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-green-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Globe className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">International Experience Canada (IEC)</h2>
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">{(H?.iec?.Heading as string) || "International Experience Canada (IEC)"}</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Work, travel, and gain valuable experience in Canada
+              {H?.iec?.description || "Work, travel, and gain valuable experience in Canada"}
             </p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16"
-          >
-            <Card>
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">About IEC</h3>
-                <p className="text-gray-700 mb-6 leading-relaxed">
-                  International Experience Canada (IEC) is a temporary work permit initiative that allows young adults
-                  from partner countries to live and work in Canada for a limited time. It's designed to promote
-                  cultural exchange and build international career experience.
-                </p>
-                <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-6">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <Users className="w-6 h-6 text-blue-600" />
-                    <h4 className="font-semibold text-gray-900">Who Can Apply?</h4>
-                  </div>
-                  <p className="text-gray-700">
-                    Youth aged 18–35 (age limit depends on your country of citizenship) from countries that have
-                    bilateral youth mobility agreements with Canada.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
           <div className="grid lg:grid-cols-3 gap-8">
-            {iecCategories.map((category, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
+            {iecCategories.map((cat, index) => (
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
                 <Card className="h-full hover:shadow-lg transition-shadow duration-300">
                   <CardContent className="p-8">
-                    <div
-                      className={`w-16 h-16 bg-gradient-to-r ${category.color} rounded-2xl flex items-center justify-center mb-6`}
-                    >
-                      <category.icon className="w-8 h-8 text-white" />
+                    <div className={`w-16 h-16 bg-gradient-to-r ${cat.color} rounded-2xl flex items-center justify-center mb-6`}>
+                      <cat.icon className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{category.category}</h3>
-                    <p className="text-sm text-gray-500 mb-4 font-medium">{category.type}</p>
-                    <p className="text-gray-600 mb-4">{category.description}</p>
-                    <p className="text-gray-700 text-sm font-medium">{category.details}</p>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">{cat.category}</h3>
+                    <p className="text-sm text-gray-500 mb-4 font-medium">{cat.type}</p>
+                    <p className="text-gray-600 mb-4">{cat.description}</p>
+                    <p className="text-gray-700 text-sm font-medium">{cat.details}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -559,62 +509,54 @@ export default function WorkPermitPage() {
         </div>
       </section>
 
-      {/* Other Work Permit Options */}
+      {/* ---------------- Other Work Permit Options ---------------- */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Other Work Permit Options
+                {(H?.other?.Heading as string) || "Other Work Permit Options"}
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Specialized work permit pathways for different professional situations
+              {H?.other?.description || "Specialized work permit pathways for different professional situations"}
             </p>
           </motion.div>
 
           <div className="space-y-8">
-            {otherWorkPermits.map((permit, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
+            {otherPermits.map((permit, index) => (
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
                 <Card className="hover:shadow-lg transition-shadow duration-300">
                   <CardContent className="p-8">
                     <div className="grid lg:grid-cols-3 gap-8 items-center">
                       <div className="lg:col-span-2">
                         <div className="flex items-center space-x-4 mb-6">
-                          <div
-                            className={`w-16 h-16 bg-gradient-to-r ${permit.color} rounded-2xl flex items-center justify-center`}
-                          >
+                          <div className={`w-16 h-16 bg-gradient-to-r ${permit.color} rounded-2xl flex items-center justify-center`}>
                             <permit.icon className="w-8 h-8 text-white" />
                           </div>
                           <div>
                             <h3 className="text-2xl font-bold text-gray-900">{permit.title}</h3>
-                            <p className="text-lg text-gray-600">{permit.subtitle}</p>
+                            {permit.subtitle && <p className="text-lg text-gray-600">{permit.subtitle}</p>}
                           </div>
                         </div>
                         <p className="text-gray-700 mb-4">{permit.description}</p>
-                        <div className="space-y-2 mb-4">
-                          {permit.features.map((feature, featureIndex) => (
-                            <div key={featureIndex} className="flex items-start space-x-2">
-                              <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                              <span className="text-gray-600 text-sm">{feature}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-4">
-                          <p className="text-sm text-gray-700">
-                            <strong>Ideal for:</strong> {permit.idealFor}
-                          </p>
-                        </div>
+                        {Array.isArray(permit.features) && permit.features.length > 0 && (
+                          <div className="space-y-2 mb-4">
+                            {permit.features.map((feature: string, i: number) => (
+                              <div key={i} className="flex items-start space-x-2">
+                                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                                <span className="text-gray-600 text-sm">{feature}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        {permit.idealFor && (
+                          <div className="bg-gray-50 rounded-lg p-4">
+                            <p className="text-sm text-gray-700">
+                              <strong>Ideal for:</strong> {permit.idealFor}
+                            </p>
+                          </div>
+                        )}
                       </div>
                       <div className="space-y-4">
                         <div className="bg-white rounded-lg p-4 border border-gray-200">
@@ -632,44 +574,13 @@ export default function WorkPermitPage() {
               </motion.div>
             ))}
           </div>
-
-          {/* Additional Routes */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mt-16"
-          >
-            <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Additional Work Permit Routes</h3>
-                <p className="text-gray-700 mb-6">Other LMIA-exempt pathways include:</p>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {[
-                    "CUSMA, CETA, & FTAs (for professionals, investors, and business visitors)",
-                    "Bridging Open Work Permits (for inland PR applicants)",
-                  ].map((route, index) => (
-                    <div key={index} className="flex items-start space-x-3">
-                      <CheckCircle className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">{route}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
         </div>
       </section>
 
-      {/* How to Apply */}
+      {/* ---------------- How to Apply ---------------- */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 text-gray-900">How to Apply</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Step-by-step application process for different work permit types
@@ -678,17 +589,12 @@ export default function WorkPermitPage() {
 
           <div className="grid lg:grid-cols-2 gap-8">
             {applicationSteps.map((application, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
                 <Card className="h-full hover:shadow-lg transition-shadow duration-300">
                   <CardContent className="p-8">
                     <h3 className="text-2xl font-bold text-gray-900 mb-6">{application.type}</h3>
                     <div className="space-y-4">
-                      {application.steps.map((step, stepIndex) => (
+                      {application.steps.map((step: string, stepIndex: number) => (
                         <div key={stepIndex} className="flex items-start space-x-4">
                           <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center flex-shrink-0">
                             <span className="text-white text-sm font-bold">{stepIndex + 1}</span>
@@ -703,12 +609,7 @@ export default function WorkPermitPage() {
             ))}
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mt-12 text-center"
-          >
+          <motion.div id="compare" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mt-12 text-center">
             <Card className="bg-gradient-to-r from-red-50 to-pink-50 border-red-200">
               <CardContent className="p-8">
                 <FileText className="w-12 h-12 text-red-600 mx-auto mb-4" />
@@ -727,49 +628,36 @@ export default function WorkPermitPage() {
         </div>
       </section>
 
-      {/* Compare Your Path */}
+      {/* ---------------- Compare Your Path (comparison-grid) ---------------- */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Compare Your Path
+                {comparison?.heading || "Compare Your Path"}
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Quick comparison of work permit options to help you choose the right pathway
+              {comparison?.description || "Quick comparison of work permit options to help you choose the right pathway"}
             </p>
           </motion.div>
 
           <div className="overflow-x-auto">
             <div className="min-w-full">
               <div className="grid grid-cols-4 gap-4 mb-4 text-sm font-semibold text-gray-700">
-                <div>Permit Type</div>
-                <div>LMIA Required</div>
-                <div>Best For</div>
-                <div>Typical Duration</div>
+                {(comparison?.columns || ["Permit Type", "LMIA Required", "Best For", "Typical Duration"]).slice(0, 4).map((c, i) => (
+                  <div key={i}>{c}</div>
+                ))}
               </div>
               <div className="space-y-4">
-                {comparisonData.map((item, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                  >
+                {(comparison?.rows || []).map((item, index) => (
+                  <motion.div key={index} initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
                     <Card className="hover:shadow-lg transition-shadow duration-300">
                       <CardContent className="p-4">
                         <div className="grid grid-cols-4 gap-4 items-center">
                           <div className="flex items-center space-x-3">
-                            <div
-                              className={`w-8 h-8 bg-gradient-to-r ${item.color} rounded-lg flex items-center justify-center`}
-                            >
-                              <Briefcase className="w-4 h-4 text-white" />
+                            <div className={`w-8 h-8 bg-gradient-to-r ${item.color} rounded-lg flex items-center justify-center`}>
+                              <item.icon className="w-4 h-4 text-white" />
                             </div>
                             <span className="font-semibold text-gray-900">{item.permitType}</span>
                           </div>
@@ -787,26 +675,23 @@ export default function WorkPermitPage() {
         </div>
       </section>
 
-      {/* Final CTA */}
+      {/* ---------------- Final CTA ---------------- */}
       <section className="py-20 bg-gradient-to-r from-red-500 to-pink-600">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Briefcase className="w-8 h-8 text-red-600" />
             </div>
-            <h2 className="text-4xl font-bold text-white mb-6">Ready to Start Working in Canada?</h2>
+            <h2 className="text-4xl font-bold text-white mb-6">{readyCTA?.heading || "Ready to Start Working in Canada?"}</h2>
             <p className="text-xl text-white/90 mb-8">
-              Whether you need an employer-specific permit, open work permit, or specialized pathway, we're here to
-              guide you through the process with expert knowledge and personalized support.
+              {readyCTA?.description ||
+                "Whether you need an employer-specific permit, open work permit, or specialized pathway, we're here to guide you through the process with expert knowledge and personalized support."}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <Button
-                  size="lg"
-                  className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold"
-                >
+              <Link href={readyCTA?.cta?.url || "/contact"}>
+                <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold">
                   <Phone className="mr-2 w-5 h-5" />
-                  Book Work Permit Consultation
+                  {readyCTA?.cta?.label || "Book Work Permit Consultation"}
                 </Button>
               </Link>
               <Button
@@ -822,8 +707,7 @@ export default function WorkPermitPage() {
               </Button>
             </div>
             <p className="text-white/70 text-sm mt-4">
-              From global talent to Canadian resident — let us support your transition with legal insight and
-              personalized planning.
+              From global talent to Canadian resident — let us support your transition with legal insight and personalized planning.
             </p>
           </motion.div>
         </div>
