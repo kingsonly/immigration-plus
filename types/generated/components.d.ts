@@ -46,6 +46,19 @@ export interface BlocksCardGrid extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksComparisonGrid extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_comparison_grids';
+  info: {
+    displayName: 'Comparison Grid';
+  };
+  attributes: {
+    columns: Schema.Attribute.Component<'shared.list-item', true>;
+    description: Schema.Attribute.Text;
+    Heading: Schema.Attribute.String;
+    rows: Schema.Attribute.Component<'shared.comparison-row', true>;
+  };
+}
+
 export interface BlocksHeadingSection extends Struct.ComponentSchema {
   collectionName: 'components_blocks_heading_sections';
   info: {
@@ -344,6 +357,21 @@ export interface SharedCard extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedComparisonRow extends Struct.ComponentSchema {
+  collectionName: 'components_shared_comparison_rows';
+  info: {
+    displayName: 'Comparison Row';
+  };
+  attributes: {
+    bestFor: Schema.Attribute.String;
+    color: Schema.Attribute.String;
+    duration: Schema.Attribute.String;
+    icon: Schema.Attribute.String;
+    lmiaRequired: Schema.Attribute.String;
+    permitType: Schema.Attribute.String;
+  };
+}
+
 export interface SharedListItem extends Struct.ComponentSchema {
   collectionName: 'components_shared_list_items';
   info: {
@@ -418,6 +446,7 @@ declare module '@strapi/strapi' {
       'blocks.application-process': BlocksApplicationProcess;
       'blocks.business-immigration': BlocksBusinessImmigration;
       'blocks.card-grid': BlocksCardGrid;
+      'blocks.comparison-grid': BlocksComparisonGrid;
       'blocks.heading-section': BlocksHeadingSection;
       'blocks.hero': BlocksHero;
       'blocks.process-steps-block': BlocksProcessStepsBlock;
@@ -440,6 +469,7 @@ declare module '@strapi/strapi' {
       'service.section': ServiceSection;
       'shared.button': SharedButton;
       'shared.card': SharedCard;
+      'shared.comparison-row': SharedComparisonRow;
       'shared.list-item': SharedListItem;
       'shared.nav-dropdown-link': SharedNavDropdownLink;
       'shared.nav-link': SharedNavLink;

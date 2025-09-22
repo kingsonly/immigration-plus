@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_shared_comparison_rows",
+  "info": { "displayName": "Comparison Row" },
+  "attributes": {
+    "icon": { "type": "string" },
+    "color": { "type": "string" },
+    "permitType": { "type": "string" },
+    "lmiaRequired": { "type": "string" },
+    "bestFor": { "type": "string" },
+    "duration": { "type": "string" }
+  }
+}

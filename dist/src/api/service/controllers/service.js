@@ -10,14 +10,55 @@ const getServicePopulate = () => ({
     ogImage: true,
     category: true,
     blocks: {
+        populate: {
+            // generic fallbacks
+            image: true,
+            items: true, // application-process.items
+            link: true,
+            ctas: true,
+        },
         on: {
-            'blocks.business-immigration': { populate: '*' },
-            'blocks.hero': { populate: '*' },
-            'blocks.heading-section': { populate: '*' },
-            'blocks.card-grid': { populate: '*' },
-            'blocks.process-steps-block': { populate: '*' },
-            'blocks.services': { populate: '*' },
-            'blocks.application-process': { populate: '*' },
+            'blocks.hero': {
+                populate: {
+                    ctas: true,
+                    image: true,
+                },
+            },
+            'blocks.heading-section': {
+                populate: {
+                    cta: true,
+                },
+            },
+            'blocks.card-grid': {
+                populate: {
+                    // ✅ this is the important bit
+                    Cards: {
+                        populate: {
+                            lists: true, // list items inside each card
+                            link: true, // optional per-card button
+                        },
+                    },
+                    link: true, // optional section-level button
+                },
+            },
+            'blocks.process-steps-block': {
+                populate: {
+                    steps: true,
+                },
+            },
+            'blocks.services': {
+                populate: {
+                    listItem: true,
+                    link: true,
+                },
+            },
+            'blocks.application-process': {
+                populate: {
+                    items: true,
+                },
+            },
+            'blocks.business-immigration': { populate: '*' }, // keep if you still use it
+            'blocks.comparison-grid': { populate: '*' }, // keep if you still use it
         },
     },
 });

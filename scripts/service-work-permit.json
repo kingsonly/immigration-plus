@@ -1,0 +1,240 @@
+{
+  "data": {
+    "title": "Work in Canada",
+    "slug": "work-permit",
+    "summary": "Employer-specific, open permits, IEC, and LMIA-exempt pathways",
+    "blocks": [
+      {
+        "__component": "blocks.hero",
+        "icon": "Briefcase",
+        "Title": "Work in Canada",
+        "Subtitle": "Empowering Skilled Workers, Entrepreneurs & Professionals",
+        "description": "<p>At TENTACULAR IMMIGRATION SOLUTIONS LTD, we provide regulated, strategic guidance for skilled workers, entrepreneurs, investors, and self-employed individuals seeking to contribute meaningfully to the Canadian economy. Whether you're pursuing a temporary work permit or aiming for permanent residency, we help you navigate federal and provincial immigration pathways with clarity and compliance.</p><p>Let us support your transition — from global talent to Canadian resident — with legal insight, personalized planning, and care at every step.</p>",
+        "ctas": [
+          {
+            "label": "Book Work Permit Consultation",
+            "url": "/contact",
+            "variant": "default"
+          },
+          {
+            "label": "Compare Permit Types",
+            "url": "#compare",
+            "variant": "outline"
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Work Permit Types",
+        "description": "Choose the right work permit pathway based on your situation and career goals",
+        "icon": "Briefcase"
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Work Permit Types",
+        "Cards": [
+          {
+            "icon": "Building",
+            "title": "Employer-Specific Work Permits",
+            "description": "Tied to a specific employer, job, and location.",
+            "lists": [
+              { "listItem": "Valid LMIA or employer offer number" },
+              { "listItem": "Formal employment offer from a Canadian employer" },
+              { "listItem": "Compliance with employer, job role, and location" }
+            ]
+          },
+          {
+            "icon": "Globe",
+            "title": "Open Work Permits",
+            "description": "Work for almost any employer in Canada without needing an LMIA.",
+            "lists": [
+              { "listItem": "No job offer required" },
+              { "listItem": "Online application process" },
+              { "listItem": "Pathway to permanent residency" }
+            ]
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Who Can Apply for Open Work Permits?",
+        "description": "Open work permits provide flexibility to work for almost any employer in Canada",
+        "icon": "Globe"
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Open Work Permit Eligibility",
+        "Cards": [
+          {
+            "icon": "Award",
+            "title": "Post-Graduation Work Permit (PGWP)",
+            "description": "Graduates applying for a Post-Graduation Work Permit"
+          },
+          {
+            "icon": "Heart",
+            "title": "Spouses of International Students",
+            "description": "Spouses/partners of eligible graduate students"
+          },
+          {
+            "icon": "Users",
+            "title": "Spouses of High-Skilled Workers",
+            "description": "Partners of TEER 0–3 skilled workers"
+          },
+          {
+            "icon": "MapPin",
+            "title": "PR Applicants from Inside Canada",
+            "description": "Family sponsorship or Express Entry applicants"
+          },
+          {
+            "icon": "Shield",
+            "title": "Vulnerable Workers",
+            "description": "Workers under employer-specific permits experiencing abuse"
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "International Experience Canada (IEC)",
+        "description": "Work, travel, and gain valuable experience in Canada",
+        "icon": "Globe"
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "IEC Categories",
+        "Cards": [
+          {
+            "icon": "Globe",
+            "title": "Working Holiday",
+            "description": "Open work permit — flexible jobs to fund your travel"
+          },
+          {
+            "icon": "Briefcase",
+            "title": "Young Professionals",
+            "description": "Employer-specific work permit for career-related experience"
+          },
+          {
+            "icon": "Users",
+            "title": "International Co-op",
+            "description": "Employer-specific permit for student internships"
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Other Work Permit Options",
+        "description": "Specialized work permit pathways for different professional situations",
+        "icon": "Briefcase"
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Other Work Permit Options",
+        "Cards": [
+          {
+            "icon": "Zap",
+            "title": "Global Skills Strategy (GSS)",
+            "description": "Fast-track permits for high-skilled workers. Processing ≈ 2 weeks."
+          },
+          {
+            "icon": "Building",
+            "title": "Intra-Company Transfer (ICT)",
+            "description": "Transfer executives or managers within multinationals."
+          },
+          {
+            "icon": "Rocket",
+            "title": "C11 Entrepreneur Work Permit",
+            "description": "For entrepreneurs and investors — build your business in Canada."
+          },
+          {
+            "icon": "Star",
+            "title": "C10 Significant Benefit Work Permit",
+            "description": "For innovators and professionals contributing to Canada’s interests."
+          }
+        ]
+      },
+      {
+        "__component": "blocks.application-process",
+        "title": "How to Apply for Employer-Specific Work Permits",
+        "icon": "Building",
+        "items": [
+          { "listItem": "Obtain LMIA or employer offer number" },
+          { "listItem": "Receive signed contract and documents" },
+          { "listItem": "Submit your application online or in Canada" }
+        ]
+      },
+      {
+        "__component": "blocks.application-process",
+        "title": "How to Apply for Open Work Permits",
+        "icon": "Globe",
+        "items": [
+          { "listItem": "Prepare eligibility documents (PGWP, spouse status, PR)" },
+          { "listItem": "Apply online through the IRCC portal" },
+          { "listItem": "Get tailored assistance for compliance and success" }
+        ]
+      },
+      {
+        "__component": "blocks.comparison-grid",
+        "Heading": "Compare Your Path",
+        "description": "Quick comparison of work permit options to help you choose the right pathway.",
+        "columns": [
+          { "listItem": "Permit Type" },
+          { "listItem": "LMIA Required" },
+          { "listItem": "Best For" },
+          { "listItem": "Typical Duration" }
+        ],
+        "rows": [
+          {
+            "icon": "Briefcase",
+            "color": "from-yellow-500 to-orange-500",
+            "permitType": "GSS",
+            "lmiaRequired": "No (If Exempt)",
+            "bestFor": "High-Skilled Talent",
+            "duration": "≈ 2 weeks processing"
+          },
+          {
+            "icon": "Briefcase",
+            "color": "from-blue-500 to-indigo-500",
+            "permitType": "ICT",
+            "lmiaRequired": "No",
+            "bestFor": "Intra-Company",
+            "duration": "1–3 years (up to 7)"
+          },
+          {
+            "icon": "Briefcase",
+            "color": "from-red-500 to-pink-500",
+            "permitType": "C11",
+            "lmiaRequired": "No",
+            "bestFor": "Entrepreneurs/Business",
+            "duration": "Up to 2 years"
+          },
+          {
+            "icon": "Briefcase",
+            "color": "from-purple-500 to-pink-500",
+            "permitType": "C10",
+            "lmiaRequired": "No",
+            "bestFor": "Significant Benefits",
+            "duration": "1 year (renewable)"
+          },
+          {
+            "icon": "Briefcase",
+            "color": "from-green-500 to-blue-500",
+            "permitType": "IEC & FTA-based",
+            "lmiaRequired": "No",
+            "bestFor": "Youth, Professionals",
+            "duration": "Varies"
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Ready to Start Working in Canada?",
+        "description": "Whether you need an employer-specific permit, open permit, or specialized pathway, we're here to guide you through the process with expert knowledge.",
+        "icon": "Briefcase",
+        "cta": {
+          "label": "Book Work Permit Consultation",
+          "url": "/contact",
+          "variant": "default"
+        }
+      }
+    ]
+  }
+}

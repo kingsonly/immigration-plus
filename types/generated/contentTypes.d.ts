@@ -522,6 +522,7 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
         'blocks.card-grid',
         'blocks.business-immigration',
         'blocks.application-process',
+        'blocks.comparison-grid',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
