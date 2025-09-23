@@ -1,39 +1,221 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import {
-  Home,
-  Briefcase,
-  Users,
-  GraduationCap,
-  MapPin,
-  Heart,
-  ArrowRight,
-  CheckCircle,
-  Clock,
-  DollarSign,
-  FileText,
-  ClipboardCheck,
-  MapPinned,
-  LogIn,
-  Globe,
-  AlertTriangle,
-  User,
-  Scale,
-  Gavel,
-  BookOpen,
-  Phone,
-  Shield,
-  Calendar,
+  Home, Briefcase, Users, GraduationCap, MapPin, Heart, ArrowRight, CheckCircle, Clock, DollarSign, FileText,
+  ClipboardCheck, MapPinned, LogIn, Globe, AlertTriangle, User, Scale, Gavel, BookOpen, Phone, Shield, Calendar,
+  Info, Star, Repeat, FileSignature, BarChart4, Leaf,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
+/* ---------------- fetch from Strapi (same as Visitor/Family) ---------------- */
+async function fetchServiceBlocks(slug: string) {
+  try {
+    const base = (process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337").replace(/\/$/, "")
+    const params = new URLSearchParams()
+    if (process.env.NEXT_PUBLIC_STRAPI_PREVIEW === "1") params.set("publicationState", "preview")
+    if (process.env.NEXT_PUBLIC_STRAPI_LOCALE) params.set("locale", process.env.NEXT_PUBLIC_STRAPI_LOCALE)
+    const qs = params.toString()
+    const url = `${base}/api/services/slug/${encodeURIComponent(slug)}${qs ? `?${qs}` : ""}`
+    const res = await fetch(url, { cache: "no-store" })
+    if (!res.ok) return null
+    const json = await res.json()
+    return json?.data?.blocks ?? null
+  } catch {
+    return null
+  }
+}
+
+/* ---------------- helpers: icon map + adapter ---------------- */
+const IconMap: Record<string, any> = {
+  Home, Briefcase, Users, GraduationCap, MapPin, Heart, ArrowRight, CheckCircle, Clock, DollarSign, FileText,
+  ClipboardCheck, MapPinned, LogIn, Globe, AlertTriangle, User, Scale, Gavel, BookOpen, Phone, Shield, Calendar,
+  Info, Star, Repeat, FileSignature, BarChart4, Leaf,
+}
+const pickIcon = (name?: string) => (name && IconMap[name]) || CheckCircle
+
+/* --- replace the whole adaptRefugeeContent with this version --- */
+function adaptRefugeeContent(blocks: any[] | null) {
+  if (!Array.isArray(blocks)) return null
+  const byType = (t: string) => blocks.filter((b) => b?.__component === t)
+  const pickIcon = (name?: string) => (name && IconMap[name]) || CheckCircle
+
+  // 1) Build a map of "nearest previous heading" for every block
+  const nearestHeadingForIndex: Record<number, any | null> = {}
+  let lastHeading: any | null = null
+  blocks.forEach((b, idx) => {
+    if (b?.__component === "blocks.heading-section") lastHeading = b
+    nearestHeadingForIndex[idx] = lastHeading
+  })
+
+  // Helper: find nearest heading for the first block that matches a predicate
+  const headingBefore = (predicate: (b: any) => boolean) => {
+    const i = blocks.findIndex(predicate)
+    return i >= 0 ? nearestHeadingForIndex[i] : null
+  }
+
+  // 2) Pull the hero
+  const heroBlock = byType("blocks.hero")[0]
+  const hero = heroBlock
+    ? {
+        title: heroBlock.Title || "Refugee / H&C",
+        subtitle: heroBlock.Subtitle || "Protection, Compassion, and Pathways to Stay",
+        html: heroBlock.description || "",
+        ctas: Array.isArray(heroBlock.ctas) ? heroBlock.ctas : [],
+        icon: pickIcon(heroBlock.icon) || Shield,
+      }
+    : null
+
+  // 3) Section headings (resolved by proximity, not exact text)
+  const H = {
+    refugeeClaim: headingBefore((b) => b?.__component === "blocks.card-grid" && b?.Heading?.toLowerCase?.().includes("refugee claim")),
+    makingClaim: headingBefore((b) => b?.__component === "blocks.card-grid" && b?.Heading?.toLowerCase?.().includes("making a refugee")),
+    claimProcess: headingBefore((b) => b?.__component === "blocks.process-steps-block" && (b?.title || "").toLowerCase().includes("refugee claim")),
+    prra: headingBefore((b) => b?.__component === "blocks.card-grid" && (b?.Heading || "").toLowerCase().includes("prra")),
+    prraCTA: headingBefore((b) => b?.__component === "blocks.heading-section" && b?.cta && (b?.Heading || "").toLowerCase().includes("pre-removal")),
+    hc: headingBefore((b) => b?.__component === "blocks.card-grid" && (b?.Heading || "").toLowerCase().includes("h&c")),
+    needExpert: headingBefore((b) => b?.__component === "blocks.heading-section" && (b?.Heading || "").toLowerCase().includes("need expert")),
+    ourProcess: headingBefore((b) => b?.__component === "blocks.process-steps-block" && (b?.title || "").toLowerCase().includes("our process")),
+    finalCTA: headingBefore((b) => b?.__component === "blocks.heading-section" && b?.cta && (b?.Heading || "").toLowerCase().includes("ready")),
+  }
+
+  // 4) Refugee Claim (card-grid)
+  const claimGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && (b?.Heading || "").toLowerCase().includes("refugee claim"))
+  const eligibilityRequirements = Array.isArray(claimGrid?.Cards)
+    ? claimGrid.Cards.map((c: any) => ({ icon: pickIcon(c.icon), title: c.title, description: c.description }))
+    : null
+
+  // 5) Making a Refugee Claim (card-grid with lists)
+  const makingGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && (b?.Heading || "").toLowerCase().includes("making a refugee"))
+  const makingClaims = Array.isArray(makingGrid?.Cards)
+    ? makingGrid.Cards.map((c: any) => ({
+        icon: pickIcon(c.icon),
+        title: c.title,
+        description: c.description,
+        tips: Array.isArray(c.lists) ? c.lists.map((l: any) => l.listItem).filter(Boolean) : [],
+      }))
+    : null
+
+  // 6) Refugee Claim Process (steps)
+  const rpdProcess = blocks.find((b) => b?.__component === "blocks.process-steps-block" && (b?.title || "").toLowerCase().includes("refugee claim"))
+  const refugeeProcessSteps = Array.isArray(rpdProcess?.steps)
+    ? rpdProcess.steps.map((s: any, idx: number) => ({
+        step: s.stepNumber || String(idx + 1).padStart(2, "0"),
+        title: s.title,
+        description: s.description || "",
+        icon: pickIcon(s.icon),
+        color:
+          (s.icon === "Scale" && "from-red-500 to-red-600") ||
+          (s.icon === "FileText" && "from-red-600 to-pink-600") ||
+          (s.icon === "BookOpen" && "from-pink-600 to-red-500") ||
+          (s.icon === "Gavel" && "from-red-500 to-red-700") ||
+          (s.icon === "CheckCircle" && "from-red-700 to-pink-500") ||
+          "from-red-500 to-red-600",
+        details: [],
+      }))
+    : null
+
+  // 7) PRRA factors (card-grid)
+  const prraFactorsGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && (b?.Heading || "").toLowerCase().includes("key considerations"))
+  const prraFactors = Array.isArray(prraFactorsGrid?.Cards)
+    ? prraFactorsGrid.Cards.map((c: any) => ({
+        icon: pickIcon(c.icon),
+        title: c.title,
+        description: c.description,
+        color:
+          (c.icon === "AlertTriangle" && "from-orange-500 to-orange-600") ||
+          (c.icon === "Scale" && "from-red-500 to-red-600") ||
+          (c.icon === "FileText" && "from-blue-500 to-blue-600") ||
+          (c.icon === "User" && "from-purple-500 to-purple-600") ||
+          "from-red-500 to-red-600",
+      }))
+    : null
+
+  // 8) PRRA applicable + risks (application-process)
+  const prraApplicable = blocks.find((b) => b?.__component === "blocks.application-process" && (b?.title || "").toLowerCase().includes("prra applicable"))
+  const prraApplicableItems = Array.isArray(prraApplicable?.items) ? prraApplicable.items.map((i: any) => i.listItem).filter(Boolean) : null
+
+  const risksAppProc = blocks.find((b) => b?.__component === "blocks.application-process" && (b?.title || "").toLowerCase().includes("risks assessed"))
+  const risksAssessed = Array.isArray(risksAppProc?.items) ? risksAppProc.items.map((i: any) => i.listItem).filter(Boolean) : null
+
+  // 9) PRRA vs H&C comparison
+  const cmp = blocks.find((b) => b?.__component === "blocks.comparison-grid")
+  const prraVsHc = Array.isArray(cmp?.rows)
+    ? cmp.rows.map((r: any) => ({
+        feature: r.permitType || r.feature || "",
+        prra: r.lmiaRequired || r.colB || "",
+        hc: r.bestFor || r.colC || "",
+      }))
+    : null
+
+  // 10) H&C factors (card-grid)
+  const hcGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && (b?.Heading || "").toLowerCase().includes("h&c"))
+  const hcFactors = Array.isArray(hcGrid?.Cards)
+    ? hcGrid.Cards.map((c: any) => ({
+        icon: pickIcon(c.icon),
+        title: c.title,
+        description: c.description,
+        details: Array.isArray(c.lists) ? c.lists.map((l: any) => l.listItem).filter(Boolean) : [],
+      }))
+    : null
+
+  // 11) H&C notes (application-process)
+  const hcNotes = blocks.find((b) => b?.__component === "blocks.application-process" && (b?.title || "").toLowerCase().includes("important notes"))
+  const hcNotesItems = Array.isArray(hcNotes?.items) ? hcNotes.items.map((i: any) => i.listItem).filter(Boolean) : null
+
+  // 12) CTAs from headings (if present)
+  const prraCTA = H.prraCTA?.cta
+    ? { heading: H.prraCTA.Heading, description: H.prraCTA.description, cta: H.prraCTA.cta }
+    : null
+  const needExpertCTA = H.needExpert?.cta
+    ? { heading: H.needExpert.Heading, description: H.needExpert.description, cta: H.needExpert.cta }
+    : null
+  const finalCTA = H.finalCTA?.cta
+    ? { heading: H.finalCTA.Heading, description: H.finalCTA.description, cta: H.finalCTA.cta }
+    : null
+
+  // 13) Our Process (steps)
+  const ourProcess = blocks.find((b) => b?.__component === "blocks.process-steps-block" && (b?.title || "").toLowerCase().includes("our process"))
+  const processSteps = Array.isArray(ourProcess?.steps)
+    ? ourProcess.steps.map((s: any, idx: number) => ({
+        step: s.stepNumber || String(idx + 1).padStart(2, "0"),
+        title: s.title,
+        description: s.description || "",
+        icon: pickIcon(s.icon),
+      }))
+    : null
+
+  return {
+    hero,
+    H, // now H.* comes from “nearest heading”, so edited titles/descriptions in Strapi show up
+    eligibilityRequirements,
+    makingClaims,
+    refugeeProcessSteps,
+    prraFactors,
+    prraApplicableItems,
+    risksAssessed,
+    prraVsHc,
+    hcFactors,
+    hcNotesItems,
+    prraCTA,
+    needExpertCTA,
+    finalCTA,
+    processSteps,
+  }
+}
+
+
+/* ------------------------------- Page ------------------------------- */
 export default function RefugeePage() {
-  const makingClaims = [
+  const [cms, setCms] = useState<ReturnType<typeof adaptRefugeeContent> | null>(null)
+
+  /* ---------- Local fallbacks: your current hardcoded arrays ---------- */
+  const makingClaimsLocal = [
     {
-      icon: LogIn, // Lucide icon for guidance/navigation
+      icon: LogIn,
       title: "How to Claim Refugee Protection Inside Canada",
       description:
         "You can make a refugee claim either at a Canadian Port of Entry (e.g., airport, land border) or at an inland Immigration, Refugees and Citizenship Canada (IRCC) office",
@@ -43,7 +225,7 @@ export default function RefugeePage() {
       ],
     },
     {
-      icon: Globe, // Lucide icon for document review
+      icon: Globe,
       title: "How to Apply for Refugee Resettlement from Outside Canada",
       description:
         "For individuals outside Canada, refugee protection may be accessed through Canada’s resettlement programs",
@@ -52,85 +234,24 @@ export default function RefugeePage() {
         "A referral from the United Nations Refugee Agency (UNHCR) or another authorized organization is usually required to begin the process abroad.",
       ],
     },
-  ];
-  const eligibilityRequirements = [
+  ]
+
+  const eligibilityRequirementsLocal = [
     {
-      icon: Users, // Suggests multi-generational or group support
+      icon: Users,
       title: "Convention Refugees",
       description:
         "These are individuals who have a well-founded fear of persecution in their home country based on one or more of the following grounds: race, religion, nationality, political opinion, or membership in a particular social group. This definition is derived from the 1951 UN Refugee Convention, to which Canada is a signatory, and is recognized under Canadian immigration law.",
     },
     {
-      icon: Users, // Suggests multi-generational or group support
+      icon: Users,
       title: "Persons in Need of Protection",
       description:
         "These are individuals who are already in Canada and would face a real risk of torture, threat to life, or cruel and unusual treatment or punishment if returned to their country of origin. This category addresses serious personal harm that does not necessarily fall under the persecution grounds required for Convention refugees.",
     },
-  ];
-
-  const services = [
-    {
-      icon: Home,
-      title: "Permanent Residency (PR)",
-      description: "Your pathway to calling Canada home permanently",
-      features: [
-        "Express Entry System",
-        "Federal Skilled Worker Program",
-        "Canadian Experience Class",
-        "Federal Skilled Trades Program",
-      ],
-      processingTime: "6-12 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-500 to-red-600",
-      href: "/services/permanent-residency",
-    },
-    {
-      icon: Briefcase,
-      title: "Business Immigration",
-      description: "Turn your business expertise into Canadian success",
-      features: [
-        "Start-up Visa Program",
-        "Self-employed Persons Program",
-        "Investor Programs",
-        "Entrepreneur Programs",
-      ],
-      processingTime: "12-24 months",
-      startingPrice: "Contact for pricing",
-      color: "from-red-600 to-pink-600",
-      href: "/services/business-immigration",
-    },
-
   ]
 
-  const processSteps = [
-    {
-      step: "01",
-      title: "Initial Consultation",
-      description: "We assess your profile and discuss your immigration goals",
-    },
-    {
-      step: "02",
-      title: "Strategy Development",
-      description: "We create a personalized immigration strategy for your situation",
-    },
-    {
-      step: "03",
-      title: "Document Preparation",
-      description: "We help you gather and prepare all required documents",
-    },
-    {
-      step: "04",
-      title: "Application Submission",
-      description: "We submit your application and monitor its progress",
-    },
-    {
-      step: "05",
-      title: "Ongoing Support",
-      description: "We provide support until you achieve your immigration goals",
-    },
-  ]
-
-  const refugeeProcessSteps = [
+  const refugeeProcessStepsLocal = [
     {
       step: "01",
       title: "Eligibility Determination",
@@ -202,7 +323,7 @@ export default function RefugeePage() {
     },
   ]
 
-  const prraFactors = [
+  const prraFactorsLocal = [
     {
       icon: AlertTriangle,
       title: "Focus on New Evidence",
@@ -233,62 +354,7 @@ export default function RefugeePage() {
     },
   ]
 
-  const hcFactors = [
-    {
-      icon: Home,
-      title: "Establishment in Canada",
-      description:
-        "How well you have built a life in Canada—your length of stay, work history, education, language ability, community involvement, and overall contribution to Canadian society.",
-      details: [
-        "Length of stay in Canada",
-        "Work history and employment",
-        "Education and language skills",
-        "Community involvement",
-        "Contribution to Canadian society",
-      ],
-    },
-    {
-      icon: Users,
-      title: "Best Interests of a Child (BIOC)",
-      description:
-        "If children—especially Canadian citizens or permanent residents—would be directly affected by your removal, their physical, emotional, and psychological well-being is a top priority.",
-      details: [
-        "Physical well-being of children",
-        "Emotional and psychological impact",
-        "Educational disruption",
-        "Healthcare access",
-        "Family stability",
-      ],
-    },
-    {
-      icon: AlertTriangle,
-      title: "Hardship if Removed",
-      description:
-        "Undue hardship you would face if required to leave Canada, such as lack of medical care, risk of violence, or severe social challenges.",
-      details: [
-        "Lack of access to necessary medical care",
-        "Risk of violence or discrimination",
-        "Political instability in home country",
-        "Severe social or economic challenges",
-        "Personal safety concerns",
-      ],
-    },
-    {
-      icon: Heart,
-      title: "Family Ties in Canada",
-      description:
-        "Your meaningful connections in Canada, including family members beyond your dependents, such as siblings, extended relatives, or long-standing community support.",
-      details: [
-        "Immediate family connections",
-        "Extended family relationships",
-        "Community support networks",
-        "Long-term relationships",
-        "Social integration",
-      ],
-    },
-  ]
-
-  const risksAssessed = [
+  const risksAssessedLocal = [
     "Persecution based on race, religion, nationality, political opinion, or membership in a particular social group",
     "Torture or risk of torture",
     "Risk to life or cruel and unusual treatment or punishment",
@@ -297,6 +363,26 @@ export default function RefugeePage() {
     "Generalized violence or civil war conditions",
   ]
 
+  useEffect(() => {
+    fetchServiceBlocks("refugee-hc").then((blocks) => setCms(adaptRefugeeContent(blocks)))
+  }, [])
+
+  /* choose CMS or fallbacks */
+  const hero = cms?.hero
+  const H = cms?.H
+  const eligibilityRequirements = cms?.eligibilityRequirements || eligibilityRequirementsLocal
+  const makingClaims = cms?.makingClaims || makingClaimsLocal
+  const refugeeProcessSteps = cms?.refugeeProcessSteps || refugeeProcessStepsLocal
+  const prraFactors = cms?.prraFactors || prraFactorsLocal
+  const prraApplicableItems = cms?.prraApplicableItems || null
+  const risksAssessed = cms?.risksAssessed || risksAssessedLocal
+  const prraVsHc = cms?.prraVsHc || null
+  const hcFactors = cms?.hcFactors || null
+  const hcNotesItems = cms?.hcNotesItems || null
+  const prraCTA = cms?.prraCTA || null
+  const needExpertCTA = cms?.needExpertCTA || null
+  const finalCTA = cms?.finalCTA || null
+  const ourProcessSteps = cms?.processSteps || null
 
   return (
     <div className="min-h-screen bg-white pt-16">
@@ -307,113 +393,92 @@ export default function RefugeePage() {
           animate={{ rotate: 360 }}
           transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
         />
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Refugee / H&C
+                {hero?.title || "Refugee / H&C"}
               </span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Canada provides refuge and compassion to those fleeing persecution, danger or exceptional hardship. We offer sensitive, confidential guidance through these life‑saving pathways.
-            </p>
+            {hero?.html ? (
+              <div
+                className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: hero.html }}
+              />
+            ) : (
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                Canada provides refuge and compassion to those fleeing persecution, danger or exceptional hardship. We offer sensitive, confidential guidance through these life-saving pathways.
+              </p>
+            )}
           </motion.div>
         </div>
       </section>
 
       {/* Refugee Claim */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white" id="refugee-claim">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">Refugee Claim</h2>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">{H?.refugeeClaim?.Heading || "Refugee Claim"}</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Canada offers refugee protection to individuals facing persecution or serious harm in their home countries, reflecting its commitment to international human rights and legal obligations..
+              {H?.refugeeClaim?.description || "Canada offers refugee protection to individuals facing persecution or serious harm in their home countries, reflecting its commitment to international human rights and legal obligations."}
             </p>
           </motion.div>
 
-
           <div className="grid md:grid-cols-2 gap-8">
-            {
-              eligibilityRequirements.map((feature, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                >
-                  <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
-                    <CardContent className="p-6">
-                      <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <feature.icon className="w-8 h-8 text-white" />
-                      </div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                      <p className="text-gray-600">{feature.description}</p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
+            {eligibilityRequirements.map((feature: any, index: number) => (
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
+                <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
+                  <CardContent className="p-6">
+                    <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <feature.icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+                    <p className="text-gray-600">{feature.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Making a Refugee Claim in Canada*/}
+      {/* Making a Refugee Claim in Canada */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Making a Refugee Claim in Canada
+                {H?.makingClaim?.Heading || "Making a Refugee Claim in Canada"}
               </span>
             </h2>
-
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {
-              makingClaims.map((tip, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                >
-                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
-                    <CardContent className="p-6">
-                      <div className="flex items-center space-x-4 mb-4">
-                        <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center">
-                          <tip.icon className="w-6 h-6 text-white" />
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-900">{tip.title}</h3>
+            {makingClaims.map((tip: any, index: number) => (
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
+                <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                  <CardContent className="p-6">
+                    <div className="flex items-center space-x-4 mb-4">
+                      <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center">
+                        <tip.icon className="w-6 h-6 text-white" />
                       </div>
-                      <p className="text-gray-600 mb-4">{tip.description}</p>
+                      <h3 className="text-xl font-bold text-gray-900">{tip.title}</h3>
+                    </div>
+                    <p className="text-gray-600 mb-4">{tip.description}</p>
+                    {Array.isArray(tip.tips) && tip.tips.length > 0 && (
                       <ul className="space-y-2">
-                        {tip.tips.map((tipItem, tipIndex) => (
-                          <li key={tipIndex} className="flex items-start space-x-2">
+                        {tip.tips.map((t: string, i: number) => (
+                          <li key={i} className="flex items-start space-x-2">
                             <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                            <span className="text-sm text-gray-600">{tipItem}</span>
+                            <span className="text-sm text-gray-600">{t}</span>
                           </li>
                         ))}
                       </ul>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -421,24 +486,19 @@ export default function RefugeePage() {
       {/* Refugee Claim Process */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                The Refugee Claim Process
+                {H?.claimProcess?.Heading || "The Refugee Claim Process"}
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Understanding the step-by-step process of making a refugee claim in Canada
+              {H?.claimProcess?.description || "Understanding the step-by-step process of making a refugee claim in Canada"}
             </p>
           </motion.div>
 
           <div className="space-y-12">
-            {refugeeProcessSteps.map((step, index) => (
+            {(refugeeProcessSteps as any[]).map((step, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
@@ -450,9 +510,7 @@ export default function RefugeePage() {
                   <Card className="hover:shadow-lg transition-shadow duration-300">
                     <CardContent className="p-8">
                       <div className="flex items-center space-x-4 mb-6">
-                        <div
-                          className={`w-16 h-16 bg-gradient-to-r ${step.color} rounded-2xl flex items-center justify-center`}
-                        >
+                        <div className={`w-16 h-16 bg-gradient-to-r ${step.color || "from-red-500 to-red-600"} rounded-2xl flex items-center justify-center`}>
                           <step.icon className="w-8 h-8 text-white" />
                         </div>
                         <div>
@@ -461,21 +519,25 @@ export default function RefugeePage() {
                         </div>
                       </div>
                       <p className="text-gray-600 text-lg mb-6 leading-relaxed">{step.description}</p>
-                      <div className="space-y-3">
-                        {step.details.map((detail, detailIndex) => (
-                          <div key={detailIndex} className="flex items-start space-x-3">
-                            <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                            <span className="text-gray-700">{detail}</span>
-                          </div>
-                        ))}
-                      </div>
+                      {Array.isArray(step.details) && step.details.length > 0 && (
+                        <div className="space-y-3">
+                          {step.details.map((d: string, i: number) => (
+                            <div key={i} className="flex items-start space-x-3">
+                              <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                              <span className="text-gray-700">{d}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </div>
 
                 <div className="flex-1 flex justify-center">
                   <motion.div
-                    className={`w-80 h-80 bg-gradient-to-br ${step.color} rounded-3xl transform ${index % 2 === 0 ? "rotate-6" : "-rotate-6"} flex items-center justify-center relative overflow-hidden`}
+                    className={`w-80 h-80 bg-gradient-to-br ${step.color || "from-red-500 to-red-600"} rounded-3xl transform ${
+                      index % 2 === 0 ? "rotate-6" : "-rotate-6"
+                    } flex items-center justify-center relative overflow-hidden`}
                     whileHover={{ rotate: 0, scale: 1.05 }}
                     transition={{ duration: 0.3 }}
                   >
@@ -499,33 +561,23 @@ export default function RefugeePage() {
         </div>
       </section>
 
-      {/* PRRA Section */}
+      {/* PRRA */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Pre-Removal Risk Assessment (PRRA)
+                {H?.prra?.Heading || "Pre-Removal Risk Assessment (PRRA)"}
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              A Pre-Removal Risk Assessment (PRRA) is an application that allows individuals facing removal from Canada
-              to seek protection based on risks they would face if returned to their country of origin.
+              {H?.prra?.description ||
+                "A Pre-Removal Risk Assessment (PRRA) is an application that allows individuals facing removal from Canada to seek protection based on risks they would face if returned to their country of origin."}
             </p>
           </motion.div>
 
-          {/* When PRRA Applies */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16"
-          >
+          {/* When PRRA Applies (from application-process if present) */}
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-16">
             <Card className="bg-gradient-to-r from-red-50 to-pink-50 border-red-200">
               <CardContent className="p-8">
                 <div className="flex items-center space-x-4 mb-6">
@@ -533,29 +585,24 @@ export default function RefugeePage() {
                   <h3 className="text-2xl font-bold text-gray-900">When Is a PRRA Applicable?</h3>
                 </div>
                 <p className="text-gray-700 mb-6 leading-relaxed">
-                  A Pre-Removal Risk Assessment (PRRA) typically applies when the Canada Border Services Agency (CBSA)
-                  notifies you that removal proceedings are underway. You may be eligible if:
+                  A PRRA typically applies when the Canada Border Services Agency (CBSA) notifies you that removal proceedings are underway. You may be eligible if:
                 </p>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-3">
-                    <div className="flex items-start space-x-3">
-                      <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">
-                        Your refugee claim was rejected, withdrawn, or deemed abandoned
-                      </span>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">
-                        Your judicial review request to the Federal Court was unsuccessful
-                      </span>
-                    </div>
+                    {(prraApplicableItems || [
+                      "Your refugee claim was rejected, withdrawn, or deemed abandoned",
+                      "Your judicial review request to the Federal Court was unsuccessful",
+                    ]).slice(0, 2).map((item: string, i: number) => (
+                      <div key={i} className="flex items-start space-x-3">
+                        <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700">{item}</span>
+                      </div>
+                    ))}
                   </div>
                   <div className="bg-white rounded-lg p-4 border border-red-200">
                     <p className="text-sm text-gray-600">
-                      <strong>Important:</strong> A 12-month waiting period generally applies after a negative refugee
-                      or PRRA decision, unless exceptional circumstances exist—such as significant changes in country
-                      conditions or the best interests of a child.
+                      <strong>Important:</strong>{" "}
+                      A 12-month waiting period generally applies after a negative refugee or PRRA decision, unless exceptional circumstances exist—such as significant changes in country conditions or the best interests of a child.
                     </p>
                   </div>
                 </div>
@@ -563,27 +610,15 @@ export default function RefugeePage() {
             </Card>
           </motion.div>
 
-          {/* Key Considerations */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16"
-          >
+          {/* Key Considerations (card-grid) */}
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-16">
             <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">Key Considerations for a PRRA</h3>
             <div className="grid md:grid-cols-2 gap-8">
-              {prraFactors.map((factor, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                >
+              {prraFactors.map((factor: any, index: number) => (
+                <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
                   <Card className="h-full hover:shadow-lg transition-shadow duration-300">
                     <CardContent className="p-6">
-                      <div
-                        className={`w-12 h-12 bg-gradient-to-r ${factor.color} rounded-xl flex items-center justify-center mb-4`}
-                      >
+                      <div className={`w-12 h-12 bg-gradient-to-r ${factor.color} rounded-xl flex items-center justify-center mb-4`}>
                         <factor.icon className="w-6 h-6 text-white" />
                       </div>
                       <h4 className="text-xl font-bold text-gray-900 mb-3">{factor.title}</h4>
@@ -596,12 +631,7 @@ export default function RefugeePage() {
           </motion.div>
 
           {/* Risks Assessed */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-16">
             <Card>
               <CardContent className="p-8">
                 <div className="flex items-center space-x-4 mb-6">
@@ -610,7 +640,7 @@ export default function RefugeePage() {
                 </div>
                 <p className="text-gray-700 mb-6">IRCC officers will evaluate whether you would face:</p>
                 <div className="grid md:grid-cols-2 gap-4">
-                  {risksAssessed.map((risk, index) => (
+                  {risksAssessed.map((risk: string, index: number) => (
                     <div key={index} className="flex items-start space-x-3">
                       <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
                       <span className="text-gray-700">{risk}</span>
@@ -621,62 +651,60 @@ export default function RefugeePage() {
             </Card>
           </motion.div>
 
-          {/* PRRA vs H&C */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16"
-          >
+          {/* PRRA vs H&C (use comparison-grid if present; else show your static summary) */}
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-16">
             <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">How Is PRRA Different from H&C Applications?</h3>
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div>
-                    <h4 className="text-lg font-semibold text-blue-600 mb-3">PRRA Applications</h4>
-                    <p className="text-gray-700">Focus strictly on protection from risk upon removal</p>
+                {Array.isArray(prraVsHc) && prraVsHc.length > 0 ? (
+                  <div className="space-y-3">
+                    {prraVsHc.map((row, i) => (
+                      <div key={i} className="grid md:grid-cols-3 gap-4 p-3 bg-white rounded-lg">
+                        <div className="font-semibold text-gray-900">{row.feature}</div>
+                        <div className="text-gray-700">{row.prra}</div>
+                        <div className="text-gray-700">{row.hc}</div>
+                      </div>
+                    ))}
                   </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-purple-600 mb-3">H&C Applications</h4>
-                    <p className="text-gray-700">
-                      Consider humanitarian factors, including establishment in Canada, family hardship, and the best
-                      interests of children
-                    </p>
+                ) : (
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div>
+                      <h4 className="text-lg font-semibold text-blue-600 mb-3">PRRA Applications</h4>
+                      <p className="text-gray-700">Focus strictly on protection from risk upon removal</p>
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-purple-600 mb-3">H&C Applications</h4>
+                      <p className="text-gray-700">
+                        Consider humanitarian factors, including establishment in Canada, family hardship, and the best interests of children
+                      </p>
+                    </div>
                   </div>
-                </div>
+                )}
               </CardContent>
             </Card>
           </motion.div>
 
-          {/* PRRA CTA */}
+          {/* PRRA CTA (heading-section with CTA if present) */}
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <Card className="bg-gradient-to-r from-red-500 to-pink-600 text-white">
               <CardContent className="p-8 text-center">
                 <Clock className="w-12 h-12 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold mb-4">Pre-Removal Risk Assessment</h3>
-                <p className="text-xl mb-6 text-white/90">Removal proceedings underway? Take the Next Step.</p>
-                <p className="mb-8 text-white/80">
-                  If you've been notified of removal from Canada, you may qualify to apply for a Pre-Removal Risk
-                  Assessment (PRRA). We can help you understand the process and support you in preparing your
-                  application.
+                <h3 className="text-2xl font-bold mb-4">{prraCTA?.heading || "Pre-Removal Risk Assessment"}</h3>
+                <p className="text-xl mb-6 text-white/90">
+                  {prraCTA?.description || "Removal proceedings underway? Take the Next Step."}
                 </p>
-                <Link href="/contact">
-                  <Button
-                    size="lg"
-                    className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold"
-                  >
+                <Link href={prraCTA?.cta?.url || "/contact"}>
+                  <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold">
                     <Calendar className="mr-2 w-5 h-5" />
-                    Schedule Consultation
+                    {prraCTA?.cta?.label || "Schedule Consultation"}
                   </Button>
                 </Link>
                 <p className="text-sm text-white/70 mt-4">
-                  Schedule a consultation with a licensed RCIC-IRB, recognized by the College of Immigration and
-                  Citizenship Consultants to represent individuals in protection and risk assessment matters.
+                  Schedule a consultation with a licensed RCIC-IRB, recognized by the College of Immigration and Citizenship Consultants to represent individuals in protection and risk assessment matters.
                 </p>
                 <div className="mt-6 p-4 bg-white/10 rounded-lg">
                   <p className="italic text-white/90">
-                    "Even at the edge of removal, hope remains. One well-prepared voice can still turn the tide toward
-                    protection."
+                    "Even at the edge of removal, hope remains. One well-prepared voice can still turn the tide toward protection."
                   </p>
                 </div>
               </CardContent>
@@ -688,165 +716,80 @@ export default function RefugeePage() {
       {/* H&C Applications */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
             <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Heart className="w-8 h-8 text-white" />
             </div>
             <h2 className="text-4xl font-bold mb-4">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Humanitarian & Compassionate Applications
+                {H?.hc?.Heading || "Humanitarian & Compassionate Applications"}
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              The Humanitarian and Compassionate (H&C) application is a discretionary pathway to permanent residence in
-              Canada for individuals who do not qualify under regular immigration programs. It allows Immigration,
-              Refugees and Citizenship Canada (IRCC) to grant exemptions from specific immigration requirements when
-              compelling personal circumstances justify special consideration.
+              {H?.hc?.description ||
+                "The Humanitarian and Compassionate (H&C) application is a discretionary pathway to permanent residence in Canada for individuals who do not qualify under regular immigration programs."}
             </p>
           </motion.div>
 
-          {/* Key Factors */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16"
-          >
-            <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">
-              Key Factors Considered in an H&C Application
-            </h3>
-            <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
-              IRCC officers assess "all the circumstances" of your case, with particular focus on:
-            </p>
-            <div className="space-y-12">
-              {hcFactors.map((factor, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                >
-                  <Card className="hover:shadow-lg transition-shadow duration-300">
-                    <CardContent className="p-8">
-                      <div className="flex items-start space-x-6">
-                        <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center flex-shrink-0">
-                          <factor.icon className="w-8 h-8 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="text-2xl font-bold text-gray-900 mb-3">{factor.title}</h4>
-                          <p className="text-gray-600 mb-6 leading-relaxed">{factor.description}</p>
-                          <div className="grid md:grid-cols-2 gap-3">
-                            {factor.details.map((detail, detailIndex) => (
-                              <div key={detailIndex} className="flex items-start space-x-2">
-                                <CheckCircle className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
-                                <span className="text-sm text-gray-700">{detail}</span>
-                              </div>
-                            ))}
+          {/* Key Factors (card-grid) */}
+          {Array.isArray(hcFactors) && hcFactors.length > 0 && (
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-16">
+              <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">
+                Key Factors Considered in an H&C Application
+              </h3>
+              <div className="space-y-12">
+                {hcFactors.map((factor: any, index: number) => (
+                  <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
+                    <Card className="hover:shadow-lg transition-shadow duration-300">
+                      <CardContent className="p-8">
+                        <div className="flex items-start space-x-6">
+                          <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <factor.icon className="w-8 h-8 text-white" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="text-2xl font-bold text-gray-900 mb-3">{factor.title}</h4>
+                            <p className="text-gray-600 mb-6 leading-relaxed">{factor.description}</p>
+                            <div className="grid md:grid-cols-2 gap-3">
+                              {factor.details.map((d: string, i: number) => (
+                                <div key={i} className="flex items-start space-x-2">
+                                  <CheckCircle className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
+                                  <span className="text-sm text-gray-700">{d}</span>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
 
-          {/* Important Notes */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16"
-          >
-            <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">
-              Important Notes about H&C Applications
-            </h3>
-            <div className="grid md:grid-cols-2 gap-8">
-              {[
-                {
-                  icon: Scale,
-                  title: "Discretionary Process",
-                  description:
-                    "H&C is not a right—approval is at the discretion of an IRCC officer under Section 25(1) of the IRPA.",
-                },
-                {
-                  icon: AlertTriangle,
-                  title: "No Alternative Options",
-                  description:
-                    "Generally pursued when no other immigration class (economic, family, protected person) is available.",
-                },
-                {
-                  icon: FileText,
-                  title: "Personal Statement is Crucial",
-                  description:
-                    "A strong and honest narrative detailing your life, challenges, and connections in Canada is vital to success.",
-                },
-                {
-                  icon: BookOpen,
-                  title: "Supporting Evidence Required",
-                  description:
-                    "Documents such as medical records, support letters, proof of community involvement, and employment history help prove the merits of your case.",
-                },
-              ].map((note, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                >
-                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
-                    <CardContent className="p-6">
-                      <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center mb-4">
-                        <note.icon className="w-6 h-6 text-white" />
-                      </div>
-                      <h4 className="text-lg font-bold text-gray-900 mb-3">{note.title}</h4>
-                      <p className="text-gray-600">{note.description}</p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Fees */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16"
-          >
-            <Card className="bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200">
-              <CardContent className="p-8">
-                <div className="flex items-center space-x-4 mb-6">
-                  <DollarSign className="w-8 h-8 text-gray-600" />
-                  <h3 className="text-2xl font-bold text-gray-900">Application Fees</h3>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-white rounded-lg p-6 border">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Adult Application</h4>
-                    <p className="text-3xl font-bold text-red-600 mb-2">$550</p>
-                    <p className="text-sm text-gray-600">Per adult applicant (18+ years)</p>
+          {/* Important Notes (application-process) */}
+          {Array.isArray(hcNotesItems) && (
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-16">
+              <Card className="bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200">
+                <CardContent className="p-8">
+                  <div className="flex items-center space-x-4 mb-6">
+                    <DollarSign className="w-8 h-8 text-gray-600" />
+                    <h3 className="text-2xl font-bold text-gray-900">Important Notes about H&C Applications</h3>
                   </div>
-                  <div className="bg-white rounded-lg p-6 border">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Child Application</h4>
-                    <p className="text-3xl font-bold text-red-600 mb-2">$150</p>
-                    <p className="text-sm text-gray-600">Per child applicant (under 18 years)</p>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {hcNotesItems.map((note: string, i: number) => (
+                      <div key={i} className="bg-white rounded-lg p-6 border flex items-start space-x-2">
+                        <CheckCircle className="w-5 h-5 text-green-500 mt-1" />
+                        <span className="text-gray-700">{note}</span>
+                      </div>
+                    ))}
                   </div>
-                </div>
-                <p className="text-sm text-gray-600 mt-4">
-                  Fees are submitted with Form IMM 5283 and are non-refundable regardless of the application outcome.
-                </p>
-              </CardContent>
-            </Card>
-          </motion.div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
 
-          {/* H&C CTA */}
+          {/* H&C CTA (static button; could also source from a heading-section if you add one) */}
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <Card className="bg-gradient-to-r from-pink-500 to-red-600 text-white">
               <CardContent className="p-8 text-center">
@@ -854,22 +797,16 @@ export default function RefugeePage() {
                 <h3 className="text-2xl font-bold mb-4">Humanitarian & Compassionate Applications</h3>
                 <p className="text-xl mb-6 text-white/90">Experiencing hardship in Canada? Take the Next Step.</p>
                 <p className="mb-8 text-white/80">
-                  If you are not eligible under other immigration categories, you may request permanent residence based
-                  on humanitarian and compassionate grounds. This discretionary process considers personal hardship and
-                  establishment in Canada.
+                  If you are not eligible under other immigration categories, you may request permanent residence based on humanitarian and compassionate grounds.
                 </p>
                 <Link href="/contact">
-                  <Button
-                    size="lg"
-                    className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold"
-                  >
+                  <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold">
                     <Calendar className="mr-2 w-5 h-5" />
                     Book Consultation
                   </Button>
                 </Link>
                 <p className="text-sm text-white/70 mt-4">
-                  Book a consultation with a Regulated Canadian Immigration Consultant (RCIC-IRB) to assess your
-                  eligibility and receive guidance on preparing a well-supported H&C application.
+                  Book a consultation with a Regulated Canadian Immigration Consultant (RCIC-IRB) to assess your eligibility and receive guidance on preparing a well-supported H&C application.
                 </p>
               </CardContent>
             </Card>
@@ -884,19 +821,21 @@ export default function RefugeePage() {
             <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Shield className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">Need Expert Protection Assistance?</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              {needExpertCTA?.heading || "Need Expert Protection Assistance?"}
+            </h2>
             <p className="text-xl text-gray-600 mb-8">
-              Refugee protection, PRRA, and H&C applications are complex legal processes that require expert guidance.
-              Don't navigate these critical applications alone.
+              {needExpertCTA?.description ||
+                "Refugee protection, PRRA, and H&C applications are complex legal processes that require expert guidance. Don't navigate these critical applications alone."}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
+              <Link href={needExpertCTA?.cta?.url || "/contact"}>
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-lg px-8 py-4 rounded-full"
                 >
                   <Phone className="mr-2 w-5 h-5" />
-                  Emergency Consultation
+                  {needExpertCTA?.cta?.label || "Emergency Consultation"}
                 </Button>
               </Link>
               <Link href="/resources">
@@ -914,31 +853,30 @@ export default function RefugeePage() {
         </div>
       </section>
 
-      {/* Process Section */}
+      {/* Our Process */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Our Process
+                {H?.ourProcess?.Heading || "Our Process"}
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We follow a proven 5-step process to ensure your immigration success
+              {H?.ourProcess?.description || "We follow a proven 5-step process to ensure your immigration success"}
             </p>
           </motion.div>
 
           <div className="relative">
-            {/* Process Line */}
             <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-red-500 to-pink-600 hidden lg:block"></div>
-
             <div className="space-y-12">
-              {processSteps.map((step, index) => (
+              {(ourProcessSteps || [
+                { step: "01", title: "Initial Consultation", description: "We assess your profile and discuss your immigration goals" },
+                { step: "02", title: "Strategy Development", description: "We create a personalized immigration strategy for your situation" },
+                { step: "03", title: "Document Preparation", description: "We help you gather and prepare all required documents" },
+                { step: "04", title: "Application Submission", description: "We submit your application and monitor its progress" },
+                { step: "05", title: "Ongoing Support", description: "We provide support until you achieve your immigration goals" },
+              ]).map((step: any, index: number) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
@@ -959,10 +897,7 @@ export default function RefugeePage() {
                       </CardContent>
                     </Card>
                   </div>
-
-                  {/* Center Circle for Desktop */}
                   <div className="hidden lg:block w-6 h-6 bg-gradient-to-r from-red-500 to-red-600 rounded-full border-4 border-white shadow-lg"></div>
-
                   <div className="flex-1 lg:block hidden"></div>
                 </motion.div>
               ))}
@@ -971,82 +906,27 @@ export default function RefugeePage() {
         </div>
       </section>
 
-      {/* Why Choose Our Services */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">Why Choose Our Services?</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We provide comprehensive support throughout your entire immigration journey
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: FileText,
-                title: "Expert Documentation",
-                description:
-                  "We ensure all your documents are properly prepared and submitted according to the latest requirements.",
-              },
-              {
-                icon: Clock,
-                title: "Timely Processing",
-                description:
-                  "We monitor your application closely and keep you updated on its progress every step of the way.",
-              },
-              {
-                icon: Users,
-                title: "Personalized Support",
-                description:
-                  "Each client receives individual attention and a customized strategy based on their unique situation.",
-              },
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
-                <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
-                  <CardContent className="p-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <feature.icon className="w-8 h-8 text-white" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                    <p className="text-gray-600">{feature.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+      {/* Final “Ready to Get Started?” CTA (if present in CMS) */}
+      {finalCTA && (
+        <section className="py-20 bg-gradient-to-r from-red-500 to-pink-600">
+          <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+              <h2 className="text-4xl font-bold text-white mb-6">{finalCTA.heading}</h2>
+              <p className="text-xl text-white/90 mb-8">
+                {finalCTA.description}
+              </p>
+              <Link href={finalCTA.cta?.url || "/contact"}>
+                <Button
+                  size="lg"
+                  className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold"
+                >
+                  {finalCTA.cta?.label || "Book Free Consultation"}
+                </Button>
+              </Link>
+            </motion.div>
           </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-red-500 to-pink-600">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h2 className="text-4xl font-bold text-white mb-6">Ready to Get Started?</h2>
-            <p className="text-xl text-white/90 mb-8">
-              Book a free consultation to discuss your immigration goals and find the right service for you.
-            </p>
-            <Link href="/contact">
-              <Button
-                size="lg"
-                className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold"
-              >
-                Book Free Consultation
-              </Button>
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   )
 }

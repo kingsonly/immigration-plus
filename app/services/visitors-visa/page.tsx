@@ -37,19 +37,24 @@ const pickIcon = (name?: string) => (name && IconMap[name]) || CheckCircle
 
 function adaptVisitorContent(blocks: any[] | null) {
   if (!Array.isArray(blocks)) return null
-  const byType = (t: string) => blocks.filter((b) => b?.__component === t)
-  const findHeading = (text: string) =>
-    byType("blocks.heading-section").find((b: any) => (b?.Heading || "").toLowerCase() === text.toLowerCase())
-  const findCardGrid = (text: string) =>
-    byType("blocks.card-grid").find((b: any) => (b?.Heading || "").toLowerCase() === text.toLowerCase())
-  const findProcessBlock = (title: string) =>
-    byType("blocks.process-steps-block").find((b: any) => (b?.title || "").toLowerCase() === title.toLowerCase())
-  const findAppProc = (title: string) =>
-    byType("blocks.application-process").find((b: any) => (b?.title || "").toLowerCase() === title.toLowerCase())
-  const findComparison = (heading: string) =>
-    byType("blocks.comparison-grid").find((b: any) => (b?.Heading || "").toLowerCase() === heading.toLowerCase())
 
-  /* Hero */
+  /* ---- helpers ---- */
+  const byType = (t: string) => blocks.filter((b) => b?.__component === t)
+  const pickIcon = (name?: string) => (name && IconMap[name]) || CheckCircle
+
+  // nearest previous heading for each block
+  const nearestHeadingForIndex: Record<number, any | null> = {}
+  let lastHeading: any | null = null
+  blocks.forEach((b, i) => {
+    if (b?.__component === "blocks.heading-section") lastHeading = b
+    nearestHeadingForIndex[i] = lastHeading
+  })
+  const headingBefore = (pred: (b: any) => boolean) => {
+    const idx = blocks.findIndex(pred)
+    return idx >= 0 ? nearestHeadingForIndex[idx] : null
+  }
+
+  /* ---- hero ---- */
   const heroBlock = byType("blocks.hero")[0]
   const hero = heroBlock
     ? {
@@ -57,27 +62,30 @@ function adaptVisitorContent(blocks: any[] | null) {
         subtitle: heroBlock.Subtitle || "Visitor & Transit Visas",
         html: heroBlock.description || "",
         ctas: Array.isArray(heroBlock.ctas) ? heroBlock.ctas : [],
-        icon: pickIcon(heroBlock.icon) || Plane,
+        icon: pickIcon(heroBlock.icon),
       }
     : null
 
-  /* Headings we’ll swap into the UI titles */
+  /* ---- section headings resolved by proximity (not exact strings) ---- */
   const H = {
-    needVisaOrEta: findHeading("Do You Need a Visa or eTA?") || findHeading("Who Can Apply for eTA or TRV?"),
-    types: findHeading("Types of Visitor Visas"),
-    validity: findHeading("Validity & Stay Duration"),
-    howToApply: findHeading("How to Apply"),
-    compare: findHeading("Visa vs eTA Comparison"),
-    expertCta: findHeading("Expert Visitor Visa Support"),
+    needVisaOrEta: headingBefore((b) => b?.__component === "blocks.card-grid" && /who.*(need|eta|trv)/i.test(b?.Heading || "")),
+    types: headingBefore((b) => b?.__component === "blocks.card-grid" && /types.*visitor/i.test(b?.Heading || "")),
+    validity: headingBefore((b) => b?.__component === "blocks.card-grid" && /validity|duration/i.test(b?.Heading || "")),
+    howToApply:
+      headingBefore((b) => b?.__component === "blocks.process-steps-block" && /how.*apply/i.test(b?.title || "")) ||
+      headingBefore((b) => b?.__component === "blocks.application-process" && /how.*apply/i.test(b?.title || "")),
+    compare: headingBefore((b) => b?.__component === "blocks.comparison-grid"),
+    expertCta: blocks.findLast?.((b) => b?.__component === "blocks.heading-section" && b?.cta) ||
+      byType("blocks.heading-section").reverse().find((b) => b?.cta) || null,
   }
 
-  /* Who needs what (card-grid with lists for examples) */
-  const whoGrid = findCardGrid("Who needs what") || findCardGrid("Do You Need a Visa or eTA?")
+  /* ---- who needs what (card-grid) ---- */
+  const whoGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && /who.*(need|eta|trv)/i.test(b?.Heading || ""))
   const whoNeedsWhat = Array.isArray(whoGrid?.Cards)
     ? whoGrid.Cards.map((c: any) => ({
         category: c.title,
-        requirement: c.description, // you can store "eTA" / "TRV" in description or add a separate field in Strapi
-        description: c.longDescription || c.extra || "", // optional long copy if you created it
+        requirement: c.description,
+        description: c.longDescription || c.extra || "",
         examples: Array.isArray(c.lists) ? c.lists.map((l: any) => l.listItem).filter(Boolean) : [],
         icon: pickIcon(c.icon),
         color:
@@ -87,13 +95,13 @@ function adaptVisitorContent(blocks: any[] | null) {
       }))
     : null
 
-  /* Types of Visitor Visas (card-grid with features = lists) */
-  const typesGrid = findCardGrid("Types of Visitor Visas")
+  /* ---- types (card-grid) ---- */
+  const typesGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && /types.*visitor/i.test(b?.Heading || ""))
   const visaTypes = Array.isArray(typesGrid?.Cards)
     ? typesGrid.Cards.map((c: any) => ({
         title: c.title,
         description: c.description,
-        idealFor: c.idealFor || "", // if you added a custom field; else keep empty
+        idealFor: c.idealFor || "",
         icon: pickIcon(c.icon),
         color:
           (c.icon === "Plane" && "from-blue-500 to-blue-600") ||
@@ -105,8 +113,8 @@ function adaptVisitorContent(blocks: any[] | null) {
       }))
     : null
 
-  /* Validity & stay (card-grid; we’ll read three bullets from lists) */
-  const validityGrid = findCardGrid("Validity & Stay Duration")
+  /* ---- validity (card-grid) ---- */
+  const validityGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && /validity|duration/i.test(b?.Heading || ""))
   const validityDurations = Array.isArray(validityGrid?.Cards)
     ? validityGrid.Cards.map((c: any) => {
         const bullets = Array.isArray(c.lists) ? c.lists.map((l: any) => l.listItem).filter(Boolean) : []
@@ -125,40 +133,39 @@ function adaptVisitorContent(blocks: any[] | null) {
       })
     : null
 
-  /* How to apply (either process-steps-block or application-process with items) */
-  const process =
-    findProcessBlock("How to Apply") ||
-    findAppProc("How to Apply") // if you used application-process, we’ll adapt as simple steps
-  const applicationSteps =
-    process && Array.isArray((process as any).steps || (process as any).items)
-      ? ((process as any).steps || (process as any).items).map((s: any, idx: number) => ({
-          step: s.stepNumber || String(idx + 1).padStart(2, "0"),
-          title: s.title || s.listItem || "Step",
-          description: s.description || "",
-          icon: pickIcon(s.icon) || Info,
-          color:
-            (s.icon === "Info" && "from-blue-500 to-blue-600") ||
-            (s.icon === "FileText" && "from-green-500 to-green-600") ||
-            (s.icon === "Globe" && "from-purple-500 to-purple-600") ||
-            (s.icon === "User" && "from-orange-500 to-orange-600") ||
-            (s.icon === "Clock" && "from-red-500 to-red-600") ||
-            (s.icon === "CheckCircle" && "from-green-600 to-green-700") ||
-            "from-red-500 to-red-600",
-        }))
-      : null
+  /* ---- how to apply (steps or app-process) ---- */
+  const processBlock =
+    blocks.find((b) => b?.__component === "blocks.process-steps-block" && /how.*apply/i.test(b?.title || "")) ||
+    blocks.find((b) => b?.__component === "blocks.application-process" && /how.*apply/i.test(b?.title || ""))
+  const rawSteps = (processBlock as any)?.steps || (processBlock as any)?.items || []
+  const applicationSteps = Array.isArray(rawSteps)
+    ? rawSteps.map((s: any, idx: number) => ({
+        step: s.stepNumber || String(idx + 1).padStart(2, "0"),
+        title: s.title || s.listItem || "Step",
+        description: s.description || "",
+        icon: pickIcon(s.icon) || Info,
+        color:
+          (s.icon === "Info" && "from-blue-500 to-blue-600") ||
+          (s.icon === "FileText" && "from-green-500 to-green-600") ||
+          (s.icon === "Globe" && "from-purple-500 to-purple-600") ||
+          (s.icon === "User" && "from-orange-500 to-orange-600") ||
+          (s.icon === "Clock" && "from-red-500 to-red-600") ||
+          (s.icon === "CheckCircle" && "from-green-600 to-green-700") ||
+          "from-red-500 to-red-600",
+      }))
+    : null
 
-  /* Visa vs eTA comparison (blocks.comparison-grid) */
-  const cmp = findComparison("Visa vs eTA Comparison") || findComparison("Infographic: Visa vs. eTA")
-  const visaVsEta =
-    cmp && Array.isArray(cmp.rows)
-      ? cmp.rows.map((r: any) => ({
-          feature: r.feature || r.permitType || r.rowLabel || "",
-          trv: r.trv || r.lmiaRequired || r.colB || "",
-          eta: r.eta || r.colC || "",
-        }))
-      : null
+  /* ---- comparison (comparison-grid) ---- */
+  const cmp = blocks.find((b) => b?.__component === "blocks.comparison-grid")
+  const visaVsEta = Array.isArray(cmp?.rows)
+    ? cmp.rows.map((r: any) => ({
+        feature: r.feature || r.permitType || r.rowLabel || "",
+        trv: r.trv || r.lmiaRequired || r.colB || "",
+        eta: r.eta || r.colC || "",
+      }))
+    : null
 
-  /* Expert CTA (heading-section with CTA) */
+  /* ---- expert CTA (heading with CTA) ---- */
   const expertCTA = H.expertCta
     ? {
         heading: H.expertCta.Heading,
@@ -167,17 +174,9 @@ function adaptVisitorContent(blocks: any[] | null) {
       }
     : null
 
-  return {
-    hero,
-    H,
-    whoNeedsWhat,
-    visaTypes,
-    validityDurations,
-    applicationSteps,
-    visaVsEta,
-    expertCTA,
-  }
+  return { hero, H, whoNeedsWhat, visaTypes, validityDurations, applicationSteps, visaVsEta, expertCTA }
 }
+
 
 /* ------------------------------- Page ------------------------------- */
 export default function VisitorVisaPage() {
