@@ -17,8 +17,12 @@
         ]
       },
 
-      { "__component": "blocks.heading-section", "Heading": "Refugee Claim", "icon": "Users" },
-
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Refugee Claim",
+        "description": "Canada offers protection to people who face persecution or serious harm if returned to their country.",
+        "icon": "Users"
+      },
       {
         "__component": "blocks.card-grid",
         "Heading": "Refugee Claim",
@@ -38,8 +42,12 @@
         ]
       },
 
-      { "__component": "blocks.heading-section", "Heading": "Making a Refugee Claim in Canada", "icon": "LogIn" },
-
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Making a Refugee Claim in Canada",
+        "description": "Two primary paths depending on whether you are entering Canada or already inside the country.",
+        "icon": "LogIn"
+      },
       {
         "__component": "blocks.card-grid",
         "Heading": "Making a Refugee Claim in Canada",
@@ -72,20 +80,80 @@
         "icon": "ClipboardCheck"
       },
 
+     
       {
-        "__component": "blocks.process-steps-block",
-        "title": "The Refugee Claim Process",
-        "steps": [
-          { "stepNumber": "01", "title": "Eligibility Determination", "description": "IRCC/CBSA screens your claim (prior claims, Safe Third Country, basic docs).", "icon": "Scale" },
-          { "stepNumber": "02", "title": "Referral to IRB (RPD)", "description": "Eligible claims are referred to the Refugee Protection Division (independent tribunal).", "icon": "FileText" },
-          { "stepNumber": "03", "title": "Basis of Claim (BOC) Form", "description": "Submit detailed personal narrative with evidence and country conditions.", "icon": "BookOpen" },
-          { "stepNumber": "04", "title": "Hearing", "description": "Testify before an RPD member; evidence reviewed; counsel may represent you.", "icon": "Gavel" },
-          { "stepNumber": "05", "title": "Decision", "description": "If accepted, you’re a protected person and may apply for PR; refusals may have review/appeal options.", "icon": "CheckCircle" }
+        "__component": "blocks.split-feature",
+        "title": "Eligibility Determination",
+        "subtitle": "Step 01",
+        "description": "IRCC/CBSA screens your claim (prior claims, Safe Third Country, basic docs).",
+        "icon": "Scale",
+        "cardIcon": "Scale",
+        "reverse": false,
+        "items": [
+          { "listItem": "Assessment of previous claims and eligibility bars" },
+          { "listItem": "Safe Third Country Agreement considerations" },
+          { "listItem": "Identity & document screening" }
+        ]
+      },
+      {
+        "__component": "blocks.split-feature",
+        "title": "Referral to IRB (RPD)",
+        "subtitle": "Step 02",
+        "description": "Eligible claims are referred to the Refugee Protection Division (independent tribunal).",
+        "icon": "FileText",
+        "cardIcon": "FileText",
+        "reverse": true,
+        "items": [
+          { "listItem": "File transfer to the Refugee Protection Division" },
+          { "listItem": "Scheduling and disclosure timelines" }
+        ]
+      },
+      {
+        "__component": "blocks.split-feature",
+        "title": "Basis of Claim (BOC) Form",
+        "subtitle": "Step 03",
+        "description": "Submit a detailed personal narrative with evidence and country conditions.",
+        "icon": "BookOpen",
+        "cardIcon": "BookOpen",
+        "reverse": false,
+        "items": [
+          { "listItem": "Personal narrative and chronology" },
+          { "listItem": "Country condition reports and exhibits" }
+        ]
+      },
+      {
+        "__component": "blocks.split-feature",
+        "title": "Hearing",
+        "subtitle": "Step 04",
+        "description": "Testify before an RPD member; evidence reviewed; counsel may represent you.",
+        "icon": "Gavel",
+        "cardIcon": "Gavel",
+        "reverse": true,
+        "items": [
+          { "listItem": "Oral testimony and questioning" },
+          { "listItem": "Representative participation (counsel/RCIC-IRB)" }
+        ]
+      },
+      {
+        "__component": "blocks.split-feature",
+        "title": "Decision",
+        "subtitle": "Step 05",
+        "description": "If accepted, you’re a protected person and may apply for PR; refusals may have review/appeal options.",
+        "icon": "CheckCircle",
+        "cardIcon": "CheckCircle",
+        "reverse": false,
+        "items": [
+          { "listItem": "Protected person status if accepted" },
+          { "listItem": "PR eligibility and post-decision options" }
         ]
       },
 
-      { "__component": "blocks.heading-section", "Heading": "Pre-Removal Risk Assessment (PRRA)", "icon": "AlertTriangle" },
-
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Pre-Removal Risk Assessment (PRRA)",
+        "description": "Understand eligibility, evidence, and timing before removal.",
+        "icon": "AlertTriangle"
+      },
       {
         "__component": "blocks.card-grid",
         "Heading": "Key Considerations for a PRRA",
@@ -96,7 +164,6 @@
           { "title": "IRCC Officer Decision", "description": "PRRA is assessed by IRCC (not the IRB’s RPD).", "icon": "User", "lists": [] }
         ]
       },
-
       {
         "__component": "blocks.application-process",
         "title": "When Is a PRRA Applicable?",
@@ -108,7 +175,6 @@
           { "listItem": "Note: a 12-month bar generally applies after a negative claim/PRRA, subject to limited exceptions" }
         ]
       },
-
       {
         "__component": "blocks.application-process",
         "title": "Risks Assessed",
@@ -142,7 +208,7 @@
       {
         "__component": "blocks.heading-section",
         "Heading": "Pre-Removal Risk Assessment",
-        "description": "Removal proceedings underway? You may qualify for a PRRA. We’ll help you understand eligibility and prepare strong submissions.",
+        "description": "Removal proceedings underway? You may qualify for a PRRA.",
         "icon": "Clock",
         "cta": { "label": "Schedule Consultation", "url": "/contact", "variant": "default" }
       },
@@ -153,7 +219,6 @@
         "description": "A discretionary pathway to permanent residence for those who don’t qualify under regular categories—focused on hardship and establishment in Canada.",
         "icon": "Heart"
       },
-
       {
         "__component": "blocks.card-grid",
         "Heading": "Key Factors Considered in an H&C Application",
@@ -206,7 +271,6 @@
           }
         ]
       },
-
       {
         "__component": "blocks.application-process",
         "title": "Important Notes about H&C Applications",
@@ -216,6 +280,18 @@
           { "listItem": "Generally pursued when no other immigration class applies" },
           { "listItem": "Personal statement is crucial—clear, truthful narrative" },
           { "listItem": "Submit strong evidence (medical, support letters, community involvement, employment, etc.)" }
+        ]
+      },
+
+
+      {
+        "__component": "blocks.fee-cards",
+        "Heading": "Application Fees",
+        "description": "Typical government filing fees. Professional fees vary by case complexity.",
+        "items": [
+          { "title": "Refugee Claim (RPD) — Government Fees", "amount": "$0", "note": "No RPD filing fee; biometrics may apply." },
+          { "title": "PRRA — Government Fees", "amount": "$0", "note": "No PRRA filing fee; biometrics may apply if required." },
+          { "title": "H&C (IMM 5283) — Government Fees", "amount": "$595 + $575", "note": "Processing fee + Right of Permanent Residence Fee (RPRF). Some exemptions/deferrals may apply." }
         ]
       },
 
@@ -233,7 +309,6 @@
         "description": "A proven 5-step approach to guide you from first consult to decision.",
         "icon": "Repeat"
       },
-
       {
         "__component": "blocks.process-steps-block",
         "title": "Our Process",

@@ -70,7 +70,9 @@
                 "blocks.business-immigration",
                 "blocks.application-process",
                 "blocks.comparison-grid",
-                "blocks.service-variant-cards"
+                "blocks.service-variant-cards",
+                "blocks.fee-cards",
+                "blocks.split-feature"
             ]
         },
         "documents": {

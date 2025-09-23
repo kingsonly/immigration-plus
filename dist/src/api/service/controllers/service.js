@@ -59,6 +59,8 @@ const getServicePopulate = () => ({
             },
             'blocks.business-immigration': { populate: '*' }, // keep if you still use it
             'blocks.comparison-grid': { populate: '*' }, // keep if you still use it
+            'blocks.fee-cards': { populate: '*' },
+            'blocks.split-feature': { populate: '*' },
         },
     },
 });
