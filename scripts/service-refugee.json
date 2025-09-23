@@ -1,0 +1,258 @@
+{
+  "data": {
+    "title": "Refugee / H&C",
+    "slug": "refugee-hc",
+    "summary": "Refugee claims, PRRA, and H&C applications—confidential, compassionate guidance for protection and permanent residence.",
+    "locale": "en",
+    "blocks": [
+      {
+        "__component": "blocks.hero",
+        "icon": "Shield",
+        "Title": "Refugee / H&C",
+        "Subtitle": "Protection, Compassion, and Pathways to Stay",
+        "description": "<p>Canada provides refuge and compassion to people facing persecution, danger, or exceptional hardship. We offer sensitive, confidential guidance through refugee claims, PRRA, and humanitarian &amp; compassionate (H&amp;C) applications.</p>",
+        "ctas": [
+          { "label": "Book Free Consultation", "url": "/contact#consultation", "variant": "default" },
+          { "label": "Learn About Protection", "url": "#refugee-claim", "variant": "outline" }
+        ]
+      },
+
+      { "__component": "blocks.heading-section", "Heading": "Refugee Claim", "icon": "Users" },
+
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Refugee Claim",
+        "Cards": [
+          {
+            "title": "Convention Refugees",
+            "description": "Well-founded fear of persecution based on race, religion, nationality, political opinion, or membership in a particular social group.",
+            "icon": "Users",
+            "lists": []
+          },
+          {
+            "title": "Persons in Need of Protection",
+            "description": "Already in Canada and at risk of torture, threat to life, or cruel and unusual treatment/punishment if returned.",
+            "icon": "Users",
+            "lists": []
+          }
+        ]
+      },
+
+      { "__component": "blocks.heading-section", "Heading": "Making a Refugee Claim in Canada", "icon": "LogIn" },
+
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Making a Refugee Claim in Canada",
+        "Cards": [
+          {
+            "title": "How to Claim Refugee Protection Inside Canada",
+            "description": "Claim at a Port of Entry (CBSA) or at an inland IRCC office (typically via the online portal).",
+            "icon": "LogIn",
+            "lists": [
+              { "listItem": "Port of Entry: claim on arrival with a CBSA officer" },
+              { "listItem": "Inland claim: submit online if you’re already in Canada" }
+            ]
+          },
+          {
+            "title": "Refugee Resettlement from Outside Canada",
+            "description": "Access protection through Canada’s resettlement programs abroad.",
+            "icon": "Globe",
+            "lists": [
+              { "listItem": "Programs: GAR, PSR, and BVOR" },
+              { "listItem": "Usually requires a UNHCR or authorized referral" }
+            ]
+          }
+        ]
+      },
+
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "The Refugee Claim Process",
+        "description": "Understand the step-by-step pathway after you make a claim.",
+        "icon": "ClipboardCheck"
+      },
+
+      {
+        "__component": "blocks.process-steps-block",
+        "title": "The Refugee Claim Process",
+        "steps": [
+          { "stepNumber": "01", "title": "Eligibility Determination", "description": "IRCC/CBSA screens your claim (prior claims, Safe Third Country, basic docs).", "icon": "Scale" },
+          { "stepNumber": "02", "title": "Referral to IRB (RPD)", "description": "Eligible claims are referred to the Refugee Protection Division (independent tribunal).", "icon": "FileText" },
+          { "stepNumber": "03", "title": "Basis of Claim (BOC) Form", "description": "Submit detailed personal narrative with evidence and country conditions.", "icon": "BookOpen" },
+          { "stepNumber": "04", "title": "Hearing", "description": "Testify before an RPD member; evidence reviewed; counsel may represent you.", "icon": "Gavel" },
+          { "stepNumber": "05", "title": "Decision", "description": "If accepted, you’re a protected person and may apply for PR; refusals may have review/appeal options.", "icon": "CheckCircle" }
+        ]
+      },
+
+      { "__component": "blocks.heading-section", "Heading": "Pre-Removal Risk Assessment (PRRA)", "icon": "AlertTriangle" },
+
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Key Considerations for a PRRA",
+        "Cards": [
+          { "title": "Focus on New Evidence", "description": "Decision centers on material changes since your last decision.", "icon": "AlertTriangle", "lists": [] },
+          { "title": "Core Risk Criteria", "description": "Risk of persecution, torture, risk to life, or cruel and unusual treatment.", "icon": "Scale", "lists": [] },
+          { "title": "Document-Based Process", "description": "Written submissions (e.g., IMM 5508) with supporting evidence.", "icon": "FileText", "lists": [] },
+          { "title": "IRCC Officer Decision", "description": "PRRA is assessed by IRCC (not the IRB’s RPD).", "icon": "User", "lists": [] }
+        ]
+      },
+
+      {
+        "__component": "blocks.application-process",
+        "title": "When Is a PRRA Applicable?",
+        "icon": "Clock",
+        "items": [
+          { "listItem": "CBSA has notified you that removal proceedings are underway" },
+          { "listItem": "Your refugee claim was rejected, withdrawn, or deemed abandoned" },
+          { "listItem": "Judicial review at the Federal Court was unsuccessful" },
+          { "listItem": "Note: a 12-month bar generally applies after a negative claim/PRRA, subject to limited exceptions" }
+        ]
+      },
+
+      {
+        "__component": "blocks.application-process",
+        "title": "Risks Assessed",
+        "icon": "AlertTriangle",
+        "items": [
+          { "listItem": "Persecution based on a Convention ground" },
+          { "listItem": "Torture or risk of torture" },
+          { "listItem": "Risk to life or cruel and unusual treatment/punishment" },
+          { "listItem": "Lack of a safe internal alternative" },
+          { "listItem": "Unavailable or ineffective state protection" },
+          { "listItem": "Generalized violence or civil war conditions" }
+        ]
+      },
+
+      {
+        "__component": "blocks.comparison-grid",
+        "Heading": "PRRA vs H&C",
+        "columns": [
+          { "listItem": "Feature" },
+          { "listItem": "PRRA" },
+          { "listItem": "H&C" }
+        ],
+        "rows": [
+          { "permitType": "Primary Focus", "lmiaRequired": "Risk upon removal", "bestFor": "Humanitarian factors & establishment" },
+          { "permitType": "Decision Maker", "lmiaRequired": "IRCC officer", "bestFor": "IRCC officer (s.25 IRPA discretion)" },
+          { "permitType": "Evidence Type", "lmiaRequired": "Mainly documentary, new evidence", "bestFor": "Broad personal circumstances" },
+          { "permitType": "Typical Timing", "lmiaRequired": "When removal is pending/underway", "bestFor": "When no regular immigration class applies" }
+        ]
+      },
+
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Pre-Removal Risk Assessment",
+        "description": "Removal proceedings underway? You may qualify for a PRRA. We’ll help you understand eligibility and prepare strong submissions.",
+        "icon": "Clock",
+        "cta": { "label": "Schedule Consultation", "url": "/contact", "variant": "default" }
+      },
+
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Humanitarian & Compassionate Applications",
+        "description": "A discretionary pathway to permanent residence for those who don’t qualify under regular categories—focused on hardship and establishment in Canada.",
+        "icon": "Heart"
+      },
+
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Key Factors Considered in an H&C Application",
+        "Cards": [
+          {
+            "title": "Establishment in Canada",
+            "description": "How well you’ve built your life in Canada.",
+            "icon": "Home",
+            "lists": [
+              { "listItem": "Length of stay" },
+              { "listItem": "Work history & employment" },
+              { "listItem": "Education & language ability" },
+              { "listItem": "Community involvement" },
+              { "listItem": "Overall contribution to Canada" }
+            ]
+          },
+          {
+            "title": "Best Interests of a Child (BIOC)",
+            "description": "Direct impact on children—especially Canadian citizen/PR children.",
+            "icon": "Users",
+            "lists": [
+              { "listItem": "Physical, emotional, psychological well-being" },
+              { "listItem": "Educational disruption" },
+              { "listItem": "Healthcare access" },
+              { "listItem": "Family stability" }
+            ]
+          },
+          {
+            "title": "Hardship if Removed",
+            "description": "Undue hardship you’d face in your home country.",
+            "icon": "AlertTriangle",
+            "lists": [
+              { "listItem": "Lack of needed medical care" },
+              { "listItem": "Risk of violence or discrimination" },
+              { "listItem": "Political instability" },
+              { "listItem": "Severe social/economic challenges" },
+              { "listItem": "Personal safety concerns" }
+            ]
+          },
+          {
+            "title": "Family Ties in Canada",
+            "description": "Meaningful connections and supports in Canada.",
+            "icon": "Heart",
+            "lists": [
+              { "listItem": "Immediate & extended family" },
+              { "listItem": "Community support networks" },
+              { "listItem": "Long-term relationships" },
+              { "listItem": "Social integration" }
+            ]
+          }
+        ]
+      },
+
+      {
+        "__component": "blocks.application-process",
+        "title": "Important Notes about H&C Applications",
+        "icon": "Info",
+        "items": [
+          { "listItem": "Discretionary process under s.25(1) IRPA (not a right)" },
+          { "listItem": "Generally pursued when no other immigration class applies" },
+          { "listItem": "Personal statement is crucial—clear, truthful narrative" },
+          { "listItem": "Submit strong evidence (medical, support letters, community involvement, employment, etc.)" }
+        ]
+      },
+
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Need Expert Protection Assistance?",
+        "description": "Refugee protection, PRRA, and H&C applications are complex legal processes—don’t navigate them alone.",
+        "icon": "Shield",
+        "cta": { "label": "Emergency Consultation", "url": "/contact", "variant": "default" }
+      },
+
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Our Process",
+        "description": "A proven 5-step approach to guide you from first consult to decision.",
+        "icon": "Repeat"
+      },
+
+      {
+        "__component": "blocks.process-steps-block",
+        "title": "Our Process",
+        "steps": [
+          { "stepNumber": "01", "title": "Initial Consultation", "description": "We assess your profile and goals.", "icon": "ClipboardCheck" },
+          { "stepNumber": "02", "title": "Strategy Development", "description": "We design a personalized plan for your situation.", "icon": "BarChart4" },
+          { "stepNumber": "03", "title": "Document Preparation", "description": "We gather and QA all required forms and proof.", "icon": "FileText" },
+          { "stepNumber": "04", "title": "Application Submission", "description": "We submit and track your file with IRCC/IRB.", "icon": "FileSignature" },
+          { "stepNumber": "05", "title": "Ongoing Support", "description": "We respond to requests and guide you to decision.", "icon": "Repeat" }
+        ]
+      },
+
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Ready to Get Started?",
+        "description": "Book a free consultation to discuss the right protection pathway and next steps.",
+        "icon": "Heart",
+        "cta": { "label": "Book Free Consultation", "url": "/contact", "variant": "default" }
+      }
+    ]
+  }
+}

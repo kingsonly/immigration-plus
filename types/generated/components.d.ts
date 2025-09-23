@@ -59,6 +59,19 @@ export interface BlocksComparisonGrid extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksFeeCards extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_fee_cards';
+  info: {
+    displayName: 'Fee Cards';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    Heading: Schema.Attribute.String;
+    items: Schema.Attribute.Component<'shared.price-item', true> &
+      Schema.Attribute.Required;
+  };
+}
+
 export interface BlocksHeadingSection extends Struct.ComponentSchema {
   collectionName: 'components_blocks_heading_sections';
   info: {
@@ -130,6 +143,22 @@ export interface BlocksServices extends Struct.ComponentSchema {
     link: Schema.Attribute.Component<'shared.button', false>;
     listItem: Schema.Attribute.Component<'shared.list-item', true>;
     title: Schema.Attribute.String;
+  };
+}
+
+export interface BlocksSplitFeature extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_split_feature';
+  info: {
+    displayName: 'Split Feature';
+  };
+  attributes: {
+    cardIcon: Schema.Attribute.String;
+    description: Schema.Attribute.RichText;
+    icon: Schema.Attribute.String & Schema.Attribute.Required;
+    items: Schema.Attribute.Component<'shared.list-item', true>;
+    reverse: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
 
@@ -347,9 +376,9 @@ export interface SharedButton extends Struct.ComponentSchema {
   attributes: {
     emailSubject: Schema.Attribute.String;
     icon: Schema.Attribute.String;
-    label: Schema.Attribute.String & Schema.Attribute.Required;
+    label: Schema.Attribute.String;
     newTab: Schema.Attribute.Boolean;
-    url: Schema.Attribute.String & Schema.Attribute.Required;
+    url: Schema.Attribute.String;
     variant: Schema.Attribute.Enumeration<
       ['default', 'secondary', 'destructive', 'link', 'outline']
     > &
@@ -427,6 +456,18 @@ export interface SharedNavLink extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedPriceItem extends Struct.ComponentSchema {
+  collectionName: 'components_shared_price_items';
+  info: {
+    displayName: 'Price Item';
+  };
+  attributes: {
+    amount: Schema.Attribute.String & Schema.Attribute.Required;
+    note: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface SharedProcessStep extends Struct.ComponentSchema {
   collectionName: 'components_shared_process_steps';
   info: {
@@ -481,11 +522,13 @@ declare module '@strapi/strapi' {
       'blocks.business-immigration': BlocksBusinessImmigration;
       'blocks.card-grid': BlocksCardGrid;
       'blocks.comparison-grid': BlocksComparisonGrid;
+      'blocks.fee-cards': BlocksFeeCards;
       'blocks.heading-section': BlocksHeadingSection;
       'blocks.hero': BlocksHero;
       'blocks.process-steps-block': BlocksProcessStepsBlock;
       'blocks.service-variant-cards': BlocksServiceVariantCards;
       'blocks.services': BlocksServices;
+      'blocks.split-feature': BlocksSplitFeature;
       'business.benefit': BusinessBenefit;
       'business.card': BusinessCard;
       'business.cta-button': BusinessCtaButton;
@@ -508,6 +551,7 @@ declare module '@strapi/strapi' {
       'shared.list-item': SharedListItem;
       'shared.nav-dropdown-link': SharedNavDropdownLink;
       'shared.nav-link': SharedNavLink;
+      'shared.price-item': SharedPriceItem;
       'shared.process-step': SharedProcessStep;
       'shared.service-variant': SharedServiceVariant;
       'shared.social-link': SharedSocialLink;

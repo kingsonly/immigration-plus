@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_shared_price_items",
+  "info": { "displayName": "Price Item" },
+  "options": {},
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "amount": { "type": "string", "required": true },
+    "note": { "type": "string" }
+  }
+}
