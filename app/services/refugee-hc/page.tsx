@@ -37,27 +37,22 @@ const IconMap: Record<string, any> = {
 }
 const pickIcon = (name?: string) => (name && IconMap[name]) || CheckCircle
 
-/* --- replace the whole adaptRefugeeContent with this version --- */
+/* --- Strapi -> UI adapter (includes Split Feature + Fee Cards) --- */
 function adaptRefugeeContent(blocks: any[] | null) {
   if (!Array.isArray(blocks)) return null
   const byType = (t: string) => blocks.filter((b) => b?.__component === t)
-  const pickIcon = (name?: string) => (name && IconMap[name]) || CheckCircle
-
-  // 1) Build a map of "nearest previous heading" for every block
   const nearestHeadingForIndex: Record<number, any | null> = {}
   let lastHeading: any | null = null
   blocks.forEach((b, idx) => {
     if (b?.__component === "blocks.heading-section") lastHeading = b
     nearestHeadingForIndex[idx] = lastHeading
   })
-
-  // Helper: find nearest heading for the first block that matches a predicate
   const headingBefore = (predicate: (b: any) => boolean) => {
     const i = blocks.findIndex(predicate)
     return i >= 0 ? nearestHeadingForIndex[i] : null
   }
 
-  // 2) Pull the hero
+  // Hero
   const heroBlock = byType("blocks.hero")[0]
   const hero = heroBlock
     ? {
@@ -69,11 +64,11 @@ function adaptRefugeeContent(blocks: any[] | null) {
       }
     : null
 
-  // 3) Section headings (resolved by proximity, not exact text)
+  // Section headings via proximity (so edits reflect)
   const H = {
     refugeeClaim: headingBefore((b) => b?.__component === "blocks.card-grid" && b?.Heading?.toLowerCase?.().includes("refugee claim")),
     makingClaim: headingBefore((b) => b?.__component === "blocks.card-grid" && b?.Heading?.toLowerCase?.().includes("making a refugee")),
-    claimProcess: headingBefore((b) => b?.__component === "blocks.process-steps-block" && (b?.title || "").toLowerCase().includes("refugee claim")),
+    claimProcess: headingBefore((b) => b?.__component === "blocks.split-feature"), // << split-feature heading
     prra: headingBefore((b) => b?.__component === "blocks.card-grid" && (b?.Heading || "").toLowerCase().includes("prra")),
     prraCTA: headingBefore((b) => b?.__component === "blocks.heading-section" && b?.cta && (b?.Heading || "").toLowerCase().includes("pre-removal")),
     hc: headingBefore((b) => b?.__component === "blocks.card-grid" && (b?.Heading || "").toLowerCase().includes("h&c")),
@@ -82,13 +77,13 @@ function adaptRefugeeContent(blocks: any[] | null) {
     finalCTA: headingBefore((b) => b?.__component === "blocks.heading-section" && b?.cta && (b?.Heading || "").toLowerCase().includes("ready")),
   }
 
-  // 4) Refugee Claim (card-grid)
+  // Refugee Claim (card-grid)
   const claimGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && (b?.Heading || "").toLowerCase().includes("refugee claim"))
   const eligibilityRequirements = Array.isArray(claimGrid?.Cards)
     ? claimGrid.Cards.map((c: any) => ({ icon: pickIcon(c.icon), title: c.title, description: c.description }))
     : null
 
-  // 5) Making a Refugee Claim (card-grid with lists)
+  // Making a Refugee Claim (card-grid w/ lists)
   const makingGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && (b?.Heading || "").toLowerCase().includes("making a refugee"))
   const makingClaims = Array.isArray(makingGrid?.Cards)
     ? makingGrid.Cards.map((c: any) => ({
@@ -99,26 +94,20 @@ function adaptRefugeeContent(blocks: any[] | null) {
       }))
     : null
 
-  // 6) Refugee Claim Process (steps)
-  const rpdProcess = blocks.find((b) => b?.__component === "blocks.process-steps-block" && (b?.title || "").toLowerCase().includes("refugee claim"))
-  const refugeeProcessSteps = Array.isArray(rpdProcess?.steps)
-    ? rpdProcess.steps.map((s: any, idx: number) => ({
-        step: s.stepNumber || String(idx + 1).padStart(2, "0"),
-        title: s.title,
-        description: s.description || "",
-        icon: pickIcon(s.icon),
-        color:
-          (s.icon === "Scale" && "from-red-500 to-red-600") ||
-          (s.icon === "FileText" && "from-red-600 to-pink-600") ||
-          (s.icon === "BookOpen" && "from-pink-600 to-red-500") ||
-          (s.icon === "Gavel" && "from-red-500 to-red-700") ||
-          (s.icon === "CheckCircle" && "from-red-700 to-pink-500") ||
-          "from-red-500 to-red-600",
-        details: [],
-      }))
-    : null
+  // Refugee Claim Process (SPLIT FEATURE blocks, not process-steps)
+  const splitFeatures = blocks
+    .filter((b) => b?.__component === "blocks.split-feature")
+    .map((b: any) => ({
+      title: b.title,
+      subtitle: b.subtitle || "",
+      descriptionHtml: b.description || "",
+      icon: pickIcon(b.icon),
+      cardIcon: pickIcon(b.cardIcon || b.icon),
+      reverse: Boolean(b.reverse),
+      items: Array.isArray(b.items) ? b.items.map((i: any) => i.listItem).filter(Boolean) : [],
+    }))
 
-  // 7) PRRA factors (card-grid)
+  // PRRA factors (card-grid)
   const prraFactorsGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && (b?.Heading || "").toLowerCase().includes("key considerations"))
   const prraFactors = Array.isArray(prraFactorsGrid?.Cards)
     ? prraFactorsGrid.Cards.map((c: any) => ({
@@ -134,14 +123,14 @@ function adaptRefugeeContent(blocks: any[] | null) {
       }))
     : null
 
-  // 8) PRRA applicable + risks (application-process)
+  // PRRA applicable + risks (application-process)
   const prraApplicable = blocks.find((b) => b?.__component === "blocks.application-process" && (b?.title || "").toLowerCase().includes("prra applicable"))
   const prraApplicableItems = Array.isArray(prraApplicable?.items) ? prraApplicable.items.map((i: any) => i.listItem).filter(Boolean) : null
 
   const risksAppProc = blocks.find((b) => b?.__component === "blocks.application-process" && (b?.title || "").toLowerCase().includes("risks assessed"))
   const risksAssessed = Array.isArray(risksAppProc?.items) ? risksAppProc.items.map((i: any) => i.listItem).filter(Boolean) : null
 
-  // 9) PRRA vs H&C comparison
+  // PRRA vs H&C comparison (comparison-grid)
   const cmp = blocks.find((b) => b?.__component === "blocks.comparison-grid")
   const prraVsHc = Array.isArray(cmp?.rows)
     ? cmp.rows.map((r: any) => ({
@@ -151,7 +140,7 @@ function adaptRefugeeContent(blocks: any[] | null) {
       }))
     : null
 
-  // 10) H&C factors (card-grid)
+  // H&C factors (card-grid)
   const hcGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && (b?.Heading || "").toLowerCase().includes("h&c"))
   const hcFactors = Array.isArray(hcGrid?.Cards)
     ? hcGrid.Cards.map((c: any) => ({
@@ -162,11 +151,24 @@ function adaptRefugeeContent(blocks: any[] | null) {
       }))
     : null
 
-  // 11) H&C notes (application-process)
+  // H&C notes (application-process)
   const hcNotes = blocks.find((b) => b?.__component === "blocks.application-process" && (b?.title || "").toLowerCase().includes("important notes"))
   const hcNotesItems = Array.isArray(hcNotes?.items) ? hcNotes.items.map((i: any) => i.listItem).filter(Boolean) : null
 
-  // 12) CTAs from headings (if present)
+  // Fee Cards (Application Fees)
+  const feeCards = blocks.find((b) => b?.__component === "blocks.fee-cards")
+    ? {
+        heading: blocks.find((b) => b?.__component === "blocks.fee-cards")?.Heading || "Application Fees",
+        description: blocks.find((b) => b?.__component === "blocks.fee-cards")?.description || "",
+        items: (blocks.find((b) => b?.__component === "blocks.fee-cards")?.items || []).map((it: any) => ({
+          title: it.title,
+          amount: it.amount,
+          note: it.note || "",
+        })),
+      }
+    : null
+
+  // CTAs from headings (if present)
   const prraCTA = H.prraCTA?.cta
     ? { heading: H.prraCTA.Heading, description: H.prraCTA.description, cta: H.prraCTA.cta }
     : null
@@ -177,7 +179,7 @@ function adaptRefugeeContent(blocks: any[] | null) {
     ? { heading: H.finalCTA.Heading, description: H.finalCTA.description, cta: H.finalCTA.cta }
     : null
 
-  // 13) Our Process (steps)
+  // Our Process (steps)
   const ourProcess = blocks.find((b) => b?.__component === "blocks.process-steps-block" && (b?.title || "").toLowerCase().includes("our process"))
   const processSteps = Array.isArray(ourProcess?.steps)
     ? ourProcess.steps.map((s: any, idx: number) => ({
@@ -190,16 +192,17 @@ function adaptRefugeeContent(blocks: any[] | null) {
 
   return {
     hero,
-    H, // now H.* comes from “nearest heading”, so edited titles/descriptions in Strapi show up
+    H,
     eligibilityRequirements,
     makingClaims,
-    refugeeProcessSteps,
+    splitFeatures,        // << new
     prraFactors,
     prraApplicableItems,
     risksAssessed,
     prraVsHc,
     hcFactors,
     hcNotesItems,
+    feeCards,             // << new
     prraCTA,
     needExpertCTA,
     finalCTA,
@@ -207,12 +210,11 @@ function adaptRefugeeContent(blocks: any[] | null) {
   }
 }
 
-
 /* ------------------------------- Page ------------------------------- */
 export default function RefugeePage() {
   const [cms, setCms] = useState<ReturnType<typeof adaptRefugeeContent> | null>(null)
 
-  /* ---------- Local fallbacks: your current hardcoded arrays ---------- */
+  /* ---------- Local fallbacks (unchanged) ---------- */
   const makingClaimsLocal = [
     {
       icon: LogIn,
@@ -241,16 +243,17 @@ export default function RefugeePage() {
       icon: Users,
       title: "Convention Refugees",
       description:
-        "These are individuals who have a well-founded fear of persecution in their home country based on one or more of the following grounds: race, religion, nationality, political opinion, or membership in a particular social group. This definition is derived from the 1951 UN Refugee Convention, to which Canada is a signatory, and is recognized under Canadian immigration law.",
+        "These are individuals who have a well-founded fear of persecution in their home country based on one or more of the following grounds: race, religion, nationality, political opinion, or membership in a particular social group.",
     },
     {
       icon: Users,
       title: "Persons in Need of Protection",
       description:
-        "These are individuals who are already in Canada and would face a real risk of torture, threat to life, or cruel and unusual treatment or punishment if returned to their country of origin. This category addresses serious personal harm that does not necessarily fall under the persecution grounds required for Convention refugees.",
+        "These are individuals who are already in Canada and would face a real risk of torture, threat to life, or cruel and unusual treatment or punishment if returned to their country of origin.",
     },
   ]
 
+  // Legacy process (fallback if no split-feature found)
   const refugeeProcessStepsLocal = [
     {
       step: "01",
@@ -372,13 +375,15 @@ export default function RefugeePage() {
   const H = cms?.H
   const eligibilityRequirements = cms?.eligibilityRequirements || eligibilityRequirementsLocal
   const makingClaims = cms?.makingClaims || makingClaimsLocal
-  const refugeeProcessSteps = cms?.refugeeProcessSteps || refugeeProcessStepsLocal
+  const splitFeatures = cms?.splitFeatures || [] // new
+  const refugeeProcessSteps = refugeeProcessStepsLocal // fallback only used when splitFeatures empty (see render)
   const prraFactors = cms?.prraFactors || prraFactorsLocal
   const prraApplicableItems = cms?.prraApplicableItems || null
   const risksAssessed = cms?.risksAssessed || risksAssessedLocal
   const prraVsHc = cms?.prraVsHc || null
   const hcFactors = cms?.hcFactors || null
   const hcNotesItems = cms?.hcNotesItems || null
+  const feeCards = cms?.feeCards || null // new
   const prraCTA = cms?.prraCTA || null
   const needExpertCTA = cms?.needExpertCTA || null
   const finalCTA = cms?.finalCTA || null
@@ -483,7 +488,7 @@ export default function RefugeePage() {
         </div>
       </section>
 
-      {/* Refugee Claim Process */}
+      {/* The Refugee Claim Process (Split Feature blocks if present, else legacy steps) */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
@@ -493,71 +498,141 @@ export default function RefugeePage() {
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {H?.claimProcess?.description || "Understanding the step-by-step process of making a refugee claim in Canada"}
+              {H?.claimProcess?.description || "Understand the step-by-step pathway after you make a claim."}
             </p>
           </motion.div>
 
-          <div className="space-y-12">
-            {(refugeeProcessSteps as any[]).map((step, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                className={`flex items-center ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} flex-col lg:flex gap-12`}
-              >
-                <div className="flex-1">
-                  <Card className="hover:shadow-lg transition-shadow duration-300">
-                    <CardContent className="p-8">
-                      <div className="flex items-center space-x-4 mb-6">
-                        <div className={`w-16 h-16 bg-gradient-to-r ${step.color || "from-red-500 to-red-600"} rounded-2xl flex items-center justify-center`}>
-                          <step.icon className="w-8 h-8 text-white" />
-                        </div>
-                        <div>
-                          <div className="text-sm text-gray-500 font-medium">STEP {step.step}</div>
-                          <h3 className="text-2xl font-bold text-gray-900">{step.title}</h3>
-                        </div>
-                      </div>
-                      <p className="text-gray-600 text-lg mb-6 leading-relaxed">{step.description}</p>
-                      {Array.isArray(step.details) && step.details.length > 0 && (
-                        <div className="space-y-3">
-                          {step.details.map((d: string, i: number) => (
-                            <div key={i} className="flex items-start space-x-3">
-                              <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                              <span className="text-gray-700">{d}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <div className="flex-1 flex justify-center">
-                  <motion.div
-                    className={`w-80 h-80 bg-gradient-to-br ${step.color || "from-red-500 to-red-600"} rounded-3xl transform ${
-                      index % 2 === 0 ? "rotate-6" : "-rotate-6"
-                    } flex items-center justify-center relative overflow-hidden`}
-                    whileHover={{ rotate: 0, scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
-                  >
+          {Array.isArray(splitFeatures) && splitFeatures.length > 0 ? (
+            <div className="space-y-12">
+              {splitFeatures.map((sf: any, index: number) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: sf.reverse ? 50 : -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className={`flex items-center ${sf.reverse ? "lg:flex-row-reverse" : "lg:flex-row"} flex-col lg:flex gap-12`}
+                >
+                  {/* Big icon column */}
+                  <div className="flex-1 flex justify-center">
                     <motion.div
-                      className="absolute inset-0 bg-white/10"
-                      animate={{
-                        background: [
-                          "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-                          "radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-                          "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-                        ],
-                      }}
-                      transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
-                    />
-                    <step.icon className="w-32 h-32 text-white/80" />
-                  </motion.div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                      className={`w-80 h-80 bg-gradient-to-br from-red-500 to-red-600 rounded-3xl transform ${sf.reverse ? "-rotate-6" : "rotate-6"} flex items-center justify-center relative overflow-hidden`}
+                      whileHover={{ rotate: 0, scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <motion.div
+                        className="absolute inset-0 bg-white/10"
+                        animate={{
+                          background: [
+                            "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                            "radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                            "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                          ],
+                        }}
+                        transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
+                      />
+                      <sf.icon className="w-32 h-32 text-white/80" />
+                    </motion.div>
+                  </div>
+
+                  {/* Card column */}
+                  <div className="flex-1">
+                    <Card className="hover:shadow-lg transition-shadow duration-300">
+                      <CardContent className="p-8">
+                        <div className="flex items-center space-x-4 mb-6">
+                          <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center">
+                            <sf.cardIcon className="w-8 h-8 text-white" />
+                          </div>
+                          <div>
+                            {sf.subtitle ? <div className="text-sm text-gray-500 font-medium">{sf.subtitle}</div> : null}
+                            <h3 className="text-2xl font-bold text-gray-900">{sf.title}</h3>
+                          </div>
+                        </div>
+                        {sf.descriptionHtml ? (
+                          <div
+                            className="text-gray-600 text-lg mb-6 leading-relaxed"
+                            dangerouslySetInnerHTML={{ __html: sf.descriptionHtml }}
+                          />
+                        ) : null}
+                        {Array.isArray(sf.items) && sf.items.length > 0 && (
+                          <div className="space-y-3">
+                            {sf.items.map((d: string, i: number) => (
+                              <div key={i} className="flex items-start space-x-3">
+                                <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                                <span className="text-gray-700">{d}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            // Fallback to legacy alternating steps if no split-feature blocks exist
+            <div className="space-y-12">
+              {(refugeeProcessSteps as any[]).map((step, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  className={`flex items-center ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} flex-col lg:flex gap-12`}
+                >
+                  <div className="flex-1">
+                    <Card className="hover:shadow-lg transition-shadow duration-300">
+                      <CardContent className="p-8">
+                        <div className="flex items-center space-x-4 mb-6">
+                          <div className={`w-16 h-16 bg-gradient-to-r ${step.color || "from-red-500 to-red-600"} rounded-2xl flex items-center justify-center`}>
+                            <step.icon className="w-8 h-8 text-white" />
+                          </div>
+                          <div>
+                            <div className="text-sm text-gray-500 font-medium">STEP {step.step}</div>
+                            <h3 className="text-2xl font-bold text-gray-900">{step.title}</h3>
+                          </div>
+                        </div>
+                        <p className="text-gray-600 text-lg mb-6 leading-relaxed">{step.description}</p>
+                        {Array.isArray(step.details) && step.details.length > 0 && (
+                          <div className="space-y-3">
+                            {step.details.map((d: string, i: number) => (
+                              <div key={i} className="flex items-start space-x-3">
+                                <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                                <span className="text-gray-700">{d}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  <div className="flex-1 flex justify-center">
+                    <motion.div
+                      className={`w-80 h-80 bg-gradient-to-br ${step.color || "from-red-500 to-red-600"} rounded-3xl transform ${
+                        index % 2 === 0 ? "rotate-6" : "-rotate-6"
+                      } flex items-center justify-center relative overflow-hidden`}
+                      whileHover={{ rotate: 0, scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <motion.div
+                        className="absolute inset-0 bg-white/10"
+                        animate={{
+                          background: [
+                            "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                            "radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                            "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                          ],
+                        }}
+                        transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
+                      />
+                      <step.icon className="w-32 h-32 text-white/80" />
+                    </motion.div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -576,7 +651,7 @@ export default function RefugeePage() {
             </p>
           </motion.div>
 
-          {/* When PRRA Applies (from application-process if present) */}
+          {/* When PRRA Applies */}
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-16">
             <Card className="bg-gradient-to-r from-red-50 to-pink-50 border-red-200">
               <CardContent className="p-8">
@@ -610,7 +685,7 @@ export default function RefugeePage() {
             </Card>
           </motion.div>
 
-          {/* Key Considerations (card-grid) */}
+          {/* Key Considerations */}
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-16">
             <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">Key Considerations for a PRRA</h3>
             <div className="grid md:grid-cols-2 gap-8">
@@ -651,7 +726,7 @@ export default function RefugeePage() {
             </Card>
           </motion.div>
 
-          {/* PRRA vs H&C (use comparison-grid if present; else show your static summary) */}
+          {/* PRRA vs H&C */}
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-16">
             <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
               <CardContent className="p-8">
@@ -672,10 +747,10 @@ export default function RefugeePage() {
                       <h4 className="text-lg font-semibold text-blue-600 mb-3">PRRA Applications</h4>
                       <p className="text-gray-700">Focus strictly on protection from risk upon removal</p>
                     </div>
-                    <div>
+                                        <div>
                       <h4 className="text-lg font-semibold text-purple-600 mb-3">H&C Applications</h4>
                       <p className="text-gray-700">
-                        Consider humanitarian factors, including establishment in Canada, family hardship, and the best interests of children
+                        Consider humanitarian factors like establishment in Canada, family ties, hardship if removed, and the best interests of a child.
                       </p>
                     </div>
                   </div>
@@ -700,13 +775,8 @@ export default function RefugeePage() {
                   </Button>
                 </Link>
                 <p className="text-sm text-white/70 mt-4">
-                  Schedule a consultation with a licensed RCIC-IRB, recognized by the College of Immigration and Citizenship Consultants to represent individuals in protection and risk assessment matters.
+                  Speak with a licensed RCIC-IRB about eligibility, timelines, and evidence for a strong PRRA.
                 </p>
-                <div className="mt-6 p-4 bg-white/10 rounded-lg">
-                  <p className="italic text-white/90">
-                    "Even at the edge of removal, hope remains. One well-prepared voice can still turn the tide toward protection."
-                  </p>
-                </div>
               </CardContent>
             </Card>
           </motion.div>
@@ -727,16 +797,14 @@ export default function RefugeePage() {
             </h2>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
               {H?.hc?.description ||
-                "The Humanitarian and Compassionate (H&C) application is a discretionary pathway to permanent residence in Canada for individuals who do not qualify under regular immigration programs."}
+                "A discretionary pathway to permanent residence for those who don’t qualify under regular categories—focused on hardship and establishment in Canada."}
             </p>
           </motion.div>
 
           {/* Key Factors (card-grid) */}
           {Array.isArray(hcFactors) && hcFactors.length > 0 && (
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-16">
-              <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">
-                Key Factors Considered in an H&C Application
-              </h3>
+              <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">Key Factors Considered in an H&C Application</h3>
               <div className="space-y-12">
                 {hcFactors.map((factor: any, index: number) => (
                   <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
@@ -749,14 +817,16 @@ export default function RefugeePage() {
                           <div className="flex-1">
                             <h4 className="text-2xl font-bold text-gray-900 mb-3">{factor.title}</h4>
                             <p className="text-gray-600 mb-6 leading-relaxed">{factor.description}</p>
-                            <div className="grid md:grid-cols-2 gap-3">
-                              {factor.details.map((d: string, i: number) => (
-                                <div key={i} className="flex items-start space-x-2">
-                                  <CheckCircle className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
-                                  <span className="text-sm text-gray-700">{d}</span>
-                                </div>
-                              ))}
-                            </div>
+                            {Array.isArray(factor.details) && factor.details.length > 0 && (
+                              <div className="grid md:grid-cols-2 gap-3">
+                                {factor.details.map((d: string, i: number) => (
+                                  <div key={i} className="flex items-start space-x-2">
+                                    <CheckCircle className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
+                                    <span className="text-sm text-gray-700">{d}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </CardContent>
@@ -773,7 +843,7 @@ export default function RefugeePage() {
               <Card className="bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200">
                 <CardContent className="p-8">
                   <div className="flex items-center space-x-4 mb-6">
-                    <DollarSign className="w-8 h-8 text-gray-600" />
+                    <Info className="w-8 h-8 text-gray-700" />
                     <h3 className="text-2xl font-bold text-gray-900">Important Notes about H&C Applications</h3>
                   </div>
                   <div className="grid md:grid-cols-2 gap-6">
@@ -789,32 +859,59 @@ export default function RefugeePage() {
             </motion.div>
           )}
 
-          {/* H&C CTA (static button; could also source from a heading-section if you add one) */}
+          {/* H&C CTA */}
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <Card className="bg-gradient-to-r from-pink-500 to-red-600 text-white">
               <CardContent className="p-8 text-center">
                 <Heart className="w-12 h-12 mx-auto mb-4" />
                 <h3 className="text-2xl font-bold mb-4">Humanitarian & Compassionate Applications</h3>
-                <p className="text-xl mb-6 text-white/90">Experiencing hardship in Canada? Take the Next Step.</p>
-                <p className="mb-8 text-white/80">
-                  If you are not eligible under other immigration categories, you may request permanent residence based on humanitarian and compassionate grounds.
-                </p>
+                <p className="text-xl mb-6 text-white/90">Experiencing hardship in Canada? Take the next step.</p>
                 <Link href="/contact">
                   <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold">
                     <Calendar className="mr-2 w-5 h-5" />
                     Book Consultation
                   </Button>
                 </Link>
-                <p className="text-sm text-white/70 mt-4">
-                  Book a consultation with a Regulated Canadian Immigration Consultant (RCIC-IRB) to assess your eligibility and receive guidance on preparing a well-supported H&C application.
-                </p>
               </CardContent>
             </Card>
           </motion.div>
         </div>
       </section>
 
-      {/* Final CTA */}
+      {/* Application Fees (Fee Cards) */}
+      {feeCards && Array.isArray(feeCards.items) && feeCards.items.length > 0 && (
+        <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-12">
+              <h2 className="text-4xl font-bold mb-4 text-gray-900">{feeCards.heading || "Application Fees"}</h2>
+              {feeCards.description ? (
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">{feeCards.description}</p>
+              ) : null}
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {feeCards.items.map((it: any, i: number) => (
+                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.05 }}>
+                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-lg font-semibold text-gray-900">{it.title}</h4>
+                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-red-50 text-red-600 font-semibold">
+                          <DollarSign className="w-4 h-4 mr-1" />
+                          {it.amount}
+                        </div>
+                      </div>
+                      {it.note ? <p className="text-sm text-gray-600">{it.note}</p> : null}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Need Expert CTA */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
@@ -826,7 +923,7 @@ export default function RefugeePage() {
             </h2>
             <p className="text-xl text-gray-600 mb-8">
               {needExpertCTA?.description ||
-                "Refugee protection, PRRA, and H&C applications are complex legal processes that require expert guidance. Don't navigate these critical applications alone."}
+                "Refugee protection, PRRA, and H&C applications are complex legal processes—don’t navigate them alone."}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href={needExpertCTA?.cta?.url || "/contact"}>
@@ -863,7 +960,7 @@ export default function RefugeePage() {
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {H?.ourProcess?.description || "We follow a proven 5-step process to ensure your immigration success"}
+              {H?.ourProcess?.description || "A proven 5-step approach to guide you from first consult to decision."}
             </p>
           </motion.div>
 
@@ -871,11 +968,11 @@ export default function RefugeePage() {
             <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-red-500 to-pink-600 hidden lg:block"></div>
             <div className="space-y-12">
               {(ourProcessSteps || [
-                { step: "01", title: "Initial Consultation", description: "We assess your profile and discuss your immigration goals" },
-                { step: "02", title: "Strategy Development", description: "We create a personalized immigration strategy for your situation" },
-                { step: "03", title: "Document Preparation", description: "We help you gather and prepare all required documents" },
-                { step: "04", title: "Application Submission", description: "We submit your application and monitor its progress" },
-                { step: "05", title: "Ongoing Support", description: "We provide support until you achieve your immigration goals" },
+                { step: "01", title: "Initial Consultation", description: "We assess your profile and goals." },
+                { step: "02", title: "Strategy Development", description: "We design a personalized plan for your situation." },
+                { step: "03", title: "Document Preparation", description: "We gather and QA all required forms and proof." },
+                { step: "04", title: "Application Submission", description: "We submit and track your file with IRCC/IRB." },
+                { step: "05", title: "Ongoing Support", description: "We respond to requests and guide you to decision." },
               ]).map((step: any, index: number) => (
                 <motion.div
                   key={index}
@@ -906,20 +1003,15 @@ export default function RefugeePage() {
         </div>
       </section>
 
-      {/* Final “Ready to Get Started?” CTA (if present in CMS) */}
+      {/* Final CTA (if present in CMS) */}
       {finalCTA && (
         <section className="py-20 bg-gradient-to-r from-red-500 to-pink-600">
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
               <h2 className="text-4xl font-bold text-white mb-6">{finalCTA.heading}</h2>
-              <p className="text-xl text-white/90 mb-8">
-                {finalCTA.description}
-              </p>
+              <p className="text-xl text-white/90 mb-8">{finalCTA.description}</p>
               <Link href={finalCTA.cta?.url || "/contact"}>
-                <Button
-                  size="lg"
-                  className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold"
-                >
+                <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold">
                   {finalCTA.cta?.label || "Book Free Consultation"}
                 </Button>
               </Link>
