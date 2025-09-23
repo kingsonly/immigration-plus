@@ -1,0 +1,163 @@
+{
+  "data": {
+    "title": "Family Sponsorship",
+    "slug": "family-sponsorship",
+    "summary": "Sponsor spouses/partners, dependent children, parents & grandparents, and certain orphaned relatives.",
+    "locale": "en",
+    "blocks": [
+      {
+        "__component": "blocks.hero",
+        "icon": "HeartHandshake",
+        "Title": "Family Sponsorship",
+        "Subtitle": "Reuniting Families in Canada",
+        "description": "<p>We guide Canadian citizens and permanent residents through sponsorship for spouses/partners, children, parents & grandparents, and eligible relatives. From eligibility to IRCC follow-up, we help bring your loved ones home.</p>",
+        "ctas": [
+          { "label": "Book Free Consultation", "url": "/contact#consultation", "variant": "default" },
+          { "label": "Check Eligibility", "url": "#eligibility", "variant": "outline" }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Who You Can Sponsor",
+        "icon": "Users"
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Who You Can Sponsor",
+        "Cards": [
+          {
+            "title": "Spouse, Common-Law, or Conjugal Partners",
+            "description": "Inland and Outland applications, proof of relationship, and dual intent guidance.",
+            "icon": "HeartHandshake",
+            "lists": []
+          },
+          {
+            "title": "Dependent Children",
+            "description": "Biological or adopted children under 22, or older dependents with medical conditions.",
+            "icon": "Baby",
+            "lists": []
+          },
+          {
+            "title": "Parents and Grandparents",
+            "description": "PGP intake, income proof, and medical/financial documentation support.",
+            "icon": "Users",
+            "lists": []
+          },
+          {
+            "title": "Orphaned Siblings, Nieces/Nephews, or Other Relatives",
+            "description": "Compassionate family reunification for eligible orphaned relatives.",
+            "icon": "UserMinus",
+            "lists": []
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Sponsorship of Adopted Children",
+        "description": "Adopting a child—internationally or within Canada—requires meeting both immigration and provincial legal standards. We provide compassionate guidance through every step so your family can grow legally and lovingly.",
+        "icon": "ClipboardCheck"
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Sponsor Eligibility Requirements",
+        "icon": "CheckCircle"
+      },
+      {
+        "__component": "blocks.application-process",
+        "title": "Sponsor Eligibility Requirements",
+        "icon": "CheckCircle",
+        "items": [
+          { "listItem": "Be at least 18 years old" },
+          { "listItem": "Be a Canadian citizen, permanent resident, or Registered Indian" },
+          { "listItem": "Live in Canada throughout the sponsorship process" },
+          { "listItem": "Meet financial requirements only where applicable (e.g., dependent children who themselves sponsor children)" },
+          { "listItem": "Have no ineligible sponsorship undertakings or bars in the last 3–5 years" }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Ways to Apply",
+        "icon": "FileSignature"
+      },
+      {
+        "__component": "blocks.service-variant-cards",
+        "Heading": "Ways to Apply",
+        "services": [
+          {
+            "title": "Outland",
+            "description": "Your loved one applies from outside Canada.",
+            "icon": "Home",
+            "color": "from-red-500 to-red-600",
+            "features": [
+              { "listItem": "Complete sponsorship + PR forms" },
+              { "listItem": "Submit online via IRCC portal" },
+              { "listItem": "AOR & biometrics within 30 days" },
+              { "listItem": "Medical, security, background checks" },
+              { "listItem": "Decision and, if approved, COPR" }
+            ],
+            "processingTime": "≈ 12 months for 80% of cases",
+            "startingPrice": "Contact for pricing",
+            "href": "/contact#consultation",
+            "extra": "Interim options: partner may receive a visitor visa while sponsorship proceeds"
+          },
+          {
+            "title": "Inland",
+            "description": "Your loved one applies from within Canada.",
+            "icon": "Briefcase",
+            "color": "from-red-600 to-pink-600",
+            "features": [
+              { "listItem": "Complete sponsorship + PR forms" },
+              { "listItem": "Submit online via IRCC portal" },
+              { "listItem": "AOR & biometrics within 30 days" },
+              { "listItem": "Medical, security, background checks" },
+              { "listItem": "Decision and, if approved, COPR" }
+            ],
+            "processingTime": "≈ 12 months for 80% of cases",
+            "startingPrice": "Contact for pricing",
+            "href": "/contact#consultation",
+            "extra": "Interim options: partner may qualify for an open work permit"
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Our Process",
+        "description": "A proven 5-step approach to make sponsorship smoother.",
+        "icon": "Repeat"
+      },
+      {
+        "__component": "blocks.process-steps-block",
+        "title": "Our Process",
+        "steps": [
+          { "stepNumber": "01", "title": "Initial Consultation", "description": "We assess your profile and goals.", "icon": "ClipboardCheck" },
+          { "stepNumber": "02", "title": "Strategy Development", "description": "We create a personalized sponsorship plan.", "icon": "BarChart4" },
+          { "stepNumber": "03", "title": "Document Preparation", "description": "We assemble and QA all required forms and proof.", "icon": "FileText" },
+          { "stepNumber": "04", "title": "Application Submission", "description": "We submit and track your file with IRCC.", "icon": "FileSignature" },
+          { "stepNumber": "05", "title": "Ongoing Support", "description": "We respond to IRCC requests and guide you to decision.", "icon": "Repeat" }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Why Choose Our Services?",
+        "description": "Comprehensive support from start to finish.",
+        "icon": "Star"
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Why Choose Our Services?",
+        "Cards": [
+          { "title": "Expert Documentation", "description": "Up-to-date forms, proof strategies, and submission standards.", "icon": "FileText", "lists": [] },
+          { "title": "Timely Processing", "description": "Transparent timelines and proactive status follow-ups.", "icon": "Clock", "lists": [] },
+          { "title": "Personalized Support", "description": "Tailored strategy to your family’s circumstances.", "icon": "Users", "lists": [] }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Ready to Get Started?",
+        "description": "Book a free consultation to discuss your sponsorship goals and next steps.",
+        "icon": "Heart",
+        "cta": { "label": "Book Free Consultation", "url": "/contact", "variant": "default" }
+      }
+    ]
+  }
+}

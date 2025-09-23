@@ -15,12 +15,7 @@
             "type": "text"
         },
         "icon": {
-            "type": "media",
-            "multiple": false,
-            "allowedTypes": [
-                "images",
-                "files"
-            ]
+            "type": "string"
         }
     },
     "config": {}

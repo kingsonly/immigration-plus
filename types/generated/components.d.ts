@@ -100,6 +100,20 @@ export interface BlocksProcessStepsBlock extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksServiceVariantCards extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_service_variant_cards';
+  info: {
+    description: 'Heading + a list of service variant cards';
+    displayName: 'Service Variant Cards';
+    icon: 'grid';
+  };
+  attributes: {
+    Heading: Schema.Attribute.String;
+    services: Schema.Attribute.Component<'shared.service-variant', true> &
+      Schema.Attribute.Required;
+  };
+}
+
 export interface BlocksServices extends Struct.ComponentSchema {
   collectionName: 'components_blocks_services';
   info: {
@@ -420,9 +434,29 @@ export interface SharedProcessStep extends Struct.ComponentSchema {
   };
   attributes: {
     description: Schema.Attribute.Text;
-    icon: Schema.Attribute.Media<'images' | 'files'>;
+    icon: Schema.Attribute.String;
     stepNumber: Schema.Attribute.String;
     title: Schema.Attribute.String;
+  };
+}
+
+export interface SharedServiceVariant extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_service_variants';
+  info: {
+    description: 'Single service option (e.g., Inland / Outland)';
+    displayName: 'Service Variant';
+    icon: 'layout';
+  };
+  attributes: {
+    color: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    extra: Schema.Attribute.Text;
+    features: Schema.Attribute.Component<'shared.list-item', true>;
+    href: Schema.Attribute.String;
+    icon: Schema.Attribute.String;
+    processingTime: Schema.Attribute.String;
+    startingPrice: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
 
@@ -450,6 +484,7 @@ declare module '@strapi/strapi' {
       'blocks.heading-section': BlocksHeadingSection;
       'blocks.hero': BlocksHero;
       'blocks.process-steps-block': BlocksProcessStepsBlock;
+      'blocks.service-variant-cards': BlocksServiceVariantCards;
       'blocks.services': BlocksServices;
       'business.benefit': BusinessBenefit;
       'business.card': BusinessCard;
@@ -474,6 +509,7 @@ declare module '@strapi/strapi' {
       'shared.nav-dropdown-link': SharedNavDropdownLink;
       'shared.nav-link': SharedNavLink;
       'shared.process-step': SharedProcessStep;
+      'shared.service-variant': SharedServiceVariant;
       'shared.social-link': SharedSocialLink;
     }
   }

@@ -1,0 +1,227 @@
+{
+  "data": {
+    "title": "Visitor Visa",
+    "slug": "visitor-visa",
+    "summary": "Visitor & Transit Visas, eTA guidance, validity & stay rules, and how to apply",
+    "locale": "en",
+    "featuredImage": null,
+    "ogImage": null,
+    "documents": [],
+    "blocks": [
+      {
+        "__component": "blocks.hero",
+        "icon": "Plane",
+        "Title": "Experience Canada with Confidence",
+        "Subtitle": "Visit Canada: Visitor & Transit Visas",
+        "description": "<p>Explore Canada with confidence—whether it's a holiday, family visit, business trip, or transit stop. TENTACULAR IMMIGRATION SOLUTIONS LTD provides expert support to help you secure the right visitor document and prepare for your journey.</p>",
+        "ctas": [
+          { "label": "Book Visitor Visa Consultation", "url": "/contact", "variant": "default" },
+          { "label": "Check Requirements", "url": "#need", "variant": "outline" }
+        ],
+        "image": null
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Do You Need a Visa or eTA?",
+        "description": "Your document requirements depend on your nationality and how you're traveling to Canada",
+        "icon": "Globe",
+        "cta": null
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Who needs what",
+        "description": null,
+        "Cards": [
+          {
+            "title": "Visa-Exempt Travelers",
+            "description": "Electronic Travel Authorization (eTA)",
+            "icon": "Plane",
+            "lists": [
+              { "listItem": "EU countries" },
+              { "listItem": "U.S. green card holders" },
+              { "listItem": "UK citizens" },
+              { "listItem": "Australian citizens" }
+            ],
+            "link": null
+          },
+          {
+            "title": "All Other Travelers",
+            "description": "Visitor Visa (TRV)",
+            "icon": "FileText",
+            "lists": [
+              { "listItem": "Most African countries" },
+              { "listItem": "Many Asian countries" },
+              { "listItem": "Some South American countries" }
+            ],
+            "link": null
+          }
+        ],
+        "link": null
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Types of Visitor Visas",
+        "description": "Choose the right visa type based on your travel needs and circumstances",
+        "icon": "FileText",
+        "cta": null
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Types of Visitor Visas",
+        "description": null,
+        "Cards": [
+          {
+            "title": "Single-Entry Visa",
+            "description": "Enter Canada once, typically up to six months stay.",
+            "icon": "Plane",
+            "lists": [
+              { "listItem": "One-time entry" },
+              { "listItem": "Up to 6 months stay" },
+              { "listItem": "Tourism & family visits" },
+              { "listItem": "Event attendance" }
+            ],
+            "link": null
+          },
+          {
+            "title": "Multiple-Entry Visa",
+            "description": "Travel to Canada multiple times over the visa validity—up to 10 years or passport expiry.",
+            "icon": "Globe",
+            "lists": [
+              { "listItem": "Multiple entries" },
+              { "listItem": "Up to 10 years validity" },
+              { "listItem": "6 months per visit" },
+              { "listItem": "Business & leisure" }
+            ],
+            "link": null
+          },
+          {
+            "title": "Transit Visa",
+            "description": "Required when passing through Canada en route elsewhere, with a layover under 48 hours.",
+            "icon": "Clock",
+            "lists": [
+              { "listItem": "Transit only" },
+              { "listItem": "Under 48 hours" },
+              { "listItem": "No stay permitted" },
+              { "listItem": "Airport connections" }
+            ],
+            "link": null
+          },
+          {
+            "title": "Super Visa",
+            "description": "Long-term, multiple-entry visa for parents and grandparents of citizens/PRs—up to 5 years per entry.",
+            "icon": "Heart",
+            "lists": [
+              { "listItem": "Up to 5 years per entry" },
+              { "listItem": "Multiple entries" },
+              { "listItem": "Family reunification" },
+              { "listItem": "Extended stays" }
+            ],
+            "link": null
+          }
+        ],
+        "link": null
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Validity & Stay Duration",
+        "description": "Understand visa validity versus duration of stay in Canada",
+        "icon": "Calendar",
+        "cta": null
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Validity & Stay Duration",
+        "description": null,
+        "Cards": [
+          {
+            "title": "Temporary Resident Visa (TRV)",
+            "description": "",
+            "icon": "Globe",
+            "lists": [
+              { "listItem": "Validity: Up to 10 years or passport expiry" },
+              { "listItem": "Stay: Up to 6 months per entry" },
+              { "listItem": "Extension: Extendable in some cases" }
+            ],
+            "link": null
+          },
+          {
+            "title": "Super Visa",
+            "description": "",
+            "icon": "Heart",
+            "lists": [
+              { "listItem": "Validity: Up to 10 years" },
+              { "listItem": "Stay: Up to 5 years per entry" },
+              { "listItem": "Extension: Can leave and re-enter" }
+            ],
+            "link": null
+          },
+          {
+            "title": "Electronic Travel Authorization (eTA)",
+            "description": "",
+            "icon": "Plane",
+            "lists": [
+              { "listItem": "Validity: Up to 5 years or passport expiry" },
+              { "listItem": "Stay: Up to 6 months per entry" },
+              { "listItem": "Extension: Extendable in some cases" }
+            ],
+            "link": null
+          }
+        ],
+        "link": null
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "How to Apply",
+        "description": "Step-by-step guide to applying for your Canadian visitor visa or eTA",
+        "icon": "Info",
+        "cta": null
+      },
+      {
+        "__component": "blocks.process-steps-block",
+        "title": "How to Apply",
+        "description": null,
+        "steps": [
+          { "stepNumber": "01", "title": "Confirm TRV or eTA", "description": "Determine requirements by nationality and travel method", "icon": null },
+          { "stepNumber": "02", "title": "Prepare documentation", "description": "Gather passport, finances, and supporting materials", "icon": null },
+          { "stepNumber": "03", "title": "Apply online or via VAC", "description": "Submit your application with all required documents", "icon": null },
+          { "stepNumber": "04", "title": "Complete biometrics (if required)", "description": "Provide fingerprints and photo at a collection point", "icon": null },
+          { "stepNumber": "05", "title": "Await processing and decision", "description": "Monitor status and respond to IRCC requests", "icon": null },
+          { "stepNumber": "06", "title": "Travel with supporting documents", "description": "Carry itinerary, proof of funds, invitation, etc.", "icon": null }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Visa vs eTA Comparison",
+        "description": "Quick comparison between Visitor Visa (TRV) and Electronic Travel Authorization (eTA)",
+        "icon": "FileText",
+        "cta": null
+      },
+      {
+        "__component": "blocks.comparison-grid",
+        "Heading": "Visa vs eTA Comparison",
+        "description": null,
+        "columns": [
+          { "listItem": "Feature" },
+          { "listItem": "TRV (Visitor Visa)" },
+          { "listItem": "eTA" }
+        ],
+        "rows": [
+          { "permitType": "Required for", "lmiaRequired": "Most non-visa-exempt countries", "bestFor": "Visa-exempt travelers (air only)", "duration": "" },
+          { "permitType": "Application Method", "lmiaRequired": "Online or VAC", "bestFor": "Online only", "duration": "" },
+          { "permitType": "Processing Time", "lmiaRequired": "Weeks (varies by country)", "bestFor": "Minutes to days", "duration": "" },
+          { "permitType": "Validity", "lmiaRequired": "Up to 10 years", "bestFor": "Up to 5 years or passport expiry", "duration": "" },
+          { "permitType": "Entry Type", "lmiaRequired": "Single or multiple", "bestFor": "Multiple", "duration": "" },
+          { "permitType": "Biometric Requirement", "lmiaRequired": "Yes (14–79 years)", "bestFor": "No", "duration": "" }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Expert Visitor Visa Support",
+        "description": "Don’t let document requirements or application complexities stop you. We provide comprehensive support for visitor visas and eTAs.",
+        "icon": "Star",
+        "cta": { "label": "Book Consultation", "url": "/contact", "variant": "default" }
+      }
+    ],
+    "publishedAt": null
+  }
+}

@@ -69,7 +69,8 @@
                 "blocks.card-grid",
                 "blocks.business-immigration",
                 "blocks.application-process",
-                "blocks.comparison-grid"
+                "blocks.comparison-grid",
+                "blocks.service-variant-cards"
             ]
         },
         "documents": {
