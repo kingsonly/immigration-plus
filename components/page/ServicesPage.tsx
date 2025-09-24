@@ -3,42 +3,145 @@
 import { motion } from "framer-motion"
 import {
   Home,
-  Briefcase,
-  Users,
-  GraduationCap,
-  MapPin,
-  Heart,
-  ArrowRight,
-  CheckCircle,
-  Clock,
-  DollarSign,
-  FileText,
-  Rocket,
+  Award,
   BriefcaseBusiness,
+  GraduationCap,
+  Briefcase,
   Plane,
   HeartHandshake,
-  Award,
   ShieldCheck,
   UserSearch,
+  FileText,
+  Rocket,
+  ArrowRight,
+  Users,
+  Clock,
+  Heart,
+  CheckCircle,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
-export default function ServicesPage({ value }: { value: any }) {
-  const [data, setData] = useState<any>()
-  useEffect(() => {
-    if (value) {
-      setData(value)
-      console.log("full test", value);
-    }
+type StrapiEntry = {
+  id?: number
+  title?: string
+  description?: string
+  blocks?: any[]
+}
 
-  }, [value])
+const IconMap: Record<string, any> = {
+  Home,
+  Award,
+  BriefcaseBusiness,
+  GraduationCap,
+  Briefcase,
+  Plane,
+  HeartHandshake,
+  ShieldCheck,
+  UserSearch,
+  FileText,
+  Rocket,
+  ArrowRight,
+  Users,
+  Clock,
+  Heart,
+  CheckCircle,
+}
+const pickIcon = (name?: string) => (name && IconMap[name]) || CheckCircle
 
-  const services = [
+/* ---------------- adapter: Strapi -> UI ---------------- */
+function adaptServicesLanding(entry: StrapiEntry | null) {
+  if (!entry || !Array.isArray(entry.blocks)) return null
+  const blocks = entry.blocks
+
+  const heroBlock = blocks.find((b) => b?.__component === "blocks.hero")
+  const hero = heroBlock
+    ? {
+        title: heroBlock.Title || entry.title || "Our Services",
+        html: heroBlock.description || (entry.description ? `<p>${entry.description}</p>` : ""),
+        ctas: Array.isArray(heroBlock.ctas) ? heroBlock.ctas : [],
+      }
+    : {
+        title: entry.title || "Our Services",
+        html: entry.description ? `<p>${entry.description}</p>` : "",
+        ctas: [],
+      }
+
+  // Services grid cards -> convert to your alternating sections layout
+  const servicesGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && (b?.Heading || "").toLowerCase() === "services")
+  const servicesCards = Array.isArray(servicesGrid?.Cards) ? servicesGrid.Cards : []
+  const palette = [
+    "from-red-500 to-red-600",
+    "from-red-600 to-pink-600",
+    "from-pink-600 to-red-500",
+    "from-red-500 to-red-700",
+    "from-red-700 to-pink-500",
+    "from-pink-500 to-red-600",
+  ]
+  const services = servicesCards.map((c: any, i: number) => ({
+    icon: pickIcon(c.icon),
+    title: c.title,
+    description: c.description,
+    details:
+      Array.isArray(c.lists) && c.lists.length
+        ? c.lists.map((l: any) => l?.listItem).filter(Boolean).join(" • ")
+        : c.description,
+    color: palette[i % palette.length],
+    href: c?.link?.url || "#",
+  }))
+
+  // Why choose us (3 feature cards)
+  const whyGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && (b?.Heading || "").toLowerCase() === "why choose us")
+  const whyCards = Array.isArray(whyGrid?.Cards)
+    ? whyGrid.Cards.map((c: any) => ({
+        icon: pickIcon(c.icon),
+        title: c.title,
+        description: c.description,
+      }))
+    : []
+
+  // Process steps
+  const stepsBlock = blocks.find((b) => b?.__component === "blocks.process-steps-block")
+  const processSteps = Array.isArray(stepsBlock?.steps)
+    ? stepsBlock.steps.map((s: any, idx: number) => ({
+        step: s.stepNumber || String(idx + 1).padStart(2, "0"),
+        title: s.title,
+        description: s.description,
+      }))
+    : []
+
+  // Headings
+  const heading = (txt: string) =>
+    blocks.find((b) => b?.__component === "blocks.heading-section" && (b?.Heading || "").toLowerCase() === txt.toLowerCase())
+  const headings = {
+    hero: heading(""),
+    explore: heading("Explore Our Services") || null,
+    process: heading("Our Process") || null,
+    why: heading("Why Choose Our Services?") || null,
+    final: heading("Ready to Get Started?") || null,
+  }
+
+  const finalCTA = headings.final
+    ? {
+        heading: headings.final.Heading,
+        description: headings.final.description || "",
+        cta: headings.final.cta || null,
+      }
+    : null
+
+  return { hero, services, whyCards, processSteps, headings, finalCTA }
+}
+
+/* ---------------- component ---------------- */
+export default function ServicesPage({ entry }: { entry?: StrapiEntry | null }) {
+  const [cms, setCms] = useState<ReturnType<typeof adaptServicesLanding> | null>(null)
+
+  // local fallbacks (your original arrays)
+  const servicesLocal = [
     {
-      icon: Home, // ✔️ Keep — matches the concept of settling permanently
+      icon: Home,
       title: "Permanent Residency (PR)",
       description: "Your pathway to calling Canada home permanently",
       details:
@@ -47,7 +150,7 @@ export default function ServicesPage({ value }: { value: any }) {
       href: "/services/permanent-residency",
     },
     {
-      icon: Award, // Lucide icon symbolizing achievement and official status
+      icon: Award,
       title: "Citizenship",
       description: "Become a citizen and complete your Canadian journey.",
       details: "Your passport to full Canadian rights and responsibilities.",
@@ -55,7 +158,7 @@ export default function ServicesPage({ value }: { value: any }) {
       href: "/services/citizenship",
     },
     {
-      icon: BriefcaseBusiness, // 🆕 Better than generic "Users" for business/investment
+      icon: BriefcaseBusiness,
       title: "Business & Investor Immigration",
       description: "Invest in your future and Canada's economy",
       details:
@@ -64,34 +167,31 @@ export default function ServicesPage({ value }: { value: any }) {
       href: "/services/business-immigration",
     },
     {
-      icon: GraduationCap, // ✔️ Already perfect
+      icon: GraduationCap,
       title: "Study",
       description: "Educational opportunities await",
-      details:
-        "Study permits allow international students to pursue education in Canada.",
+      details: "Study permits allow international students to pursue education in Canada.",
       color: "from-red-500 to-red-700",
       href: "/services/study",
     },
     {
-      icon: Briefcase, // 🆕 Change from duplicate GraduationCap to Briefcase
+      icon: Briefcase,
       title: "Work Permits",
       description: "Career opportunities await",
-      details:
-        "Work permits provide opportunities to gain valuable Canadian work experience.",
+      details: "Work permits provide opportunities to gain valuable Canadian work experience.",
       color: "from-red-500 to-red-700",
       href: "/services/work-permit",
     },
     {
-      icon: Plane, // 🆕 More intuitive for travel/visits than MapPin
+      icon: Plane,
       title: "Visitors Visa",
       description: "Welcome visitors from around the world",
-      details:
-        "Visitors visas allow you to visit Canada for a specific period of time.",
+      details: "Visitors visas allow you to visit Canada for a specific period of time.",
       color: "from-red-700 to-pink-500",
       href: "/services/visitors-visa",
     },
     {
-      icon: HeartHandshake, // 🆕 Stronger emotional symbol for family reunification
+      icon: HeartHandshake,
       title: "Family Sponsorship",
       description: "Reunite with your loved ones in Canada",
       details:
@@ -100,54 +200,61 @@ export default function ServicesPage({ value }: { value: any }) {
       href: "/services/family-sponsorship",
     },
     {
-      icon: ShieldCheck, // Lucide icon representing protection and humanitarian support
+      icon: ShieldCheck,
       title: "Refugee & H&C",
       description: "Support when safety, dignity, or compassion are at stake.",
       details: "Compassionate support for those in vulnerable or life-threatening situations.",
       color: "from-pink-500 to-red-600",
       href: "/services/refugee-hc",
     },
-
     {
-      icon: UserSearch, // Lucide icon for recruitment and talent sourcing
+      icon: UserSearch,
       title: "Recruitment Services",
-      description:
-        "Your gateway to hiring or working in Canada.",
+      description: "Your gateway to hiring or working in Canada.",
       details:
         "Connecting skilled candidates with Canadian employers in sectors like hospitality, healthcare, tech, and agriculture.",
       color: "from-red-500 to-red-600",
       href: "/services/recruitment",
-    }
-  ];
-
-
-  const processSteps = [
-    {
-      step: "01",
-      title: "Initial Consultation",
-      description: "We assess your profile and discuss your immigration goals",
-    },
-    {
-      step: "02",
-      title: "Strategy Development",
-      description: "We create a personalized immigration strategy for your situation",
-    },
-    {
-      step: "03",
-      title: "Document Preparation",
-      description: "We help you gather and prepare all required documents",
-    },
-    {
-      step: "04",
-      title: "Application Submission",
-      description: "We submit your application and monitor its progress",
-    },
-    {
-      step: "05",
-      title: "Ongoing Support",
-      description: "We provide support until you achieve your immigration goals",
     },
   ]
+
+  const processStepsLocal = [
+    { step: "01", title: "Initial Consultation", description: "We assess your profile and discuss your immigration goals" },
+    { step: "02", title: "Strategy Development", description: "We create a personalized immigration strategy for your situation" },
+    { step: "03", title: "Document Preparation", description: "We help you gather and prepare all required documents" },
+    { step: "04", title: "Application Submission", description: "We submit your application and monitor its progress" },
+    { step: "05", title: "Ongoing Support", description: "We provide support until you achieve your immigration goals" },
+  ]
+
+  useEffect(() => {
+    setCms(adaptServicesLanding(entry || null))
+  }, [entry])
+
+  const hero = cms?.hero || {
+    title: "Our Services",
+    html:
+      "<p>Comprehensive Canadian immigration services tailored to your unique situation. From permanent residency to family reunification, we're here to guide you every step of the way.</p>",
+    ctas: [
+      { label: "Book Free Consultation", url: "/contact", variant: "default" },
+      { label: "Explore Services", url: "#services", variant: "outline" },
+    ],
+  }
+
+  const services = (cms?.services?.length ? cms.services : servicesLocal).map((s: any) => ({
+    ...s,
+    // normalize: function/class component for icons
+    icon: typeof s.icon === "function" ? s.icon : pickIcon((s.icon as any)?._name),
+  }))
+
+  const processSteps = cms?.processSteps?.length ? cms.processSteps : processStepsLocal
+
+  const whyCards = (cms?.whyCards?.length ? cms.whyCards : [
+    { icon: FileText, title: "Expert Documentation", description: "We ensure all your documents are properly prepared and submitted according to the latest requirements." },
+    { icon: Clock, title: "Timely Processing", description: "We monitor your application closely and keep you updated on its progress every step of the way." },
+    { icon: Users, title: "Personalized Support", description: "Each client receives individual attention and a customized strategy based on their unique situation." },
+  ]).map((c: any) => ({ ...c, icon: typeof c.icon === "function" ? c.icon : pickIcon(c.icon) }))
+
+  const finalCTA = cms?.finalCTA
 
   return (
     <div className="min-h-screen bg-white pt-16">
@@ -158,49 +265,43 @@ export default function ServicesPage({ value }: { value: any }) {
           animate={{ rotate: 360 }}
           transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
         />
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                {data?.hero?.title || "Our Services"}
+                {hero.title || "Our Services"}
               </span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              {data?.hero?.description || "Comprehensive Canadian immigration services tailored to your unique situation. From permanent residency to family reunification, we're here to guide you every step of the way."}
-
-            </p>
+            {hero?.html ? (
+              <div className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed" dangerouslySetInnerHTML={{ __html: hero.html }} />
+            ) : null}
+            <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+              {Array.isArray(hero?.ctas) &&
+                hero.ctas.map((c: any, i: number) => (
+                  <Link key={i} href={c?.url || "#"}>
+                    <Button
+                      size="lg"
+                      className={
+                        (c?.variant || "default") === "outline"
+                          ? "border-red-600 text-red-600 hover:bg-red-50 bg-transparent"
+                          : "bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
+                      }
+                      variant={c?.variant === "outline" ? "outline" : "default"}
+                    >
+                      {c?.label || "Learn More"}
+                    </Button>
+                  </Link>
+                ))}
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Services Grid */}
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+      {/* Services Grid (alternating sections preserved) */}
+      <section id="services" className="py-20 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Your Immigration Journey
-              </span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Discover the pathway that's right for you. Each route offers unique opportunities to build your future in
-              Canada.
-            </p>
-          </motion.div> */}
-
           <div className="space-y-32">
-            {services.map((service, index) => (
+            {services.map((service: any, index: number) => (
               <motion.div
                 key={index}
                 className={`service-section relative ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} flex flex-col lg:flex items-center gap-12`}
@@ -211,9 +312,7 @@ export default function ServicesPage({ value }: { value: any }) {
                 {/* Content */}
                 <div className="flex-1 space-y-6">
                   <div className="flex items-center space-x-4">
-                    <div
-                      className={`w-16 h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center transform rotate-12`}
-                    >
+                    <div className={`w-16 h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center transform rotate-12`}>
                       <service.icon className="w-8 h-8 text-white" />
                     </div>
                     <div>
@@ -230,7 +329,7 @@ export default function ServicesPage({ value }: { value: any }) {
                     <CheckCircle className="w-5 h-5 text-green-500" />
                     <span className="text-gray-700">Personalized strategy for your situation</span>
                   </div>
-                  <Link href={service.href}>
+                  <Link href={service.href || "#"}>
                     <Button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
                       Learn More
                       <ArrowRight className="ml-2 w-4 h-4" />
@@ -268,26 +367,19 @@ export default function ServicesPage({ value }: { value: any }) {
       {/* Process Section */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Our Process
+                {cms?.headings?.process?.Heading || "Our Process"}
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We follow a proven 5-step process to ensure your immigration success
+              {cms?.headings?.process?.description || "We follow a proven 5-step process to ensure your immigration success"}
             </p>
           </motion.div>
 
           <div className="relative">
-            {/* Process Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-red-500 to-pink-600 hidden lg:block"></div>
-
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-red-500 to-pink-600 hidden lg:block" />
             <div className="space-y-12">
               {processSteps.map((step, index) => (
                 <motion.div
@@ -310,11 +402,8 @@ export default function ServicesPage({ value }: { value: any }) {
                       </CardContent>
                     </Card>
                   </div>
-
-                  {/* Center Circle for Desktop */}
-                  <div className="hidden lg:block w-6 h-6 bg-gradient-to-r from-red-500 to-red-600 rounded-full border-4 border-white shadow-lg"></div>
-
-                  <div className="flex-1 lg:block hidden"></div>
+                  <div className="hidden lg:block w-6 h-6 bg-gradient-to-r from-red-500 to-red-600 rounded-full border-4 border-white shadow-lg" />
+                  <div className="flex-1 lg:block hidden" />
                 </motion.div>
               ))}
             </div>
@@ -325,45 +414,16 @@ export default function ServicesPage({ value }: { value: any }) {
       {/* Why Choose Our Services */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">Why Choose Our Services?</h2>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">{cms?.headings?.why?.Heading || "Why Choose Our Services?"}</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We provide comprehensive support throughout your entire immigration journey
+              {cms?.headings?.why?.description || "We provide comprehensive support throughout your entire immigration journey"}
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: FileText,
-                title: "Expert Documentation",
-                description:
-                  "We ensure all your documents are properly prepared and submitted according to the latest requirements.",
-              },
-              {
-                icon: Clock,
-                title: "Timely Processing",
-                description:
-                  "We monitor your application closely and keep you updated on its progress every step of the way.",
-              },
-              {
-                icon: Users,
-                title: "Personalized Support",
-                description:
-                  "Each client receives individual attention and a customized strategy based on their unique situation.",
-              },
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
+            {whyCards.map((feature, index) => (
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
                 <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
                   <CardContent className="p-6">
                     <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -383,16 +443,15 @@ export default function ServicesPage({ value }: { value: any }) {
       <section className="py-20 bg-gradient-to-r from-red-500 to-pink-600">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h2 className="text-4xl font-bold text-white mb-6">Ready to Get Started?</h2>
+            <h2 className="text-4xl font-bold text-white mb-6">
+              {finalCTA?.heading || "Ready to Get Started?"}
+            </h2>
             <p className="text-xl text-white/90 mb-8">
-              Book a free consultation to discuss your immigration goals and find the right service for you.
+              {finalCTA?.description || "Book a free consultation to discuss your immigration goals and find the right service for you."}
             </p>
-            <Link href="/contact">
-              <Button
-                size="lg"
-                className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold"
-              >
-                Book Free Consultation
+            <Link href={finalCTA?.cta?.url || "/contact"}>
+              <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold">
+                {finalCTA?.cta?.label || "Book Free Consultation"}
               </Button>
             </Link>
           </motion.div>
