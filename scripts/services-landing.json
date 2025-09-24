@@ -1,0 +1,187 @@
+{
+  "data": {
+    "title": "Our Services",
+    "description": "Comprehensive Canadian immigration services tailored to your unique situation. From permanent residency to family reunification, we're here to guide you every step of the way.",
+    "locale": "en",
+    "blocks": [
+      {
+        "__component": "blocks.hero",
+        "icon": "Briefcase",
+        "Title": "Our Services",
+        "Subtitle": "From strategy to submission—end-to-end immigration support",
+        "description": "<p>Comprehensive Canadian immigration services tailored to your unique situation. From permanent residency to family reunification, we're here to guide you every step of the way.</p>",
+        "ctas": [
+          { "label": "Book Free Consultation", "url": "/contact", "variant": "default" },
+          { "label": "Explore Services", "url": "#services", "variant": "outline" }
+        ]
+      },
+
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Explore Our Services",
+        "description": "Discover the pathway that's right for you."
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Services",
+        "Cards": [
+          {
+            "title": "Permanent Residency (PR)",
+            "description": "Your pathway to calling Canada home permanently.",
+            "icon": "Home",
+            "link": { "label": "Learn More", "url": "/services/permanent-residency", "variant": "link" },
+            "lists": [
+              { "listItem": "Live, work, and study anywhere in Canada" },
+              { "listItem": "Programs include Express Entry & more" }
+            ]
+          },
+          {
+            "title": "Citizenship",
+            "description": "Become a citizen and complete your Canadian journey.",
+            "icon": "Award",
+            "link": { "label": "Learn More", "url": "/services/citizenship", "variant": "link" },
+            "lists": [
+              { "listItem": "Full rights and responsibilities" },
+              { "listItem": "Guidance from eligibility to test & oath" }
+            ]
+          },
+          {
+            "title": "Business & Investor Immigration",
+            "description": "Invest in your future and Canada's economy.",
+            "icon": "BriefcaseBusiness",
+            "link": { "label": "Learn More", "url": "/services/business-immigration", "variant": "link" },
+            "lists": [
+              { "listItem": "Entrepreneur & investor pathways" },
+              { "listItem": "Programs tailored to job creation & impact" }
+            ]
+          },
+          {
+            "title": "Study",
+            "description": "Educational opportunities await.",
+            "icon": "GraduationCap",
+            "link": { "label": "Learn More", "url": "/services/study", "variant": "link" },
+            "lists": [
+              { "listItem": "Study permits & extensions" },
+              { "listItem": "Pathways to PGWP & PR" }
+            ]
+          },
+          {
+            "title": "Work Permits",
+            "description": "Career opportunities await.",
+            "icon": "Briefcase",
+            "link": { "label": "Learn More", "url": "/services/work-permit", "variant": "link" },
+            "lists": [
+              { "listItem": "Employer-specific & open permits" },
+              { "listItem": "LMIA & LMIA-exempt categories" }
+            ]
+          },
+          {
+            "title": "Visitors Visa",
+            "description": "Welcome visitors from around the world.",
+            "icon": "Plane",
+            "link": { "label": "Learn More", "url": "/services/visitors-visa", "variant": "link" },
+            "lists": [
+              { "listItem": "TRVs, eTAs, extensions" },
+              { "listItem": "Family visits, tourism, business trips" }
+            ]
+          },
+          {
+            "title": "Family Sponsorship",
+            "description": "Reunite with your loved ones in Canada.",
+            "icon": "HeartHandshake",
+            "link": { "label": "Learn More", "url": "/services/family-sponsorship", "variant": "link" },
+            "lists": [
+              { "listItem": "Spouse, partner, children" },
+              { "listItem": "Parents & grandparents programs" }
+            ]
+          },
+          {
+            "title": "Refugee & H&C",
+            "description": "Support when safety, dignity, or compassion are at stake.",
+            "icon": "ShieldCheck",
+            "link": { "label": "Learn More", "url": "/services/refugee-hc", "variant": "link" },
+            "lists": [
+              { "listItem": "Refugee claims & PRRA" },
+              { "listItem": "Humanitarian & compassionate cases" }
+            ]
+          },
+          {
+            "title": "Recruitment Services",
+            "description": "Your gateway to hiring or working in Canada.",
+            "icon": "UserSearch",
+            "link": { "label": "Learn More", "url": "/services/recruitment", "variant": "link" },
+            "lists": [
+              { "listItem": "LMIA strategy & submissions" },
+              { "listItem": "Sectors: hospitality, healthcare, tech, agriculture" }
+            ]
+          }
+        ],
+        "link": { "label": "See All Services", "url": "/services", "variant": "outline" }
+      },
+
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Our Process",
+        "description": "We follow a proven 5-step process to ensure your success."
+      },
+      {
+        "__component": "blocks.process-steps-block",
+        "title": "Our Process",
+        "steps": [
+          { "stepNumber": "01", "title": "Initial Consultation", "description": "We assess your profile and discuss your immigration goals.", "icon": "FileText" },
+          { "stepNumber": "02", "title": "Strategy Development", "description": "We create a personalized immigration strategy for your situation.", "icon": "Rocket" },
+          { "stepNumber": "03", "title": "Document Preparation", "description": "We help you gather and prepare all required documents.", "icon": "FileText" },
+          { "stepNumber": "04", "title": "Application Submission", "description": "We submit your application and monitor its progress.", "icon": "ArrowRight" },
+          { "stepNumber": "05", "title": "Ongoing Support", "description": "We support you until you achieve your immigration goals.", "icon": "Users" }
+        ]
+      },
+
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Why Choose Our Services?",
+        "description": "We provide comprehensive support throughout your entire immigration journey."
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Why Choose Us",
+        "Cards": [
+          {
+            "title": "Expert Documentation",
+            "description": "Documents prepared and QA’d to current requirements.",
+            "icon": "FileText",
+            "lists": [
+              { "listItem": "Structured evidence & forms" },
+              { "listItem": "Up-to-date requirements" }
+            ]
+          },
+          {
+            "title": "Timely Processing",
+            "description": "We monitor and keep you updated every step of the way.",
+            "icon": "Clock",
+            "lists": [
+              { "listItem": "Proactive status follow-ups" },
+              { "listItem": "Clear communication" }
+            ]
+          },
+          {
+            "title": "Personalized Support",
+            "description": "Tailored strategy and hands-on guidance for your case.",
+            "icon": "Users",
+            "lists": [
+              { "listItem": "One-on-one guidance" },
+              { "listItem": "Strategy aligned to your goals" }
+            ]
+          }
+        ]
+      },
+      {
+  "__component": "blocks.heading-section",
+  "Heading": "Ready to Get Started?",
+  "description": "Book a free consultation to discuss your immigration goals and find the right service for you.",
+  "icon": "Heart",
+  "cta": { "label": "Book Free Consultation", "url": "/contact", "variant": "default" }
+}
+
+    ]
+  }
+}
