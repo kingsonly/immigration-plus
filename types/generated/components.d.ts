@@ -394,6 +394,7 @@ export interface SharedCard extends Struct.ComponentSchema {
   attributes: {
     description: Schema.Attribute.Text;
     icon: Schema.Attribute.String;
+    image: Schema.Attribute.Media<'images'>;
     link: Schema.Attribute.Component<'shared.button', false>;
     lists: Schema.Attribute.Component<'shared.list-item', true>;
     title: Schema.Attribute.String;

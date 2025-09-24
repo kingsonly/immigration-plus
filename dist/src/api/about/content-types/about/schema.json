@@ -1,0 +1,54 @@
+{
+    "kind": "singleType",
+    "collectionName": "abouts",
+    "info": {
+        "singularName": "about",
+        "pluralName": "abouts",
+        "displayName": "About"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {
+        "i18n": {
+            "localized": true
+        }
+    },
+    "attributes": {
+        "title": {
+            "type": "string",
+            "pluginOptions": {
+                "i18n": {
+                    "localized": true
+                }
+            }
+        },
+        "description": {
+            "type": "text",
+            "pluginOptions": {
+                "i18n": {
+                    "localized": true
+                }
+            }
+        },
+        "blocks": {
+            "type": "dynamiczone",
+            "pluginOptions": {
+                "i18n": {
+                    "localized": true
+                }
+            },
+            "components": [
+                "blocks.split-feature",
+                "blocks.services",
+                "blocks.service-variant-cards",
+                "blocks.process-steps-block",
+                "blocks.hero",
+                "blocks.heading-section",
+                "blocks.comparison-grid",
+                "blocks.card-grid",
+                "blocks.application-process"
+            ]
+        }
+    }
+}
