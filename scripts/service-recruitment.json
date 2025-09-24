@@ -1,0 +1,117 @@
+{
+  "data": {
+    "title": "Recruitment Services",
+    "slug": "recruitment",
+    "summary": "End-to-end, compliant hiring support: LMIA streams, recruitment, processing times, and expert representation.",
+    "locale": "en",
+    "blocks": [
+      {
+        "__component": "blocks.hero",
+        "icon": "Briefcase",
+        "Title": "Recruitment Services",
+        "Subtitle": "Hire with confidence. Work with purpose.",
+        "description": "<p>We connect skilled, reliable international candidates with Canadian employers across hospitality, healthcare, technology, and agriculture. From LMIA to work permits, our team delivers compliant, efficient recruitment—tailored to your needs.</p>",
+        "ctas": [
+          { "label": "Start Hiring Process", "url": "/contact#hire", "variant": "default" },
+          { "label": "Find Job Opportunities", "url": "/jobs", "variant": "outline" }
+        ]
+      },
+
+      { "__component": "blocks.heading-section", "Heading": "Key Sectors We Serve", "description": "Connecting talent across Canada's growing industries", "icon": "Users" },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Key Sectors",
+        "Cards": [
+          { "title": "Hospitality", "description": "Hotels, restaurants, tourism", "icon": "Users", "lists": [] },
+          { "title": "Healthcare", "description": "Nurses, caregivers, support staff", "icon": "Users", "lists": [] },
+          { "title": "Technology", "description": "Software, IT, engineering", "icon": "Users", "lists": [] },
+          { "title": "Agriculture", "description": "Farm workers, seasonal positions", "icon": "Users", "lists": [] }
+        ]
+      },
+
+      { "__component": "blocks.heading-section", "Heading": "LMIA Support Services", "description": "End-to-end LMIA strategy, submission, and compliance for Canadian employers.", "icon": "FileCheck" },
+
+      { "__component": "blocks.heading-section", "Heading": "LMIA Streams", "description": "Choose the right stream for your position and timeline.", "icon": "Target" },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "LMIA Streams",
+        "Cards": [
+          { "title": "High-Wage Stream", "description": "Job offers at or above the median provincial wage. Typical processing: 61 business days.", "icon": "DollarSign", "lists": [] },
+          { "title": "Low-Wage Stream", "description": "Job offers below the median provincial wage. Typical processing: 61 business days.", "icon": "Users", "lists": [] },
+          { "title": "Agricultural Stream", "description": "On-farm roles in livestock, grains, and horticulture. Typical processing: 15 business days.", "icon": "Target", "lists": [] },
+          { "title": "Global Talent Stream", "description": "High-skilled roles in designated occupations. Typical processing: 8 business days.", "icon": "Globe", "lists": [] },
+          { "title": "SAWP", "description": "Seasonal Agricultural Worker Program for partner countries. Typical processing: 8 business days.", "icon": "Calendar", "lists": [] }
+        ]
+      },
+
+      { "__component": "blocks.heading-section", "Heading": "LMIA Application Process", "description": "Our comprehensive 6-step approach to LMIA success", "icon": "ArrowRight" },
+      {
+        "__component": "blocks.process-steps-block",
+        "title": "LMIA Application Process",
+        "steps": [
+          { "stepNumber": "01", "title": "Eligibility Assessment", "description": "We review the job offer, employer profile, and program requirements to confirm LMIA needs.", "icon": "FileCheck" },
+          { "stepNumber": "02", "title": "Document Preparation", "description": "We organize documents to establish business legitimacy, wage accuracy, and conditions.", "icon": "Building2" },
+          { "stepNumber": "03", "title": "Stream Selection", "description": "We identify high-wage, low-wage, or agricultural streams per the latest ESDC guidance.", "icon": "Target" },
+          { "stepNumber": "04", "title": "Application Submission", "description": "We file via LMIA Online or designated ESDC email and track its progress.", "icon": "ArrowRight" },
+          { "stepNumber": "05", "title": "Recruitment Compliance", "description": "We help meet advertising and recruitment obligations to hire Canadians first.", "icon": "Users" },
+          { "stepNumber": "06", "title": "Follow-Up & Inspection Readiness", "description": "We respond to officer requests and prepare you for potential inspections.", "icon": "Shield" }
+        ]
+      },
+
+      { "__component": "blocks.heading-section", "Heading": "LMIA Processing Times", "description": "Current service standards—update in CMS as needed.", "icon": "Clock" },
+      {
+        "__component": "blocks.comparison-grid",
+        "Heading": "LMIA Streams and Duration",
+        "columns": [
+          { "listItem": "Stream" },
+          { "listItem": "Processing Time" },
+          { "listItem": "Priority" }
+        ],
+        "rows": [
+          { "permitType": "Global Talent Stream", "lmiaRequired": "8 business days", "bestFor": "High" },
+          { "permitType": "Agricultural Stream", "lmiaRequired": "15 business days", "bestFor": "Medium" },
+          { "permitType": "SAWP", "lmiaRequired": "8 business days", "bestFor": "High" },
+          { "permitType": "High-Wage Stream", "lmiaRequired": "61 business days", "bestFor": "Standard" },
+          { "permitType": "Low-Wage Stream", "lmiaRequired": "61 business days", "bestFor": "Standard" }
+        ]
+      },
+
+      {
+        "__component": "blocks.application-process",
+        "title": "What this means for you",
+        "icon": "Info",
+        "items": [
+          { "listItem": "Global Talent & SAWP receive priority—results in just over a week." },
+          { "listItem": "High/Low-Wage streams average about 3 months (61 business days)." },
+          { "listItem": "Agricultural LMIAs process in approximately 3 weeks." },
+          { "listItem": "Start early—planning ahead avoids timeline crunches." }
+        ]
+      },
+
+      {
+        "__component": "blocks.fee-cards",
+        "Heading": "LMIA Fees & Planning",
+        "description": "Typical government filing fees. Professional fees vary by case complexity.",
+        "items": [
+          { "title": "LMIA Application Fee (per position)", "amount": "$1,000 CAD", "note": "Employer-paid" }
+        ]
+      },
+
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "External Representation You Can Trust",
+        "description": "As authorized representatives, we can act on your behalf throughout the LMIA process, ensuring proper stream selection, compliance, and ongoing advice.",
+        "icon": "Shield",
+        "cta": { "label": "Get Expert Representation", "url": "/contact#representation", "variant": "default" }
+      },
+
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Work with Tentacular Immigration Solutions Ltd",
+        "description": "From small businesses to large employers, we deliver lawful, timely, and well-documented LMIA applications across Canada.",
+        "icon": "Phone",
+        "cta": { "label": "Schedule Consultation", "url": "/contact#consultation", "variant": "default" }
+      }
+    ]
+  }
+}
