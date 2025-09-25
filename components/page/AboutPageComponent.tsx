@@ -75,24 +75,23 @@ async function fetchAboutBlocks() {
   }
 }
 
-/* ---------------- adapter (with proximity-based headings) ---------------- */
 function adaptAboutContent(blocks: any[] | null) {
   if (!Array.isArray(blocks)) return null;
   const byType = (t: string) => blocks.filter((b) => b?.__component === t);
 
-  // nearest previous heading
-  const nearest: Record<number, any | null> = {};
-  let last: any | null = null;
+  // nearest heading resolver (for proximity-based pairing)
+  const nearestHeadingForIndex: Record<number, any | null> = {};
+  let lastHeading: any | null = null;
   blocks.forEach((b, i) => {
-    if (b?.__component === "blocks.heading-section") last = b;
-    nearest[i] = last;
+    if (b?.__component === "blocks.heading-section") lastHeading = b;
+    nearestHeadingForIndex[i] = lastHeading;
   });
-  const headingBefore = (pred: (b: any) => boolean) => {
-    const idx = blocks.findIndex(pred);
-    return idx >= 0 ? nearest[idx] : null;
+  const headingBefore = (predicate: (b: any) => boolean) => {
+    const i = blocks.findIndex(predicate);
+    return i >= 0 ? nearestHeadingForIndex[i] : null;
   };
 
-  // hero
+  /* ---- Hero ---- */
   const heroBlock = byType("blocks.hero")[0];
   const hero = heroBlock
     ? {
@@ -103,87 +102,59 @@ function adaptAboutContent(blocks: any[] | null) {
       }
     : null;
 
-  // headings (dynamic)
-  const H = {
-    story:
-      headingBefore(
-        (b) =>
-          b?.__component === "blocks.card-grid" &&
-          /story|about/i.test(b?.Heading || "")
-      ) ||
-      byType("blocks.heading-section").find((h) =>
-        /our\s+story|about\s+us/i.test(h?.Heading || "")
-      ) ||
-      null,
-    values:
-      headingBefore(
-        (b) =>
-          b?.__component === "blocks.card-grid" &&
-          /value/i.test(b?.Heading || "")
-      ) ||
-      byType("blocks.heading-section").find((h) =>
-        /value/i.test(h?.Heading || "")
-      ) ||
-      null,
-    team:
-      headingBefore(
-        (b) =>
-          b?.__component === "blocks.card-grid" &&
-          /team/i.test(b?.Heading || "")
-      ) ||
-      byType("blocks.heading-section").find((h) =>
-        /team/i.test(h?.Heading || "")
-      ) ||
-      null,
-    achievements:
-      headingBefore(
-        (b) =>
-          b?.__component === "blocks.card-grid" &&
-          /achieve|milestone|numbers/i.test(b?.Heading || "")
-      ) ||
-      byType("blocks.heading-section").find((h) =>
-        /achieve|milestone|numbers/i.test(h?.Heading || "")
-      ) ||
-      null,
-    why:
-      headingBefore(
-        (b) =>
-          b?.__component === "blocks.card-grid" && /why/i.test(b?.Heading || "")
-      ) ||
-      byType("blocks.heading-section").find((h) =>
-        /why/i.test(h?.Heading || "")
-      ) ||
-      null,
-    final:
-      blocks.findLast?.(
-        (b) =>
-          b?.__component === "blocks.heading-section" &&
-          (b?.cta || /ready|work with/i.test(b?.Heading || ""))
-      ) ||
-      byType("blocks.heading-section")
-        .reverse()
-        .find((h) => h?.cta || /ready|work with/i.test(h?.Heading || "")) ||
-      null,
-  };
+  /* ---- Our Story ----
+     Strategy:
+     - Primary: heading-section whose Heading contains "our story"
+       - take its description as HTML
+       - if it has an image (optional schema), use it
+     - Secondary: if a nearby split-feature (by proximity) also looks like story, prefer its image/description
+  */
+  const storyHeading =
+    blocks.find(
+      (b) =>
+        b?.__component === "blocks.heading-section" &&
+        /our\s*story/i.test(b?.Heading || "")
+    ) || null;
 
-  // story HTML: prefer the H.story description
-  let storyHtml = "";
-  if (H.story?.description) {
-    storyHtml = H.story.description;
-  } else if (H.story) {
-    const hIndex = blocks.findIndex((b) => b === H.story);
-    const after = blocks.slice(hIndex + 1);
-    const rich =
-      after.find((b) => b?.__component === "blocks.rich-text" && b?.content) ||
-      after.find((b) => b?.__component === "blocks.paragraph" && b?.content) ||
-      null;
-    storyHtml = rich?.content || "";
+  let storyHtml = storyHeading?.description || "";
+  let storyImageUrl: string | null = null;
+
+  // Optional heading image support
+  if (storyHeading?.image) {
+    const m = storyHeading.image;
+    storyImageUrl = assetUrl(
+      m?.url ||
+        m?.formats?.medium?.url ||
+        m?.formats?.small?.url ||
+        m?.formats?.thumbnail?.url
+    );
   }
 
-  // values (card-grid)
+  // If there is a split-feature right after/before this heading and it "looks" like the story section, prefer its rich text + image.
+  const storySplit = byType("blocks.split-feature").find((sf) => {
+    const h = headingBefore((b) => b === sf);
+    return h && storyHeading && h === storyHeading; // paired by proximity to the same heading
+  });
+  if (storySplit) {
+    storyHtml = storySplit.description || storyHtml;
+    if (storySplit.image) {
+      const m = storySplit.image;
+      storyImageUrl =
+        assetUrl(
+          m?.url ||
+            m?.formats?.large?.url ||
+            m?.formats?.medium?.url ||
+            m?.formats?.small?.url ||
+            m?.formats?.thumbnail?.url
+        ) || storyImageUrl;
+    }
+  }
+
+  /* ---- Core Values (card-grid "values") ---- */
   const valuesGrid = blocks.find(
     (b) =>
-      b?.__component === "blocks.card-grid" && /value/i.test(b?.Heading || "")
+      b?.__component === "blocks.card-grid" &&
+      /(core\s*values|values)/i.test(b?.Heading || "")
   );
   const values = Array.isArray(valuesGrid?.Cards)
     ? valuesGrid.Cards.map((c: any) => ({
@@ -193,7 +164,7 @@ function adaptAboutContent(blocks: any[] | null) {
       }))
     : null;
 
-  // team (card-grid) + optional avatar/image
+  /* ---- Team (card-grid "team") with optional avatar/image on each card ---- */
   const teamGrid = blocks.find(
     (b) =>
       b?.__component === "blocks.card-grid" && /team/i.test(b?.Heading || "")
@@ -213,22 +184,23 @@ function adaptAboutContent(blocks: any[] | null) {
       })
     : null;
 
-  // achievements (card-grid): title=number, description=label
+  /* ---- Achievements (card-grid "achievements": title=number, description=label) ---- */
   const achGrid = blocks.find(
     (b) =>
       b?.__component === "blocks.card-grid" &&
-      /achieve|milestone|numbers/i.test(b?.Heading || "")
+      /achievements/i.test(b?.Heading || "")
   );
   const achievements = Array.isArray(achGrid?.Cards)
     ? achGrid.Cards.map((c: any) => ({ number: c.title, label: c.description }))
     : null;
 
-  // why choose us: collect bullets from list items (or fall back to card titles)
+  /* ---- Why Choose Us (either bullets in lists or titles as bullets) ---- */
   const whyGrid = blocks.find(
     (b) =>
-      b?.__component === "blocks.card-grid" && /why/i.test(b?.Heading || "")
+      b?.__component === "blocks.card-grid" &&
+      /why\s*choose/i.test(b?.Heading || "")
   );
-  const whyBullets: string[] | null = Array.isArray(whyGrid?.Cards)
+  const whyBullets: string[] = Array.isArray(whyGrid?.Cards)
     ? whyGrid.Cards.flatMap((c: any) =>
         Array.isArray(c.lists) && c.lists.length
           ? c.lists.map((l: any) => l.listItem).filter(Boolean)
@@ -238,28 +210,58 @@ function adaptAboutContent(blocks: any[] | null) {
       )
     : null;
 
-  // final CTA
-  const finalCTA = H.final
+  /* ---- Generic two-column sections via split-feature (image-aware) ---- */
+  const twoColSections = byType("blocks.split-feature").map((sf) => {
+    const img =
+      sf?.image?.url ||
+      sf?.image?.formats?.large?.url ||
+      sf?.image?.formats?.medium?.url ||
+      sf?.image?.formats?.small?.url ||
+      sf?.image?.formats?.thumbnail?.url ||
+      null;
+
+    return {
+      title: sf.title,
+      subtitle: sf.subtitle || "",
+      html: sf.description || "",
+      icon: pickIcon(sf.icon),
+      useIcon: !img, // if no image, fallback to icon
+      imageUrl: assetUrl(img),
+      reverse: !!sf.reverse,
+      items: Array.isArray(sf.items)
+        ? sf.items.map((i: any) => i?.listItem).filter(Boolean)
+        : [],
+    };
+  });
+
+  // Final CTA (heading with CTA)
+  const finalCTAHeading = blocks.find(
+    (b) =>
+      b?.__component === "blocks.heading-section" &&
+      !!b?.cta &&
+      /ready|work\s*with\s*us/i.test(b?.Heading || "")
+  );
+  const finalCTA = finalCTAHeading
     ? {
-        heading: H.final.Heading,
-        description: H.final.description,
-        cta: H.final.cta,
+        heading: finalCTAHeading.Heading,
+        description: finalCTAHeading.description,
+        cta: finalCTAHeading.cta,
       }
     : null;
 
   return {
     hero,
-    H,
     storyHtml,
+    storyImageUrl,
     values,
     team,
     achievements,
     whyBullets,
+    twoColSections,
     finalCTA,
   };
 }
 
-/* ---------------- component ---------------- */
 export default function AboutPageComponent() {
   const [cms, setCms] = useState<ReturnType<typeof adaptAboutContent> | null>(
     null
@@ -435,6 +437,7 @@ export default function AboutPageComponent() {
               />
             </motion.div>
 
+            {/* Visual column for Our Story */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -453,12 +456,99 @@ export default function AboutPageComponent() {
                   }}
                   transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
                 />
-                <MapPin className="w-32 h-32 text-white/80" />
+                {cms?.storyImageUrl ? (
+                  <img
+                    src={cms.storyImageUrl}
+                    alt="Our Story"
+                    className="object-cover w-full h-full"
+                  />
+                ) : (
+                  // fallback to your large icon (MapPin or any)
+                  <MapPin className="w-32 h-32 text-white/80" />
+                )}
               </div>
             </motion.div>
           </div>
         </div>
       </section>
+
+      {(cms?.twoColSections || []).map((sf, idx) => (
+        <section
+          key={idx}
+          className={`py-20 ${idx % 2 === 1 ? "bg-gray-50" : "bg-white"}`}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div
+              className={`grid lg:grid-cols-2 gap-12 items-center ${
+                sf.reverse ? "lg:flex-row-reverse" : ""
+              }`}
+            >
+              <motion.div
+                initial={{ opacity: 0, x: sf.reverse ? 50 : -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                <h2 className="text-4xl font-bold mb-3 text-gray-900">
+                  {sf.title}
+                </h2>
+                {sf.subtitle ? (
+                  <p className="text-red-600 font-medium mb-4">{sf.subtitle}</p>
+                ) : null}
+                {sf.html ? (
+                  <div
+                    className="space-y-4 text-gray-600 text-lg leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: sf.html }}
+                  />
+                ) : null}
+                <ul className="mt-6 space-y-3">
+                  {(sf.items || []).map((txt: string, i2: number) => (
+                    <li
+                      key={i2}
+                      className="flex items-start gap-3 text-gray-700"
+                    >
+                      <CheckCircle className="w-5 h-5 text-green-500 mt-1" />
+                      <span>{txt}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: sf.reverse ? -50 : 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                className="relative"
+              >
+                <div className="w-full h-96 bg-gradient-to-br from-red-500 to-pink-600 rounded-3xl transform rotate-3 flex items-center justify-center relative overflow-hidden">
+                  <motion.div
+                    className="absolute inset-0 bg-white/10"
+                    animate={{
+                      background: [
+                        "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                        "radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                        "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                      ],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Number.POSITIVE_INFINITY,
+                    }}
+                  />
+                  {sf.imageUrl ? (
+                    <img
+                      src={sf.imageUrl}
+                      alt={sf.title || "Section image"}
+                      className="object-cover w-full h-full"
+                    />
+                  ) : (
+                    <sf.icon className="w-32 h-32 text-white/80" />
+                  )}
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+      ))}
 
       {/* Values */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">

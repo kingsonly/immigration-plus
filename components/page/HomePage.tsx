@@ -1,276 +1,246 @@
-"use client"
+"use client";
 
-import { use, useEffect, useState } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { useEffect, useMemo, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import {
-  ChevronDown,
-  MapPin,
-  Users,
-  GraduationCap,
-  Briefcase,
-  Heart,
-  Home,
-  Calendar,
-  CheckCircle,
-  ArrowRight,
-  Phone,
-  Mail,
-  Clock,
-  Star,
-  Award,
-  Globe,
-  Rocket,
-  Plane,
-  HeartHandshake,
-  BriefcaseBusiness,
-  ShieldCheck,
-  UserSearch,
-} from "lucide-react"
-import { homepageModule } from "@/lib/contentfulModules/homePageModeule"
-import HomePageSkeleton from "../pageSkeletons/HomePageSkeleton"
-import { Button } from "../ui/button"
-import Link from "next/link"
-import { LucideIcon } from "../LucideIcon/LucideIcon"
-import { Card, CardContent } from "../ui/card"
+  ChevronDown, Users, GraduationCap, Briefcase, Heart, Home as HomeIcon, CheckCircle,
+  ArrowRight, Star, Award, Globe, Plane, HeartHandshake, BriefcaseBusiness, ShieldCheck,
+} from "lucide-react";
+import HomePageSkeleton from "../pageSkeletons/HomePageSkeleton";
+import { Button } from "../ui/button";
+import Link from "next/link";
+import { Card, CardContent } from "../ui/card";
 
+type StrapiHomepage = {
+  id?: number;
+  title?: string;
+  description?: string;
+  blocks?: any[];
+};
 
-export default function HomePage({ homepageContentProps }: { homepageContentProps: any }) {
-  const [homepageContent, setHomepageContent] = useState<any>()
-  // const [activeSection, setActiveSection] = useState(0)
-  useEffect(() => {
-    if (homepageContentProps) {
-      setHomepageContent(homepageContentProps)
-      console.log("full test", homepageContentProps);
-    }
+const IconMap: Record<string, any> = {
+  // services/CTA icons
+  Home: HomeIcon, Award, BriefcaseBusiness, GraduationCap, Briefcase, Plane, HeartHandshake, ShieldCheck, Users, Globe, Star,
+  // misc
+  ArrowRight, CheckCircle,
+};
+const pickIcon = (name?: string) => (name && IconMap[name]) || CheckCircle;
 
-  }, [homepageContentProps])
-  const { scrollYProgress } = useScroll()
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
+/* ---------- adapter: Strapi blocks -> UI ---------- */
+function adaptHomepage(entry: StrapiHomepage | null) {
+  if (!entry || !Array.isArray(entry.blocks)) return null;
+  const blocks = entry.blocks;
+  const byType = (t: string) => blocks.filter((b) => b?.__component === t);
 
-  const services = [
-    {
-      icon: Home, // ✔️ Keep — matches the concept of settling permanently
-      title: "Permanent Residency (PR)",
-      description: "Your pathway to calling Canada home permanently",
-      details:
-        "Permanent Residency allows you to live, work, and study anywhere in Canada. Through various programs like Express Entry, you can build a new life in one of the world's most welcoming countries.",
-      color: "from-red-500 to-red-600",
-      href: "/services/permanent-residency",
-    },
-    {
-      icon: Award, // Lucide icon symbolizing achievement and official status
-      title: "Citizenship",
-      description: "Become a citizen and complete your Canadian journey.",
-      details: "Your passport to full Canadian rights and responsibilities.",
-      color: "from-red-600 to-pink-600",
-      href: "/services/citizenship",
-    },
-    {
-      icon: BriefcaseBusiness, // 🆕 Better than generic "Users" for business/investment
-      title: "Business & Investor Immigration",
-      description: "Invest in your future and Canada's economy",
-      details:
-        "Various investor and business immigration programs allow you to immigrate to Canada by making a significant investment or starting a business that benefits the Canadian economy.",
-      color: "from-pink-600 to-red-500",
-      href: "/services/business-immigration",
-    },
-    {
-      icon: GraduationCap, // ✔️ Already perfect
-      title: "Study",
-      description: "Educational opportunities await",
-      details:
-        "Study permits allow international students to pursue education in Canada.",
-      color: "from-red-500 to-red-700",
-      href: "/services/study",
-    },
-    {
-      icon: Briefcase, // 🆕 Change from duplicate GraduationCap to Briefcase
-      title: "Work Permits",
-      description: "Career opportunities await",
-      details:
-        "Work permits provide opportunities to gain valuable Canadian work experience.",
-      color: "from-red-500 to-red-700",
-      href: "/services/work-permit",
-    },
-    {
-      icon: Plane, // 🆕 More intuitive for travel/visits than MapPin
-      title: "Visitors Visa",
-      description: "Welcome visitors from around the world",
-      details:
-        "Visitors visas allow you to visit Canada for a specific period of time.",
-      color: "from-red-700 to-pink-500",
-      href: "/services/visitors-visa",
-    },
-    {
-      icon: HeartHandshake, // 🆕 Stronger emotional symbol for family reunification
-      title: "Family Sponsorship",
-      description: "Reunite with your loved ones in Canada",
-      details:
-        "Sponsor your spouse, children, parents, or grandparents to join you in Canada. Family reunification is a cornerstone of Canadian immigration policy.",
-      color: "from-pink-500 to-red-600",
-      href: "/services/family-sponsorship",
-    },
-    {
-      icon: ShieldCheck, // Lucide icon representing protection and humanitarian support
-      title: "Refugee & H&C",
-      description: "Support when safety, dignity, or compassion are at stake.",
-      details: "Compassionate support for those in vulnerable or life-threatening situations.",
-      color: "from-pink-500 to-red-600",
-      href: "/services/refugee-hc",
-    },
+  // proximity headings
+  const nearestHeading: Record<number, any | null> = {};
+  let last: any | null = null;
+  blocks.forEach((b, i) => {
+    if (b?.__component === "blocks.heading-section") last = b;
+    nearestHeading[i] = last;
+  });
+  const headingBefore = (pred: (b: any) => boolean) => {
+    const idx = blocks.findIndex(pred);
+    return idx >= 0 ? nearestHeading[idx] : null;
+  };
 
-    {
-      icon: UserSearch, // Lucide icon for recruitment and talent sourcing
-      title: "Recruitment Services",
-      description:
-        "Your gateway to hiring or working in Canada.",
-      details:
-        "Connecting skilled candidates with Canadian employers in sectors like hospitality, healthcare, tech, and agriculture.",
-      color: "from-red-500 to-red-600",
-      href: "/services/recruitment",
-    }
+  // hero
+  const heroBlock = byType("blocks.hero")[0];
+  const hero = heroBlock
+    ? {
+        titleTop: heroBlock.Title || "Immigration Made Simple",
+        titleBottom: heroBlock.Subtitle || "Your Canadian Dream",
+        html: heroBlock.description || "",
+        ctas: Array.isArray(heroBlock.ctas) ? heroBlock.ctas : [],
+      }
+    : null;
+
+  // services grid -> alternating sections
+  const servicesGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && /services/i.test(b?.Heading || ""));
+  const palette = [
+    "from-red-500 to-red-600",
+    "from-red-600 to-pink-600",
+    "from-pink-600 to-red-500",
+    "from-red-500 to-red-700",
+    "from-red-700 to-pink-500",
+    "from-pink-500 to-red-600",
   ];
+  const services = Array.isArray((servicesGrid as any)?.Cards)
+    ? (servicesGrid as any).Cards.map((c: any, i: number) => ({
+        iconName: c.icon,
+        icon: pickIcon(c.icon),
+        title: c.title,
+        description: c.description,
+        details: Array.isArray(c.lists) && c.lists.length
+          ? c.lists.map((l: any) => l?.listItem).filter(Boolean).join(" • ")
+          : c.description,
+        colorClass: palette[i % palette.length],
+        slug: c?.link?.url || "#",
+      }))
+    : null;
 
+  // dynamic headings
+  const H = {
+    services:
+      headingBefore((b) => b?.__component === "blocks.card-grid" && /services/i.test(b?.Heading || "")) ||
+      byType("blocks.heading-section").find((h) => /journey|services/i.test(h?.Heading || "")) ||
+      null,
+    getStarted:
+      blocks.findLast?.((b) => b?.__component === "blocks.heading-section" && (b?.cta || /get\s*started/i.test(b?.Heading || ""))) ||
+      byType("blocks.heading-section").reverse().find((h) => h?.cta || /get\s*started/i.test(h?.Heading || "")) ||
+      null,
+  };
 
-  const stats = [
-    { icon: Users, number: "500+", label: "Successful Applications" },
-    { icon: Globe, number: "50+", label: "Countries Served" },
-    { icon: Award, number: "15+", label: "Years Experience" },
-    { icon: Star, number: "98%", label: "Success Rate" },
-  ]
+  // split-feature (can be multiple)
+  const splitFeatures = byType("blocks.split-feature").map((sf) => ({
+    title: sf.title,
+    subtitle: sf.subtitle || "",
+    html: sf.description || "",
+    icon: pickIcon(sf.icon),
+    cardIcon: pickIcon(sf.cardIcon),
+    reverse: !!sf.reverse,
+    items: Array.isArray(sf.items) ? sf.items.map((i: any) => i?.listItem).filter(Boolean) : [],
+    // image is not in schema per your model; omit
+  }));
 
-  if (!homepageContent) return <HomePageSkeleton />
+  // CTA card-grid (e.g., “CTA” section)
+  const ctaGrid = blocks.find((b) => b?.__component === "blocks.card-grid" && /cta/i.test(b?.Heading || ""));
+  const ctaCards = Array.isArray((ctaGrid as any)?.Cards)
+    ? (ctaGrid as any).Cards.map((c: any) => ({
+        icon: pickIcon(c.icon),
+        title: c.title,
+        description: c.description,
+      }))
+    : [];
+
+  // final CTA button from heading-section with CTA
+  const finalCTA = H.getStarted
+    ? {
+        heading: H.getStarted.Heading,
+        description: H.getStarted.description || "",
+        cta: H.getStarted.cta || { label: "Book Consultation", url: "/contact", variant: "default" },
+      }
+    : null;
+
+  return { hero, services, H, splitFeatures, ctaCards, finalCTA };
+}
+
+/* ---------- component ---------- */
+export default function HomePage({ entry }: { entry: StrapiHomepage | null }) {
+  const [cms, setCms] = useState<ReturnType<typeof adaptHomepage> | null>(null);
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+
+  // local fallbacks (minimal)
+  const servicesLocal = useMemo(
+    () => [
+      { icon: HomeIcon, title: "Permanent Residency (PR)", description: "Your pathway to calling Canada home permanently", details: "Live, work, and study anywhere in Canada • Express Entry & PNP pathways", colorClass: "from-red-500 to-red-600", slug: "/services/permanent-residency" },
+      { icon: Award, title: "Citizenship", description: "Become a citizen and complete your Canadian journey.", details: "Eligibility, test & oath guidance • Proof of citizenship", colorClass: "from-red-600 to-pink-600", slug: "/services/citizenship" },
+      { icon: BriefcaseBusiness, title: "Business & Investor Immigration", description: "Invest in your future and Canada's economy", details: "Entrepreneur & investor programs • Job creation focus", colorClass: "from-pink-600 to-red-500", slug: "/services/business-immigration" },
+    ],
+    []
+  );
+
+  useEffect(() => {
+    setCms(adaptHomepage(entry));
+  }, [entry]);
+
+  if (!cms) return <HomePageSkeleton />;
+
+  const hero = cms.hero || {
+    titleTop: "Immigration Made Simple",
+    titleBottom: "Your Canadian Dream",
+    html: "<p>TENTACULAR IMMIGRATION SOLUTIONS LTD guides you through every step—strategy to submission.</p>",
+    ctas: [
+      { label: "Start Your Journey", url: "/services", variant: "default", icon: "ArrowRight" },
+      { label: "About Us", url: "/about", variant: "outline", icon: "Users" },
+    ],
+  };
+  const services = cms.services?.length ? cms.services : servicesLocal;
+  const splitFeatures = cms.splitFeatures || [];
+  const ctaCards = cms.ctaCards || [];
+  const finalCTA = cms.finalCTA;
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
-      {/* Hero Section */}
+      {/* Hero */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
         <motion.div className="absolute inset-0 bg-gradient-to-br from-red-50 via-white to-pink-50" style={{ y }} />
-
-        {/* Animated Background Shapes */}
         <motion.div
           className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-red-200 to-pink-200 rounded-full opacity-20"
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "linear",
-          }}
+          animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
+          transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
         />
         <motion.div
           className="absolute bottom-20 right-10 w-48 h-48 bg-gradient-to-r from-pink-200 to-red-200 rounded-full opacity-20"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            rotate: [360, 180, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "linear",
-          }}
+          animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }}
+          transition={{ duration: 25, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
         />
-
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
           <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                {homepageContent?.hero?.titleTop}
-              </span>
+              <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">{hero.titleTop}</span>
               <br />
-              <span className="text-gray-900">
-                {homepageContent?.hero?.titleBottom || "Your Canadian Dream"}
-              </span>
+              <span className="text-gray-900">{hero.titleBottom}</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
-              {homepageContent?.hero?.description || "TENTACULAR IMMIGRATION SOLUTIONS LTD guides you..."}
-            </p>
+            {hero.html ? (
+              <div className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed" dangerouslySetInnerHTML={{ __html: hero.html }} />
+            ) : null}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link href={homepageContent?.hero?.ctaPrimaryLink || "/services"}>
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-lg px-8 py-4 rounded-full"
-                  >
-                    {homepageContent?.hero?.ctaPrimaryText || "Start Your Journey"}
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </Button>
-                </Link>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link href={homepageContent?.hero?.ctaSecondaryLink || "/about"}>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="border-red-500 text-red-600 hover:bg-red-50 text-lg px-8 py-4 rounded-full"
-                  >
-                    {homepageContent?.hero?.ctaSecondaryText || "About Us"}
-                  </Button>
-                </Link>
-              </motion.div>
+              {(hero.ctas || []).map((c: any, i: number) => {
+                const Icon = pickIcon(c.icon);
+                const outline = (c?.variant || "default") === "outline";
+                return (
+                  <motion.div key={i} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Link href={c?.url || "#"}>
+                      <Button
+                        size="lg"
+                        className={
+                          outline
+                            ? "border-red-500 text-red-600 hover:bg-red-50 text-lg px-8 py-4 rounded-full"
+                            : "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-lg px-8 py-4 rounded-full"
+                        }
+                        variant={outline ? "outline" : "default"}
+                      >
+                        {c?.label || "Learn more"}
+                        {!outline ? <ArrowRight className="ml-2 w-5 h-5" /> : null}
+                        {outline && Icon ? <Icon className="ml-2 w-5 h-5" /> : null}
+                      </Button>
+                    </Link>
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
         </div>
-
-        <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-        >
+        <motion.div className="absolute bottom-8 left-1/2 transform -translate-x-1/2" animate={{ y: [0, 10, 0] }} transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}>
           <ChevronDown className="w-8 h-8 text-red-500" />
         </motion.div>
       </section>
 
-      {/* Stats Section */}
-      {/* <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="text-center"
-              >
-                <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <stat.icon className="w-8 h-8 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-gray-900 mb-2">{stat.number}</div>
-                <div className="text-gray-600">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section> */}
-
-      {/* Services Journey */}
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+      {/* Dynamic heading before Services (if present) */}
+      {cms.H?.services ? (
+        <section className="py-12 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                Your Immigration Journey
+                {cms.H.services.Heading || "Your Immigration Journey"}
               </span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Discover the pathway that's right for you. Each route offers unique opportunities to build your future in
-              Canada.
-            </p>
-          </motion.div>
+            {cms.H.services.description ? (
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">{cms.H.services.description}</p>
+            ) : null}
+          </div>
+        </section>
+      ) : null}
 
+      {/* Services Journey (alternating) */}
+      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-32">
-            {homepageContent && homepageContent.services?.map((newService: any, index: number) => {
-              const service = newService;
+            {(services || []).map((service: any, index: number) => {
+              const Icon = service.icon || pickIcon(service.iconName);
               return (
-
                 <motion.div
                   key={index}
                   className={`service-section relative ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} flex flex-col lg:flex items-center gap-12`}
@@ -278,14 +248,10 @@ export default function HomePage({ homepageContentProps }: { homepageContentProp
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
                 >
-                  {/* Content */}
                   <div className="flex-1 space-y-6">
                     <div className="flex items-center space-x-4">
-                      <div
-                        className={`w-16 h-16 bg-gradient-to-r ${service.colorClass} rounded-2xl flex items-center justify-center transform rotate-12`}
-                      >
-                        <LucideIcon name={service.iconName} className="w-8 h-8 text-white" />
-
+                      <div className={`w-16 h-16 bg-gradient-to-r ${service.colorClass} rounded-2xl flex items-center justify-center transform rotate-12`}>
+                        <Icon className="w-8 h-8 text-white" />
                       </div>
                       <div>
                         <h3 className="text-3xl font-bold text-gray-900">{service.title}</h3>
@@ -301,7 +267,7 @@ export default function HomePage({ homepageContentProps }: { homepageContentProp
                       <CheckCircle className="w-5 h-5 text-green-500" />
                       <span className="text-gray-700">Personalized strategy for your situation</span>
                     </div>
-                    <Link href={service.slug}>
+                    <Link href={service.slug || "#"}>
                       <Button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
                         Learn More
                         <ArrowRight className="ml-2 w-4 h-4" />
@@ -309,7 +275,6 @@ export default function HomePage({ homepageContentProps }: { homepageContentProp
                     </Link>
                   </div>
 
-                  {/* Visual Element */}
                   <div className="flex-1 flex justify-center">
                     <motion.div
                       className={`w-80 h-80 bg-gradient-to-br ${service.colorClass} rounded-3xl transform rotate-6 flex items-center justify-center relative overflow-hidden`}
@@ -327,84 +292,117 @@ export default function HomePage({ homepageContentProps }: { homepageContentProp
                         }}
                         transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
                       />
-                      <LucideIcon name={service.iconName} className="w-32 h-32 text-white/80" />
-
+                      <Icon className="w-32 h-32 text-white/80" />
                     </motion.div>
                   </div>
                 </motion.div>
-              )
-            }
-            )
-            }
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Call to Action Section */}
-      <section className="py-20 bg-gradient-to-r from-red-500 to-pink-600 relative overflow-hidden">
-        <motion.div
-          className="absolute top-0 left-0 w-full h-full opacity-10"
-          animate={{
-            backgroundImage: [
-              "radial-gradient(circle at 25% 25%, white 2px, transparent 2px)",
-              "radial-gradient(circle at 75% 75%, white 2px, transparent 2px)",
-              "radial-gradient(circle at 25% 25%, white 2px, transparent 2px)",
-            ],
-          }}
-          transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY }}
-        />
+      {/* Split Feature blocks */}
+      {splitFeatures.length
+        ? splitFeatures.map((sf, i) => {
+            const Icon = sf.icon || Users;
+            return (
+              <section key={i} className={`py-20 ${i % 2 === 1 ? "bg-gray-50" : "bg-white"}`}>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className={`grid lg:grid-cols-2 gap-12 items-center ${sf.reverse ? "lg:flex-row-reverse" : ""}`}>
+                    <motion.div initial={{ opacity: 0, x: sf.reverse ? 50 : -50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
+                      <h2 className="text-4xl font-bold mb-3 text-gray-900">{sf.title}</h2>
+                      {sf.subtitle ? <p className="text-red-600 font-medium mb-4">{sf.subtitle}</p> : null}
+                      {sf.html ? (
+                        <div className="space-y-4 text-gray-600 text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: sf.html }} />
+                      ) : null}
+                      <ul className="mt-6 space-y-3">
+                        {(sf.items || []).map((it: string, idx: number) => (
+                          <li key={idx} className="flex items-start gap-3 text-gray-700">
+                            <CheckCircle className="w-5 h-5 text-green-500 mt-1" />
+                            <span>{it}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
 
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Ready to Start Your Canadian Journey?</h2>
-            <p className="text-xl text-white/90 mb-8 leading-relaxed">
-              Book a consultation with our expert immigration consultants and take the first step towards your new life
-              in Canada.
-            </p>
+                    <motion.div
+                      initial={{ opacity: 0, x: sf.reverse ? -50 : 50 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.8 }}
+                      className="relative"
+                    >
+                      <div className="w-full h-96 bg-gradient-to-br from-red-500 to-pink-600 rounded-3xl transform rotate-3 flex items-center justify-center relative overflow-hidden">
+                        <motion.div
+                          className="absolute inset-0 bg-white/10"
+                          animate={{
+                            background: [
+                              "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                              "radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                              "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                            ],
+                          }}
+                          transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
+                        />
+                        <Icon className="w-32 h-32 text-white/80" />
+                      </div>
+                    </motion.div>
+                  </div>
+                </div>
+              </section>
+            );
+          })
+        : null}
 
-            <div className="grid md:grid-cols-3 gap-6 mb-12">
-              {/* <Card className="bg-white/10 backdrop-blur-sm border-white/20">
-                  <CardContent className="p-6 text-center">
-                    <Phone className="w-8 h-8 text-white mx-auto mb-3" />
-                    <h3 className="font-semibold text-white mb-2">Free Consultation</h3>
-                    <p className="text-white/80 text-sm">30-minute initial assessment</p>
-                  </CardContent>
-                </Card> */}
+      {/* CTA Cards + Final CTA */}
+      {(ctaCards.length || finalCTA) ? (
+        <section className="py-20 bg-gradient-to-r from-red-500 to-pink-600 relative overflow-hidden">
+          <motion.div
+            className="absolute top-0 left-0 w-full h-full opacity-10"
+            animate={{
+              backgroundImage: [
+                "radial-gradient(circle at 25% 25%, white 2px, transparent 2px)",
+                "radial-gradient(circle at 75% 75%, white 2px, transparent 2px)",
+                "radial-gradient(circle at 25% 25%, white 2px, transparent 2px)",
+              ],
+            }}
+            transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY }}
+          />
+          <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 relative z-10">
+            {ctaCards.length ? (
+              <div className="grid md:grid-cols-3 gap-6 mb-12">
+                {ctaCards.map((card: any, idx: number) => (
+                  <Card key={idx} className="bg-white/10 backdrop-blur-sm border-white/20">
+                    <CardContent className="p-6 text-center">
+                      <card.icon className="w-8 h-8 text-white mx-auto mb-3" />
+                      <h3 className="font-semibold text-white mb-2">{card.title}</h3>
+                      <p className="text-white/80 text-sm">{card.description}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : null}
 
-              {homepageContent.cta.cards?.map((card: any, index: number) => (
-                <Card key={index} className="bg-white/10 backdrop-blur-sm border-white/20">
-                  <CardContent className="p-6 text-center">
-                    <LucideIcon name={card.fields.iconName} className="w-8 h-8 text-white mx-auto mb-3" />
-                    <h3 className="font-semibold text-white mb-2">{card.fields.title}</h3>
-                    <p className="text-white/80 text-sm">{card.fields.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link href={homepageContent.cta.buttonLink || "/contact"}>
-                <Button
-                  size="lg"
-                  className="bg-white text-red-600 hover:bg-gray-100 text-lg px-12 py-4 rounded-full font-semibold"
-                >
-                  <LucideIcon name={homepageContent.cta.buttonIconName} className="w-5 h-5 mr-3" />
-                  {homepageContent.cta.buttonText}
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                {finalCTA?.heading || "Ready to Start Your Canadian Journey?"}
+              </h2>
+              <p className="text-xl text-white/90 mb-8 leading-relaxed">
+                {finalCTA?.description ||
+                  "Book a consultation with our expert immigration consultants and take the first step towards your new life in Canada."}
+              </p>
+              <Link href={finalCTA?.cta?.url || "/contact"}>
+                <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 text-lg px-12 py-4 rounded-full font-semibold">
+                  {(finalCTA?.cta?.icon && pickIcon(finalCTA.cta.icon)) ? (
+                    <finalCTA.cta.icon className="w-5 h-5 mr-3" />
+                  ) : null}
+                  {finalCTA?.cta?.label || "Book Consultation"}
                 </Button>
               </Link>
-              {/* <Link href={homepageContent.cta.buttonLink || "/contact"}>
-                  <button className="bg-white text-red-600 hover:bg-gray-100 text-lg px-12 py-4 rounded-full font-semibold">
-                    <LucideIcon name={homepageContent.cta.buttonIconName} className="w-5 h-5 mr-3" />
-                    {homepageContent.cta.buttonText}
-                  </button>
-                </Link> */}
             </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-
-
+          </div>
+        </section>
+      ) : null}
     </div>
-  )
+  );
 }
