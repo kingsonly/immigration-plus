@@ -13,6 +13,7 @@
       "type": "component",
       "repeatable": true,
       "component": "shared.list-item"
-    }
+    },
+    "image": { "type": "media", "multiple": false, "allowedTypes": ["images"] }
   }
 }

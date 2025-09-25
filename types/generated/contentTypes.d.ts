@@ -488,6 +488,7 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
         'blocks.heading-section',
         'blocks.services',
         'blocks.card-grid',
+        'blocks.split-feature',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

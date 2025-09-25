@@ -42,7 +42,8 @@
         "blocks.hero",
         "blocks.heading-section",
         "blocks.services",
-        "blocks.card-grid"
+        "blocks.card-grid",
+        "blocks.split-feature"
       ]
     }
   }

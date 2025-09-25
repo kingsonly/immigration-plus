@@ -82,6 +82,7 @@ export interface BlocksHeadingSection extends Struct.ComponentSchema {
     description: Schema.Attribute.Text;
     Heading: Schema.Attribute.String;
     icon: Schema.Attribute.String;
+    image: Schema.Attribute.Media<'images'>;
   };
 }
 
@@ -155,6 +156,7 @@ export interface BlocksSplitFeature extends Struct.ComponentSchema {
     cardIcon: Schema.Attribute.String;
     description: Schema.Attribute.RichText;
     icon: Schema.Attribute.String & Schema.Attribute.Required;
+    image: Schema.Attribute.Media<'images'>;
     items: Schema.Attribute.Component<'shared.list-item', true>;
     reverse: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     subtitle: Schema.Attribute.String;
