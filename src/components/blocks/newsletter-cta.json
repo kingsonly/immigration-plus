@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_blocks_newsletter_cta",
+  "info": { "displayName": "Newsletter CTA" },
+  "options": {},
+  "attributes": {
+    "Heading": { "type": "string" },
+    "description": { "type": "text" },
+    "cta": { "type": "component", "component": "shared.cta" }
+  }
+}

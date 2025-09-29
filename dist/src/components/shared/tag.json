@@ -1,0 +1,5 @@
+{
+    "collectionName": "components_shared_tag",
+    "info": { "displayName": "Tag" },
+    "attributes": { "label": { "type": "string", "required": true }, "slug": { "type": "uid", "targetField": "label" } }
+}

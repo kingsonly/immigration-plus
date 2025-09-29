@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_blocks_featured_strip",
+  "info": { "displayName": "Featured Strip" },
+  "options": {},
+  "attributes": {
+    "Heading": { "type": "string" },
+    "description": { "type": "text" },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.featured-item"
+    }
+  }
+}

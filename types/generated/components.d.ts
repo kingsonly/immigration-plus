@@ -59,6 +59,18 @@ export interface BlocksComparisonGrid extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksFeaturedStrip extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_featured_strip';
+  info: {
+    displayName: 'Featured Strip';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    Heading: Schema.Attribute.String;
+    items: Schema.Attribute.Component<'shared.featured-item', true>;
+  };
+}
+
 export interface BlocksFeeCards extends Struct.ComponentSchema {
   collectionName: 'components_blocks_fee_cards';
   info: {
@@ -101,6 +113,33 @@ export interface BlocksHero extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksNewsList extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_news_list';
+  info: {
+    displayName: 'News List';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    Heading: Schema.Attribute.String;
+    limit: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<4>;
+    mode: Schema.Attribute.Enumeration<['auto', 'manual']> &
+      Schema.Attribute.DefaultTo<'auto'>;
+    resources: Schema.Attribute.Relation<'oneToMany', 'api::resource.resource'>;
+  };
+}
+
+export interface BlocksNewsletterCta extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_newsletter_cta';
+  info: {
+    displayName: 'Newsletter CTA';
+  };
+  attributes: {
+    cta: Schema.Attribute.Component<'shared.cta', false>;
+    description: Schema.Attribute.Text;
+    Heading: Schema.Attribute.String;
+  };
+}
+
 export interface BlocksProcessStepsBlock extends Struct.ComponentSchema {
   collectionName: 'components_blocks_process_steps_blocks';
   info: {
@@ -111,6 +150,28 @@ export interface BlocksProcessStepsBlock extends Struct.ComponentSchema {
     description: Schema.Attribute.Text;
     steps: Schema.Attribute.Component<'shared.process-step', true>;
     title: Schema.Attribute.String;
+  };
+}
+
+export interface BlocksResourceGrid extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_resource_grid';
+  info: {
+    displayName: 'Resource Grid';
+  };
+  attributes: {
+    category: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::resource-category.resource-category'
+    >;
+    description: Schema.Attribute.Text;
+    Heading: Schema.Attribute.String;
+    limit: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<6>;
+    mode: Schema.Attribute.Enumeration<['manual', 'auto']> &
+      Schema.Attribute.DefaultTo<'manual'>;
+    resources: Schema.Attribute.Relation<'oneToMany', 'api::resource.resource'>;
+    typeFilter: Schema.Attribute.Enumeration<
+      ['guide', 'checklist', 'calculator', 'news']
+    >;
   };
 }
 
@@ -161,6 +222,19 @@ export interface BlocksSplitFeature extends Struct.ComponentSchema {
     reverse: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     subtitle: Schema.Attribute.String;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface BlocksToolsGrid extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_tools_grid';
+  info: {
+    displayName: 'Tools Grid';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    Heading: Schema.Attribute.String;
+    limit: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<4>;
+    tools: Schema.Attribute.Relation<'manyToMany', 'api::tool.tool'>;
   };
 }
 
@@ -418,6 +492,33 @@ export interface SharedComparisonRow extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedCta extends Struct.ComponentSchema {
+  collectionName: 'components_shared_cta';
+  info: {
+    displayName: 'CTA';
+  };
+  attributes: {
+    icon: Schema.Attribute.String;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    url: Schema.Attribute.String & Schema.Attribute.Required;
+    variant: Schema.Attribute.Enumeration<['default', 'outline', 'link']> &
+      Schema.Attribute.DefaultTo<'default'>;
+  };
+}
+
+export interface SharedFeaturedItem extends Struct.ComponentSchema {
+  collectionName: 'components_shared_featured_item';
+  info: {
+    displayName: 'Featured Item';
+  };
+  attributes: {
+    colorClass: Schema.Attribute.String;
+    icon: Schema.Attribute.String;
+    slug: Schema.Attribute.String & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface SharedListItem extends Struct.ComponentSchema {
   collectionName: 'components_shared_list_items';
   info: {
@@ -484,6 +585,18 @@ export interface SharedProcessStep extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedSeo extends Struct.ComponentSchema {
+  collectionName: 'components_shared_seo';
+  info: {
+    displayName: 'SEO';
+  };
+  attributes: {
+    metaDescription: Schema.Attribute.Text;
+    metaTitle: Schema.Attribute.String;
+    shareImage: Schema.Attribute.Media<'images'>;
+  };
+}
+
 export interface SharedServiceVariant extends Struct.ComponentSchema {
   collectionName: 'components_blocks_service_variants';
   info: {
@@ -518,6 +631,17 @@ export interface SharedSocialLink extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedTag extends Struct.ComponentSchema {
+  collectionName: 'components_shared_tag';
+  info: {
+    displayName: 'Tag';
+  };
+  attributes: {
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    slug: Schema.Attribute.UID<'label'>;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
@@ -525,13 +649,18 @@ declare module '@strapi/strapi' {
       'blocks.business-immigration': BlocksBusinessImmigration;
       'blocks.card-grid': BlocksCardGrid;
       'blocks.comparison-grid': BlocksComparisonGrid;
+      'blocks.featured-strip': BlocksFeaturedStrip;
       'blocks.fee-cards': BlocksFeeCards;
       'blocks.heading-section': BlocksHeadingSection;
       'blocks.hero': BlocksHero;
+      'blocks.news-list': BlocksNewsList;
+      'blocks.newsletter-cta': BlocksNewsletterCta;
       'blocks.process-steps-block': BlocksProcessStepsBlock;
+      'blocks.resource-grid': BlocksResourceGrid;
       'blocks.service-variant-cards': BlocksServiceVariantCards;
       'blocks.services': BlocksServices;
       'blocks.split-feature': BlocksSplitFeature;
+      'blocks.tools-grid': BlocksToolsGrid;
       'business.benefit': BusinessBenefit;
       'business.card': BusinessCard;
       'business.cta-button': BusinessCtaButton;
@@ -551,13 +680,17 @@ declare module '@strapi/strapi' {
       'shared.button': SharedButton;
       'shared.card': SharedCard;
       'shared.comparison-row': SharedComparisonRow;
+      'shared.cta': SharedCta;
+      'shared.featured-item': SharedFeaturedItem;
       'shared.list-item': SharedListItem;
       'shared.nav-dropdown-link': SharedNavDropdownLink;
       'shared.nav-link': SharedNavLink;
       'shared.price-item': SharedPriceItem;
       'shared.process-step': SharedProcessStep;
+      'shared.seo': SharedSeo;
       'shared.service-variant': SharedServiceVariant;
       'shared.social-link': SharedSocialLink;
+      'shared.tag': SharedTag;
     }
   }
 }

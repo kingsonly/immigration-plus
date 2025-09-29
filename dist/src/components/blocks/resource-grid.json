@@ -1,0 +1,29 @@
+{
+    "collectionName": "components_blocks_resource_grid",
+    "info": { "displayName": "Resource Grid" },
+    "options": {},
+    "attributes": {
+        "Heading": { "type": "string" },
+        "description": { "type": "text" },
+        "mode": {
+            "type": "enumeration",
+            "enum": ["manual", "auto"],
+            "default": "manual"
+        },
+        "resources": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::resource.resource"
+        },
+        "typeFilter": {
+            "type": "enumeration",
+            "enum": ["guide", "checklist", "calculator", "news"]
+        },
+        "category": {
+            "type": "relation",
+            "relation": "oneToOne",
+            "target": "api::resource-category.resource-category"
+        },
+        "limit": { "type": "integer", "default": 6 }
+    }
+}

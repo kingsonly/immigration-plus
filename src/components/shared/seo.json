@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_shared_seo",
+  "info": { "displayName": "SEO" },
+  "options": {},
+  "attributes": {
+    "metaTitle":       { "type": "string" },
+    "metaDescription": { "type": "text" },
+    "shareImage":      { "type": "media", "multiple": false, "allowedTypes": ["images"] }
+  }
+}

@@ -1,0 +1,11 @@
+{
+    "collectionName": "components_shared_featured_item",
+    "info": { "displayName": "Featured Item" },
+    "options": {},
+    "attributes": {
+        "title": { "type": "string", "required": true },
+        "slug": { "type": "string", "required": true, "unique": false },
+        "icon": { "type": "string" },
+        "colorClass": { "type": "string" }
+    }
+}
