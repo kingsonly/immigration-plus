@@ -1,0 +1,11 @@
+{
+  "collectionName": "components_blocks_calendly",
+  "info": { "displayName": "Calendly", "icon": "calendar" },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "title": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
+    "description": { "type": "text", "pluginOptions": { "i18n": { "localized": true } } },
+    "calendlyLink": { "type": "string" },
+    "expectations": { "type": "json" }
+  }
+}

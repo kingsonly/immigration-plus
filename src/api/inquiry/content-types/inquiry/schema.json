@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "inquiries",
+  "info": {
+    "singularName": "inquiry",
+    "pluralName": "inquiries",
+    "displayName": "Inquiry",
+    "description": "Contact form submissions from the website"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "firstName": {
+      "type": "string",
+      "required": true
+    },
+    "lastName": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "phone": {
+      "type": "string"
+    },
+    "service": {
+      "type": "enumeration",
+      "enum": [
+        "Permanent Residency (PR)",
+        "Business Immigration",
+        "Study & Work Permits",
+        "Family Sponsorship",
+        "Provincial Nominee Program",
+        "Citizenship Application",
+        "Other"
+      ]
+    },
+    "message": {
+      "type": "text",
+      "required": true
+    },
+    "source": {
+      "type": "string",
+      "default": "website"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["new", "in_progress", "closed"],
+      "default": "new"
+    }
+  }
+}

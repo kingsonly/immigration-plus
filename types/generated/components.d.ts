@@ -33,6 +33,33 @@ export interface BlocksBusinessImmigration extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksCalendly extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_calendly';
+  info: {
+    displayName: 'Calendly';
+    icon: 'calendar';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    calendlyLink: Schema.Attribute.String;
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    expectations: Schema.Attribute.JSON;
+    title: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+  };
+}
+
 export interface BlocksCardGrid extends Struct.ComponentSchema {
   collectionName: 'components_blocks_card_grids';
   info: {
@@ -59,6 +86,49 @@ export interface BlocksComparisonGrid extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksContactCard extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_contact_card';
+  info: {
+    displayName: 'Contact Card';
+    icon: 'phone';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    details: Schema.Attribute.JSON;
+    icon: Schema.Attribute.String;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+  };
+}
+
+export interface BlocksContactForm extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_contact_form';
+  info: {
+    displayName: 'Contact Form';
+    icon: 'email';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    redirectUrl: Schema.Attribute.String;
+    services: Schema.Attribute.JSON;
+    successMessage: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+  };
+}
+
 export interface BlocksCtaSection extends Struct.ComponentSchema {
   collectionName: 'components_blocks_cta_section';
   info: {
@@ -69,6 +139,33 @@ export interface BlocksCtaSection extends Struct.ComponentSchema {
     cta: Schema.Attribute.Component<'shared.cta', false>;
     description: Schema.Attribute.Text;
     Heading: Schema.Attribute.String;
+  };
+}
+
+export interface BlocksFaq extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_faq';
+  info: {
+    displayName: 'FAQ';
+    icon: 'information';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    answer: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    question: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
   };
 }
 
@@ -771,9 +868,13 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'blocks.application-process': BlocksApplicationProcess;
       'blocks.business-immigration': BlocksBusinessImmigration;
+      'blocks.calendly': BlocksCalendly;
       'blocks.card-grid': BlocksCardGrid;
       'blocks.comparison-grid': BlocksComparisonGrid;
+      'blocks.contact-card': BlocksContactCard;
+      'blocks.contact-form': BlocksContactForm;
       'blocks.cta-section': BlocksCtaSection;
+      'blocks.faq': BlocksFaq;
       'blocks.featured-strip': BlocksFeaturedStrip;
       'blocks.fee-cards': BlocksFeeCards;
       'blocks.heading-section': BlocksHeadingSection;
