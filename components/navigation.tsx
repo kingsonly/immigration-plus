@@ -1,103 +1,136 @@
-"use client"
+// components/NavigationClient.tsx
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { motion, AnimatePresence } from "framer-motion"
-import { MapPin, Menu, X, ChevronDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
+import { useState, useMemo } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, Menu, X } from "lucide-react";
+import Image from "next/image";
 
-const Navigation = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [servicesOpen, setServicesOpen] = useState(false)
-  const pathname = usePathname()
+export type NavDropdown = {
+  id: number;
+  label: string;
+  url?: string | null;
+  icon?: string | null;
+};
 
-  const navItems = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    {
-      name: "Services",
-      href: "/services",
-      dropdown: [
+export type NavLink = {
+  id: number;
+  label: string;
+  url?: string | null;
+  icon?: string | null;
+  image?: any;
+  dropdown?: NavDropdown[];
+};
 
-        { name: "Permanent Residency", href: "/services/permanent-residency" },
-        { name: "Business & Investor Immigration", href: "/services/business-immigration" },
-        { name: "Study", href: "/services/study" },
-        { name: "Work Permits", href: "/services/work-permit" },
-        { name: "Family Sponsorship", href: "/services/family-sponsorship" },
-        { name: "Visitor Visa", href: "/services/visitors-visa" },
-        { name: "Citizenship & Integration", href: "/services/citizenship" },
-        { name: "Refugee/Asylum Visa", href: "/services/refugee-hc" },
-        { name: "Recruitment", href: "/services/recruitment" },
-      ],
-    },
-    { name: "Resources", href: "/resources" },
-    { name: "Success Stories", href: "/success-stories" },
-    { name: "Contact", href: "/contact" },
-  ]
+export type HeaderProps = {
+  logoLabel?: string;
+  logoHref?: string;
+  nav: NavLink[];
+};
+
+function buildFallback(): HeaderProps {
+  return {
+    logoLabel: "Coming2Canada",
+    logoHref: "/",
+    nav: [
+      { id: 1, label: "Home", url: "/" },
+      { id: 2, label: "About", url: "/about" },
+      {
+        id: 3,
+        label: "Services",
+        url: "/services",
+        dropdown: [
+          { id: 31, label: "Permanent Residency", url: "/services/permanent-residency" },
+          { id: 32, label: "Business & Investor Immigration", url: "/services/business-immigration" },
+          { id: 33, label: "Study", url: "/services/study" },
+          { id: 34, label: "Work Permits", url: "/services/work-permit" },
+          { id: 35, label: "Family Sponsorship", url: "/services/family-sponsorship" },
+          { id: 36, label: "Visitor Visa", url: "/services/visitors-visa" },
+          { id: 37, label: "Citizenship & Integration", url: "/services/citizenship" },
+          { id: 38, label: "Refugee/Asylum Visa", url: "/services/refugee-hc" },
+          { id: 39, label: "Recruitment", url: "/services/recruitment" }
+        ]
+      },
+      { id: 4, label: "Resources", url: "/resources" },
+      { id: 5, label: "Success Stories", url: "/success-stories" },
+      { id: 6, label: "Contact", url: "/contact" }
+    ]
+  };
+}
+
+export default function NavigationClient(props: HeaderProps) {
+  const data = props?.nav && props.nav.length ? props : buildFallback();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
+  const pathname = usePathname();
+
+  const navItems = useMemo(() => data.nav, [data.nav]);
 
   return (
     <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-red-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center min-h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-20 h-20  rounded-full flex items-center justify-center">
+          <Link href={data.logoHref || "/"} className="flex items-center space-x-2">
+            <div className="w-20 h-20 rounded-full flex items-center justify-center">
               <Image src="/logo.png" alt="logo" width={100} height={100} />
             </div>
-            {/* <span className="font-bold text-xl text-gray-900">Coming2Canada</span> */}
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <div key={item.name} className="relative group">
-                {item.dropdown ? (
-                  <div className="relative">
-                    <Link
-                      href={item.href}
-                      className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${pathname.startsWith(item.href)
-                        ? "text-red-600 bg-red-50"
-                        : "text-gray-700 hover:text-red-600 hover:bg-red-50"
-                        }`}
-                    >
-                      <span>{item.name}</span>
-                      <ChevronDown className="w-4 h-4" />
-                    </Link>
-                    <div className="absolute top-full left-0 mt-1 w-64 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                      {item.dropdown.map((subItem) => (
-                        <Link
-                          key={subItem.name}
-                          href={subItem.href}
-                          className="block px-4 py-3 text-sm text-gray-700 hover:text-red-600 hover:bg-red-50 first:rounded-t-lg last:rounded-b-lg"
-                        >
-                          {subItem.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <Link
-                    href={item.href}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${pathname === item.href
-                      ? "text-red-600 bg-red-50"
-                      : "text-gray-700 hover:text-red-600 hover:bg-red-50"
-                      }`}
-                  >
-                    {item.name}
-                  </Link>
-                )}
-              </div>
-            ))}
-          </div>
+            {navItems.map((item) => {
+              const isActive =
+                item.url && (item.url === "/" ? pathname === "/" : pathname.startsWith(item.url));
+              const hasDropdown = Array.isArray(item.dropdown) && item.dropdown.length > 0;
 
-          {/* CTA Button */}
-          {/* <div className="hidden lg:block">
-            <Button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
-              Free Assessment
-            </Button>
-          </div> */}
+              return (
+                <div key={item.id} className="relative group">
+                  {hasDropdown ? (
+                    <div className="relative">
+                      <Link
+                        href={item.url || "#"}
+                        className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                          isActive ? "text-red-600 bg-red-50" : "text-gray-700 hover:text-red-600 hover:bg-red-50"
+                        }`}
+                        onMouseEnter={() => setOpenDropdownId(item.id)}
+                        onMouseLeave={() => setOpenDropdownId(null)}
+                      >
+                        <span>{item.label}</span>
+                        <ChevronDown className="w-4 h-4" />
+                      </Link>
+
+                      <div
+                        className={`absolute top-full left-0 mt-1 w-64 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200`}
+                      >
+                        {item.dropdown!.map((sub) => (
+                          <Link
+                            key={sub.id}
+                            href={sub.url || "#"}
+                            className="block px-4 py-3 text-sm text-gray-700 hover:text-red-600 hover:bg-red-50 first:rounded-t-lg last:rounded-b-lg"
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <Link
+                      href={item.url || "#"}
+                      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                        isActive ? "text-red-600 bg-red-50" : "text-gray-700 hover:text-red-600 hover:bg-red-50"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </div>
+              );
+            })}
+          </div>
 
           {/* Mobile menu button */}
           <button
@@ -119,64 +152,64 @@ const Navigation = () => {
             className="lg:hidden bg-white border-t border-gray-200"
           >
             <div className="px-4 py-2 space-y-1">
-              {navItems.map((item) => (
-                <div key={item.name}>
-                  {item.dropdown ? (
-                    <div>
-                      <button
-                        onClick={() => setServicesOpen(!servicesOpen)}
-                        className="flex items-center justify-between w-full px-3 py-2 text-left text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-md"
+              {navItems.map((item) => {
+                const hasDropdown = Array.isArray(item.dropdown) && item.dropdown.length > 0;
+
+                return (
+                  <div key={item.id}>
+                    {hasDropdown ? (
+                      <div>
+                        <button
+                          onClick={() =>
+                            setOpenDropdownId((cur) => (cur === item.id ? null : item.id))
+                          }
+                          className="flex items-center justify-between w-full px-3 py-2 text-left text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-md"
+                        >
+                          <span>{item.label}</span>
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform ${
+                              openDropdownId === item.id ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                        <AnimatePresence>
+                          {openDropdownId === item.id && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="ml-4 space-y-1"
+                            >
+                              {item.dropdown!.map((sub) => (
+                                <Link
+                                  key={sub.id}
+                                  href={sub.url || "#"}
+                                  className="block px-3 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-md"
+                                  onClick={() => setIsOpen(false)}
+                                >
+                                  {sub.label}
+                                </Link>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    ) : (
+                      <Link
+                        href={item.url || "#"}
+                        className={`block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-red-600 hover:bg-red-50`}
+                        onClick={() => setIsOpen(false)}
                       >
-                        <span>{item.name}</span>
-                        <ChevronDown className={`w-4 h-4 transition-transform ${servicesOpen ? "rotate-180" : ""}`} />
-                      </button>
-                      <AnimatePresence>
-                        {servicesOpen && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="ml-4 space-y-1"
-                          >
-                            {item.dropdown.map((subItem) => (
-                              <Link
-                                key={subItem.name}
-                                href={subItem.href}
-                                className="block px-3 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-md"
-                                onClick={() => setIsOpen(false)}
-                              >
-                                {subItem.name}
-                              </Link>
-                            ))}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  ) : (
-                    <Link
-                      href={item.href}
-                      className={`block px-3 py-2 rounded-md text-base font-medium ${pathname === item.href
-                        ? "text-red-600 bg-red-50"
-                        : "text-gray-700 hover:text-red-600 hover:bg-red-50"
-                        }`}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {item.name}
-                    </Link>
-                  )}
-                </div>
-              ))}
-              {/* <div className="pt-4">
-                <Button className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
-                  Free Assessment
-                </Button>
-              </div> */}
+                        {item.label}
+                      </Link>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </nav>
-  )
+  );
 }
-
-export default Navigation

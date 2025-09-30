@@ -1,119 +1,62 @@
-﻿import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
-import Navigation from "@/components/navigation"
-import Link from "next/link"
-import { MapPin } from "lucide-react"
-import Image from "next/image"
+﻿// app/layout.tsx
+import type React from "react";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], display: "swap", adjustFontFallback: true, preload: false })
+import { fetchGlobal } from "@/lib/api/global";
+import NavigationClient from "@/components/navigation";
+import FooterDynamic from "@/components/FooterDynamic";
+
+const inter = Inter({ subsets: ["latin"], display: "swap", adjustFontFallback: true, preload: false });
 
 export const metadata: Metadata = {
   title: "Coming2Canada - Immigration Consulting Services",
   description: "TENTACULAR IMMIGRATION SOLUTIONS LTD - Your trusted partner for Canadian immigration success",
-  icons: {
-    icon: '/logo.png', // Make sure this path points to your actual favicon file
-  }
-}
+  icons: { icon: "/logo.png" },
+};
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export const dynamic = "force-dynamic"; // reflect header/footer changes immediately
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const global = await fetchGlobal();
+
+  const headerProps = {
+    logoLabel: global?.Header?.Logo?.label || "Coming2Canada",
+    logoHref: global?.Header?.Logo?.url || "/",
+    nav:
+      global?.Header?.NavLink?.map((n) => ({
+        id: n.id,
+        label: n.label,
+        url: n.url || "#",
+        icon: n.icon || null,
+        image: n.image || null,
+        dropdown: (n.dropdown || []).map((d) => ({
+          id: d.id,
+          label: d.label,
+          url: d.url || "#",
+          icon: d.icon || null,
+        })),
+      })) || [],
+  };
+
+  const footerProps = {
+    links:
+      global?.Footer?.FooterLinks?.map((n) => ({
+        id: n.id,
+        label: n.label,
+        url: n.url || "#",
+      })) || [],
+    copyright: global?.Footer?.FooterCopyright,
+  };
+
   return (
     <html lang="en">
-      <body >
-        <Navigation />
+      <body className={inter.className}>
+        <NavigationClient {...headerProps} />
         {children}
-        <footer className="bg-gray-900 text-white py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-4 gap-8">
-              <div>
-                <div className="flex items-center space-x-2 mb-4">
-                  <div className="min-w-8 min-h-8 bg-gradient-to-r from-white to-white rounded-full flex items-center justify-center">
-                    <Image src="/logo.png" alt="logo" width={60} height={60} />
-                  </div>
-                  <span className="font-bold text-xl">Coming2Canada</span>
-                </div>
-                <p className="text-gray-400 mb-4">TENTACULAR IMMIGRATION SOLUTIONS LTD</p>
-                <p className="text-gray-400">Your trusted partner for Canadian immigration success.</p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
-                <ul className="space-y-2 text-gray-400">
-                  <li>
-                    <Link href="/services/permanent-residency" className="hover:text-white">
-                      Permanent Residency
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/services/business-immigration" className="hover:text-white">
-                      Business Immigration
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/services/study-work-permits" className="hover:text-white">
-                      Study & Work Permits
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/services/family-sponsorship" className="hover:text-white">
-                      Family Sponsorship
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/about" className="hover:text-white">
-                      About Us
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/programs" className="hover:text-white">
-                      Immigration Programs
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/resources" className="hover:text-white">
-                      Resources
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/success-stories" className="hover:text-white">
-                      Success Stories
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-lg mb-4">Contact</h3>
-                <div className="space-y-2 text-gray-400">
-                  <p>ðŸ“§ info@coming2canada.ca</p>
-                  <p>ðŸ“ž +1 (613) 371-6611</p>
-                  <p>ðŸ“ Canada</p>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-lg mb-4"> Immigration Consultant</h3>
-                <ul className="space-y-2 text-gray-400">
-                  <li>
-                    <Link target="_blank" href="https://register.college-ic.ca/Public-Register-EN/Licensee/Profile.aspx?ID=40974&b9100e1006f6=2#b9100e1006f6" className="hover:text-white">
-                      <Image src="/rcic-irb.jpeg" alt="rcic-irb Logo" width={200} height={100} />
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-              <p>&copy; 2025 TENTACULAR IMMIGRATION SOLUTIONS LTD. All rights reserved.</p>
-            </div>
-          </div>
-        </footer>
+        <FooterDynamic {...footerProps} />
       </body>
     </html>
-  )
+  );
 }
-
-
