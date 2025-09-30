@@ -1,0 +1,11 @@
+{
+    "collectionName": "components_blocks_story_carousel",
+    "info": { "displayName": "Story Carousel", "description": "" },
+    "attributes": {
+        "Heading": { "type": "string" },
+        "description": { "type": "text" },
+        "mode": { "type": "enumeration", "enum": ["auto", "manual"], "default": "manual" },
+        "limit": { "type": "integer" },
+        "stories": { "type": "relation", "relation": "oneToMany", "target": "api::success-story.success-story" }
+    }
+}

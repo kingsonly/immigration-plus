@@ -59,6 +59,19 @@ export interface BlocksComparisonGrid extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksCtaSection extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_cta_section';
+  info: {
+    description: '';
+    displayName: 'CTA Section';
+  };
+  attributes: {
+    cta: Schema.Attribute.Component<'shared.cta', false>;
+    description: Schema.Attribute.Text;
+    Heading: Schema.Attribute.String;
+  };
+}
+
 export interface BlocksFeaturedStrip extends Struct.ComponentSchema {
   collectionName: 'components_blocks_featured_strip';
   info: {
@@ -225,6 +238,51 @@ export interface BlocksSplitFeature extends Struct.ComponentSchema {
   };
 }
 
+export interface BlocksStatsGrid extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_stats_grid';
+  info: {
+    description: '';
+    displayName: 'Stats Grid';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    Heading: Schema.Attribute.String;
+    stats: Schema.Attribute.Component<'shared.stat', true>;
+  };
+}
+
+export interface BlocksStoryCarousel extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_story_carousel';
+  info: {
+    description: '';
+    displayName: 'Story Carousel';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    Heading: Schema.Attribute.String;
+    limit: Schema.Attribute.Integer;
+    mode: Schema.Attribute.Enumeration<['auto', 'manual']> &
+      Schema.Attribute.DefaultTo<'manual'>;
+    stories: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::success-story.success-story'
+    >;
+  };
+}
+
+export interface BlocksTestimonialsGrid extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_testimonials_grid';
+  info: {
+    description: '';
+    displayName: 'Testimonials Grid';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    Heading: Schema.Attribute.String;
+    testimonials: Schema.Attribute.Component<'shared.testimonial', true>;
+  };
+}
+
 export interface BlocksToolsGrid extends Struct.ComponentSchema {
   collectionName: 'components_blocks_tools_grid';
   info: {
@@ -235,6 +293,19 @@ export interface BlocksToolsGrid extends Struct.ComponentSchema {
     Heading: Schema.Attribute.String;
     limit: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<4>;
     tools: Schema.Attribute.Relation<'manyToMany', 'api::tool.tool'>;
+  };
+}
+
+export interface BlocksVideoGrid extends Struct.ComponentSchema {
+  collectionName: 'components_blocks_video_grid';
+  info: {
+    description: '';
+    displayName: 'Video Grid';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    Heading: Schema.Attribute.String;
+    videos: Schema.Attribute.Component<'shared.video', true>;
   };
 }
 
@@ -631,6 +702,19 @@ export interface SharedSocialLink extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedStat extends Struct.ComponentSchema {
+  collectionName: 'components_shared_stats';
+  info: {
+    description: '';
+    displayName: 'Stat';
+  };
+  attributes: {
+    icon: Schema.Attribute.String;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    number: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface SharedTag extends Struct.ComponentSchema {
   collectionName: 'components_shared_tag';
   info: {
@@ -642,6 +726,46 @@ export interface SharedTag extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedTestimonial extends Struct.ComponentSchema {
+  collectionName: 'components_shared_testimonials';
+  info: {
+    description: 'Client testimonial with rating';
+    displayName: 'testimonial';
+    icon: 'quote';
+  };
+  attributes: {
+    avatar: Schema.Attribute.Media<'images'>;
+    country: Schema.Attribute.String;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    program: Schema.Attribute.String;
+    rating: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 5;
+          min: 1;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<5>;
+    text: Schema.Attribute.Text & Schema.Attribute.Required;
+  };
+}
+
+export interface SharedVideo extends Struct.ComponentSchema {
+  collectionName: 'components_shared_videos';
+  info: {
+    description: '';
+    displayName: 'Video';
+  };
+  attributes: {
+    country: Schema.Attribute.String;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    program: Schema.Attribute.String;
+    thumbnailUrl: Schema.Attribute.String;
+    videoUrl: Schema.Attribute.String;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
@@ -649,6 +773,7 @@ declare module '@strapi/strapi' {
       'blocks.business-immigration': BlocksBusinessImmigration;
       'blocks.card-grid': BlocksCardGrid;
       'blocks.comparison-grid': BlocksComparisonGrid;
+      'blocks.cta-section': BlocksCtaSection;
       'blocks.featured-strip': BlocksFeaturedStrip;
       'blocks.fee-cards': BlocksFeeCards;
       'blocks.heading-section': BlocksHeadingSection;
@@ -660,7 +785,11 @@ declare module '@strapi/strapi' {
       'blocks.service-variant-cards': BlocksServiceVariantCards;
       'blocks.services': BlocksServices;
       'blocks.split-feature': BlocksSplitFeature;
+      'blocks.stats-grid': BlocksStatsGrid;
+      'blocks.story-carousel': BlocksStoryCarousel;
+      'blocks.testimonials-grid': BlocksTestimonialsGrid;
       'blocks.tools-grid': BlocksToolsGrid;
+      'blocks.video-grid': BlocksVideoGrid;
       'business.benefit': BusinessBenefit;
       'business.card': BusinessCard;
       'business.cta-button': BusinessCtaButton;
@@ -690,7 +819,10 @@ declare module '@strapi/strapi' {
       'shared.seo': SharedSeo;
       'shared.service-variant': SharedServiceVariant;
       'shared.social-link': SharedSocialLink;
+      'shared.stat': SharedStat;
       'shared.tag': SharedTag;
+      'shared.testimonial': SharedTestimonial;
+      'shared.video': SharedVideo;
     }
   }
 }

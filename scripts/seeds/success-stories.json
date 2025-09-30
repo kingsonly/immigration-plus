@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Sarah & Michael Chen",
+    "slug": "sarah-michael-chen",
+    "country": "Singapore",
+    "program": "Express Entry - Federal Skilled Worker",
+    "timeline": "8 months",
+    "image": null,
+    "quote": "TENTACULAR IMMIGRATION made our Canadian dream come true. Their expertise and guidance throughout the Express Entry process was invaluable.",
+    "story": "Sarah and Michael were software engineers in Singapore and felt overwhelmed by the immigration process. We optimized their CRS score, prepared documents, and navigated Express Entry. They received an ITA within 3 months and landed in Toronto 8 months later. Today, they both work in tech and purchased their first home in Canada.",
+    "outcome": "Now permanent residents living in Toronto, both employed in their field",
+    "category": "skilled-worker",
+    "rating": 5
+  },
+  {
+    "name": "Priya Patel",
+    "slug": "priya-patel",
+    "country": "India",
+    "program": "Provincial Nominee Program - Ontario",
+    "timeline": "14 months",
+    "image": null,
+    "quote": "The PNP process seemed impossible until I found TENTACULAR IMMIGRATION. They made everything clear and manageable.",
+    "story": "Priya was a marketing manager in Mumbai without enough points for Express Entry. We targeted Ontario HCP stream, improved language scores, got ECA, and prepared a compelling application. After nomination (+600), she received ITA and now works for a major agency in Toronto.",
+    "outcome": "Marketing Director at a Fortune 500 company in Toronto",
+    "category": "pnp",
+    "rating": 5
+  },
+  {
+    "name": "Ahmed & Fatima Al-Rashid",
+    "slug": "ahmed-fatima-al-rashid",
+    "country": "UAE",
+    "program": "Start-up Visa Program",
+    "timeline": "18 months",
+    "image": null,
+    "quote": "Our innovative fintech startup found its home in Canada thanks to the exceptional guidance from TENTACULAR IMMIGRATION.",
+    "story": "We connected the founders with a designated organization, refined their business plan, and navigated the SUV process. Their startup has now raised $2M and employs 15 people in Vancouver.",
+    "outcome": "Successfully launched fintech startup with $2M funding",
+    "category": "business",
+    "rating": 5
+  },
+  {
+    "name": "Maria Rodriguez",
+    "slug": "maria-rodriguez",
+    "country": "Mexico",
+    "program": "Family Sponsorship - Spouse",
+    "timeline": "11 months",
+    "image": null,
+    "quote": "Being separated from my husband was heartbreaking. TENTACULAR IMMIGRATION reunited our family faster than we expected.",
+    "story": "We fixed documentation issues in a delayed spousal file, resubmitted a complete application, and guided them through to approval. Maria reunited with her husband in Calgary and works as a nurse.",
+    "outcome": "Reunited with family, working as a registered nurse in Calgary",
+    "category": "family",
+    "rating": 5
+  }
+]

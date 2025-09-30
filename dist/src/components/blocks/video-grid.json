@@ -1,0 +1,9 @@
+{
+    "collectionName": "components_blocks_video_grid",
+    "info": { "displayName": "Video Grid", "description": "" },
+    "attributes": {
+        "Heading": { "type": "string" },
+        "description": { "type": "text" },
+        "videos": { "type": "component", "repeatable": true, "component": "shared.video" }
+    }
+}

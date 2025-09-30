@@ -1,0 +1,9 @@
+{
+  "collectionName": "components_blocks_stats_grid",
+  "info": { "displayName": "Stats Grid", "description": "" },
+  "attributes": {
+    "Heading": { "type": "string" },
+    "description": { "type": "text" },
+    "stats": { "type": "component", "repeatable": true, "component": "shared.stat" }
+  }
+}
