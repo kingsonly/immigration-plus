@@ -56,7 +56,7 @@ jobs:
       - name: Build Strapi admin (production)
         env:
           NODE_ENV: production
-          PUBLIC_URL: https://c2c.skillzserver.com/admin
+          PUBLIC_URL: https://c2c.skillzserver.com
         run: npm run build
       - name: Create rsync exclude file
         run: |
