@@ -1,3 +1,2 @@
-const strapi = require("@strapi/strapi");
-const app = strapi({ distDir: "./dist" });
-app.start();
+const { createStrapi } = require("@strapi/strapi");
+createStrapi({ distDir: "./dist" }).start();
