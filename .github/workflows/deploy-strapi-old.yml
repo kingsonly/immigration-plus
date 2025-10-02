@@ -57,7 +57,7 @@ jobs:
         env:
           NODE_ENV: production
           PUBLIC_URL: https://c2c.skillzserver.com
-        run: npm run build
+        run: NODE_ENV=production npm run build
       - name: Create rsync exclude file
         run: |
           cat > .rsync-exclude << 'EOF'
