@@ -146,3 +146,12 @@
 #             mkdir -p tmp && touch tmp/restart.txt
 #           fi
 #           EOF
+
+#### just a test 
+#       - name: Rsync to server (mirror, preserve .env & uploads)
+#         shell: bash
+#         run: |
+#           set -euo pipefail
+#           ssh remote "mkdir -p ${{ secrets.APP_ROOT }}"
+#           rsync -az --delete --exclude-from='.rsync-exclude' \
+#             ./ remote:${{ secrets.APP_ROOT }}/
