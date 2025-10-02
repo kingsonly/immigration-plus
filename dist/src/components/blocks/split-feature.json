@@ -1,0 +1,19 @@
+{
+    "collectionName": "components_blocks_split_feature",
+    "info": { "displayName": "Split Feature" },
+    "options": {},
+    "attributes": {
+        "title": { "type": "string", "required": true },
+        "subtitle": { "type": "string" },
+        "description": { "type": "richtext" },
+        "icon": { "type": "string", "required": true },
+        "cardIcon": { "type": "string" },
+        "reverse": { "type": "boolean", "default": false },
+        "items": {
+            "type": "component",
+            "repeatable": true,
+            "component": "shared.list-item"
+        },
+        "image": { "type": "media", "multiple": false, "allowedTypes": ["images"] }
+    }
+}

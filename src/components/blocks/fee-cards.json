@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_blocks_fee_cards",
+  "info": { "displayName": "Fee Cards" },
+  "options": {},
+  "attributes": {
+    "Heading": { "type": "string" },
+    "description": { "type": "text" },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.price-item",
+      "required": true
+    }
+  }
+}

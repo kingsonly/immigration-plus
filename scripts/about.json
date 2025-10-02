@@ -1,0 +1,108 @@
+{
+  "data": {
+    "title": "About Us",
+    "description": "Learn about our story, values, and team.",
+    "locale": "en",
+    "blocks": [
+      {
+        "__component": "blocks.hero",
+        "icon": "Users",
+        "Title": "About Us",
+        "Subtitle": "Trusted immigration guidance, built on integrity and care",
+        "description": "<p>TENTACULAR IMMIGRATION SOLUTIONS LTD is your trusted partner in navigating the complex world of Canadian immigration. With years of experience and a passion for helping dreams come true, we're here to guide you every step of the way.</p>",
+        "ctas": [
+          { "label": "Book Free Consultation", "url": "/contact", "variant": "default" },
+          { "label": "Our Services", "url": "/services", "variant": "outline" }
+        ]
+      },
+
+      { "__component": "blocks.heading-section", "Heading": "Our Story", "description": "<p>Founded with a vision to make Canadian immigration accessible and successful for everyone, we have helped individuals and families achieve their Canadian dreams for over a decade.</p><p>Our journey began when our founder experienced firsthand the challenges of navigating Canada's immigration system. This inspired a client-first practice built on clarity, ethics, and results.</p><p>Today, our licensed team combines decades of experience with up-to-date knowledge of Canadian immigration law.</p>" },
+
+      { "__component": "blocks.heading-section", "Heading": "Our Core Values", "description": "These values guide everything we do." },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Values",
+        "Cards": [
+          { "title": "Integrity", "description": "Highest ethical standards and transparency.", "icon": "Shield", "lists": [] },
+          { "title": "Compassion", "description": "Empathy and genuine care in every case.", "icon": "Heart", "lists": [] },
+          { "title": "Excellence", "description": "Relentless focus on quality and outcomes.", "icon": "Target", "lists": [] },
+          { "title": "Reliability", "description": "Timely responses and efficient processing.", "icon": "Clock", "lists": [] }
+        ]
+      },
+
+      { "__component": "blocks.heading-section", "Heading": "Meet Our Expert Team", "description": "Licensed immigration consultants with years of experience." },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Team",
+        "Cards": [
+          {
+            "title": "Sarah Johnson",
+            "description": "Senior Immigration Consultant",
+            "icon": "Users",
+            "lists": [
+              { "listItem": "RCIC, MBA" },
+              { "listItem": "12+ years" },
+              { "listItem": "Express Entry, PNP Programs" }
+            ]
+          },
+          {
+            "title": "Michael Chen",
+            "description": "Business Immigration Specialist",
+            "icon": "Users",
+            "lists": [
+              { "listItem": "RCIC, CPA" },
+              { "listItem": "10+ years" },
+              { "listItem": "Start-up Visa, Investor Programs" }
+            ]
+          },
+          {
+            "title": "Priya Patel",
+            "description": "Family Sponsorship Expert",
+            "icon": "Users",
+            "lists": [
+              { "listItem": "RCIC, LLB" },
+              { "listItem": "8+ years" },
+              { "listItem": "Spouse, Parent & Grandparent Sponsorship" }
+            ]
+          }
+        ]
+      },
+
+      { "__component": "blocks.heading-section", "Heading": "Our Achievements", "description": "Numbers that reflect our commitment." },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Achievements",
+        "Cards": [
+          { "title": "500+", "description": "Successful Applications", "icon": "CheckCircle", "lists": [] },
+          { "title": "50+", "description": "Countries Served", "icon": "MapPin", "lists": [] },
+          { "title": "15+", "description": "Years Combined Experience", "icon": "Clock", "lists": [] },
+          { "title": "98%", "description": "Client Satisfaction Rate", "icon": "Heart", "lists": [] }
+        ]
+      },
+
+      { "__component": "blocks.heading-section", "Heading": "Why Choose Us?", "description": "What sets us apart." },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Why Choose",
+        "Cards": [
+          { "title": "Licensed & regulated consultants", "description": "", "icon": "ShieldCheck", "lists": [] },
+          { "title": "Personalized, strategy-led approach", "description": "", "icon": "Target", "lists": [] },
+          { "title": "Up-to-date knowledge of the law", "description": "", "icon": "FileText", "lists": [] },
+          { "title": "Transparent fees, no hidden costs", "description": "", "icon": "CheckCircle", "lists": [] },
+          { "title": "Multilingual support team", "description": "", "icon": "Users", "lists": [] },
+          { "title": "End-to-end service to landing", "description": "", "icon": "ArrowRight", "lists": [] },
+          { "title": "Strong history of results", "description": "", "icon": "Award", "lists": [] },
+          { "title": "Support after you arrive", "description": "", "icon": "HeartHandshake", "lists": [] }
+        ]
+      },
+
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Ready to Work With Us?",
+        "description": "Let’s discuss your goals and craft a strategy for success.",
+        "icon": "Heart",
+        "cta": { "label": "Get Started Today", "url": "/contact", "variant": "default" }
+      }
+    ]
+  }
+}

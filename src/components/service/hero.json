@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_service_heroes",
+  "info": {
+    "displayName": "Hero",
+    "description": "Hero section for a service"
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true
+    }
+  }
+}

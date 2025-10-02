@@ -1,0 +1,64 @@
+{
+    "collectionName": "components_blocks_business_immigration",
+    "info": {
+        "displayName": "Business Immigration Block",
+        "description": "Full business-immigration page block to be used inside Service.blocks dynamic zone"
+    },
+    "attributes": {
+        "hero": {
+            "type": "component",
+            "component": "business.hero",
+            "repeatable": false
+        },
+        "programs": {
+            "type": "component",
+            "component": "business.program",
+            "repeatable": true
+        },
+        "seServices": {
+            "type": "component",
+            "component": "business.service",
+            "repeatable": true
+        },
+        "howItWorks": {
+            "type": "component",
+            "component": "business.step",
+            "repeatable": true
+        },
+        "fees": {
+            "type": "component",
+            "component": "business.fee",
+            "repeatable": true
+        },
+        "govFees": {
+            "type": "component",
+            "component": "business.gov-fee",
+            "repeatable": true
+        },
+        "pnpOverview": {
+            "type": "component",
+            "component": "business.kv",
+            "repeatable": true
+        },
+        "streams": {
+            "type": "component",
+            "component": "business.stream",
+            "repeatable": true
+        },
+        "c11Benefits": {
+            "type": "component",
+            "component": "business.benefit",
+            "repeatable": true
+        },
+        "quoteCTA": {
+            "type": "component",
+            "component": "business.cta-button",
+            "repeatable": false
+        },
+        "postInvestmentCards": {
+            "type": "component",
+            "component": "business.card",
+            "repeatable": true
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "collectionName": "components_business_fee",
+    "info": { "displayName": "Fee" },
+    "attributes": {
+        "category": { "type": "string" },
+        "range": { "type": "string" },
+        "description": { "type": "text" },
+        "details": { "type": "json" },
+        "note": { "type": "string" }
+    }
+}

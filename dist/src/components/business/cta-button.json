@@ -1,0 +1,9 @@
+{
+    "collectionName": "components_business_cta_button",
+    "info": { "displayName": "CTA Button" },
+    "attributes": {
+        "label": { "type": "string" },
+        "href": { "type": "string" },
+        "emailSubject": { "type": "string" }
+    }
+}

@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_shared_nav_dropdown_links",
+  "info": {
+    "displayName": "Nav Dropdown Link",
+    "icon": "link",
+    "description": "Dropdown item for navigation link"
+  },
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": false
+    },
+    "icon": {
+      "type": "string"
+    }
+  }
+}

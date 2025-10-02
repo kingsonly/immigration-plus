@@ -14,11 +14,15 @@ pnpm-lock.yaml
 .env
 .env.*.local
 
+
 # os/editor
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
+AGENTS.md
+update-or-create-service.js
+upsert-single-type.js
 
 # uploads (keep out of git; store on S3/Cloudinary or persist on server)
 public/uploads/

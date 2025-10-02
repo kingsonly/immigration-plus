@@ -1,0 +1,167 @@
+{
+  "data": {
+    "title": "Tentacular Immigration — Homepage",
+    "description": "End-to-end Canadian immigration guidance: strategy, documents, submission, and beyond.",
+    "blocks": [
+      {
+        "__component": "blocks.hero",
+        "icon": "Home",
+        "Title": "Immigration Made Simple",
+        "Subtitle": "Your Canadian Dream",
+        "description": "<p>TENTACULAR IMMIGRATION SOLUTIONS LTD guides you through every step—strategy to submission. Licensed, transparent, and results-driven.</p>",
+        "ctas": [
+          { "label": "Start Your Journey", "url": "/services", "variant": "default", "icon": "ArrowRight" },
+          { "label": "About Us", "url": "/about", "variant": "outline", "icon": "Users" }
+        ]
+      },
+
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Your Immigration Journey",
+        "description": "Discover the pathway that's right for you. Each route offers unique opportunities to build your future in Canada."
+      },
+
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Services",
+        "description": "Explore our core services below.",
+        "Cards": [
+          {
+            "title": "Permanent Residency (PR)",
+            "description": "Your pathway to calling Canada home permanently.",
+            "icon": "Home",
+            "lists": [
+              { "listItem": "Live, work, and study anywhere in Canada" },
+              { "listItem": "Express Entry & PNP pathways" }
+            ],
+            "link": { "label": "Learn More", "url": "/services/permanent-residency", "variant": "link" }
+          },
+          {
+            "title": "Citizenship",
+            "description": "Become a citizen and complete your Canadian journey.",
+            "icon": "Award",
+            "lists": [
+              { "listItem": "Eligibility, test & oath guidance" },
+              { "listItem": "Proof of citizenship & applications" }
+            ],
+            "link": { "label": "Learn More", "url": "/services/citizenship", "variant": "link" }
+          },
+          {
+            "title": "Business & Investor Immigration",
+            "description": "Invest in your future and Canada's economy.",
+            "icon": "BriefcaseBusiness",
+            "lists": [
+              { "listItem": "Entrepreneur & investor programs" },
+              { "listItem": "Job creation & innovation focus" }
+            ],
+            "link": { "label": "Learn More", "url": "/services/business-immigration", "variant": "link" }
+          },
+          {
+            "title": "Study",
+            "description": "Educational opportunities await.",
+            "icon": "GraduationCap",
+            "lists": [
+              { "listItem": "Study permits & extensions" },
+              { "listItem": "PGWP & PR pathways" }
+            ],
+            "link": { "label": "Learn More", "url": "/services/study", "variant": "link" }
+          },
+          {
+            "title": "Work Permits",
+            "description": "Career opportunities await.",
+            "icon": "Briefcase",
+            "lists": [
+              { "listItem": "LMIA & LMIA-exempt categories" },
+              { "listItem": "Open & employer-specific permits" }
+            ],
+            "link": { "label": "Learn More", "url": "/services/work-permit", "variant": "link" }
+          },
+          {
+            "title": "Visitors Visa",
+            "description": "Welcome visitors from around the world.",
+            "icon": "Plane",
+            "lists": [
+              { "listItem": "TRVs, eTAs, extensions" },
+              { "listItem": "Tourism, family visits, business trips" }
+            ],
+            "link": { "label": "Learn More", "url": "/services/visitors-visa", "variant": "link" }
+          },
+          {
+            "title": "Family Sponsorship",
+            "description": "Reunite with your loved ones in Canada.",
+            "icon": "HeartHandshake",
+            "lists": [
+              { "listItem": "Spouse/partner, children" },
+              { "listItem": "Parents & grandparents programs" }
+            ],
+            "link": { "label": "Learn More", "url": "/services/family-sponsorship", "variant": "link" }
+          },
+          {
+            "title": "Refugee & H&C",
+            "description": "Support when safety, dignity, or compassion are at stake.",
+            "icon": "ShieldCheck",
+            "lists": [
+              { "listItem": "Refugee claims & PRRA" },
+              { "listItem": "Humanitarian & compassionate cases" }
+            ],
+            "link": { "label": "Learn More", "url": "/services/refugee-hc", "variant": "link" }
+          },
+          {
+            "title": "Recruitment Services",
+            "description": "Your gateway to hiring or working in Canada.",
+            "icon": "UserSearch",
+            "lists": [
+              { "listItem": "LMIA strategy & submissions" },
+              { "listItem": "Hospitality, healthcare, tech, agriculture" }
+            ],
+            "link": { "label": "Learn More", "url": "/services/recruitment", "variant": "link" }
+          }
+        ]
+      },
+
+      {
+        "__component": "blocks.split-feature",
+        "title": "Regulated, Transparent, Results-Driven",
+        "subtitle": "Work with licensed consultants committed to integrity and excellence.",
+        "description": "<p>We tailor strategies to your profile and keep you informed at every step.</p>",
+        "icon": "ShieldCheck",
+        "cardIcon": "Users",
+        "reverse": false,
+        "items": [
+          { "listItem": "Licensed RCIC professionals" },
+          { "listItem": "Personalized strategies & timelines" },
+          { "listItem": "Up-to-date on IRCC rules" }
+        ]
+      },
+
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Why Work With Us",
+        "description": "Three quick reasons clients choose us.",
+        "Cards": [
+          { "title": "Licensed RCIC", "description": "Trusted, regulated professionals", "icon": "Award" },
+          { "title": "Personalized Strategy", "description": "Tailored timelines & plans", "icon": "Target" },
+          { "title": "Always Up-to-date", "description": "We track IRCC changes for you", "icon": "Globe" }
+        ]
+      },
+
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Get Started",
+        "description": "Book a consultation and take the first step toward life in Canada.",
+        "cta": { "label": "Book Consultation", "url": "/contact", "variant": "default", "icon": "ArrowRight" }
+      },
+
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "CTA",
+        "description": "Quick reasons clients choose us.",
+        "Cards": [
+          { "title": "Free Consultation", "description": "30-minute initial assessment", "icon": "Users" },
+          { "title": "Licensed RCIC", "description": "Trusted, regulated professionals", "icon": "Award" },
+          { "title": "Global Clients", "description": "We serve 50+ countries", "icon": "Globe" }
+        ]
+      }
+    ]
+  }
+}

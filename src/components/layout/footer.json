@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_layout_footers",
+  "info": {
+    "displayName": "Footer"
+  },
+  "options": {},
+  "attributes": {
+    "FooterLinks": {
+      "type": "component",
+      "component": "shared.nav-link",
+      "repeatable": true
+    },
+    "FooterCopyright": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

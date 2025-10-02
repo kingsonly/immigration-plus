@@ -1,0 +1,85 @@
+{
+  "data": {
+    "title": "Citizenship",
+    "slug": "citizenship",
+    "summary": "Canadian citizenship overview and process",
+    "blocks": [
+      {
+        "__component": "blocks.hero",
+        "Title": "Canadian Citizenship",
+        "Subtitle": "Become a citizen and complete your Canadian journey."
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Eligibility Requirements",
+        "description": "Key criteria to qualify for Canadian citizenship"
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "",
+        "description": "",
+        "Cards": [
+          { "icon": "Users", "title": "PR Status", "description": "Hold Permanent Resident status; not under review for fraud or removal." },
+          { "icon": "Users", "title": "Physical Presence", "description": "At least 1,095 days in Canada within the last 5 years (some half-day credits)." },
+          { "icon": "Users", "title": "Income Tax Filing", "description": "Filed taxes in at least 3 of the last 5 years, if required." },
+          { "icon": "Users", "title": "Language (18–54)", "description": "CLB 4+ in speaking and listening (English or French)." },
+          { "icon": "Users", "title": "Citizenship Test (18–54)", "description": "20 questions on Canada; score 75% or higher." },
+          { "icon": "Users", "title": "Oath of Citizenship", "description": "Attend ceremony and take the oath to become a citizen." }
+        ]
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Other Requirements",
+        "description": "Additional considerations you may need to meet",
+        "Cards": [
+          { "icon": "Info", "title": "First-Generation Limit", "description": "Children born abroad to Canadian parents may still need a certificate — check IRCC’s rules." },
+          { "icon": "AlertCircle", "title": "Accommodations & Waivers", "description": "Request help or exemptions for language, testing, or the oath in special circumstances." },
+          { "icon": "Shield", "title": "Prohibitions", "description": "Certain criminality or removal orders may affect eligibility." }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Application Process",
+        "description": "From initial consultation to taking the oath"
+      },
+      {
+        "__component": "blocks.application-process",
+        "title": "Application Process",
+        "icon": "FileText",
+        "items": [
+          { "listItem": "✔️ Confirm You Meet Eligibility: Use IRCC’s Physical Presence Calculator; Gather language proof and tax records; Complete the citizenship test study materials" },
+          { "listItem": "✔️ Prepare & Submit Your Application: Use the adult PR application package; Include all supporting documents and fees" },
+          { "listItem": "✔️ Take the Citizenship Test and/or Interview (if required): Administered online or in person for applicants aged 18–54" },
+          { "listItem": "✔️ Attend Your Citizenship Ceremony & Take the Oath: Official ceremony where you complete the oath and receive your citizenship" }
+        ]
+      },
+      {
+        "__component": "blocks.process-steps-block",
+        "title": "Our Process",
+        "description": "We follow a proven 5-step process",
+        "steps": [
+          { "stepNumber": "01", "title": "Initial Consultation", "description": "We assess your profile and discuss your goals." },
+          { "stepNumber": "02", "title": "Strategy Development", "description": "Personalized plan for your situation." },
+          { "stepNumber": "03", "title": "Document Preparation", "description": "Gather and prepare all required documents." },
+          { "stepNumber": "04", "title": "Application Submission", "description": "Submit your application and monitor progress." },
+          { "stepNumber": "05", "title": "Ongoing Support", "description": "Support until you achieve your goals." }
+        ]
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Why Choose Our Services?",
+        "description": "We provide comprehensive support throughout your journey",
+        "Cards": [
+          { "icon": "FileText", "title": "Expert Documentation", "description": "Accurate, compliant applications prepared to current requirements." },
+          { "icon": "Clock", "title": "Timely Processing", "description": "Proactive updates and timeline management." },
+          { "icon": "Users", "title": "Personalized Support", "description": "Tailored strategies and one-on-one guidance." }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Ready to Get Started?",
+        "description": "Book a free consultation to discuss your eligibility and next steps."
+      }
+    ]
+  }
+}

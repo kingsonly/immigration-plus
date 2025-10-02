@@ -1,0 +1,9 @@
+{
+    "collectionName": "components_business_benefit",
+    "info": { "displayName": "Benefit" },
+    "attributes": {
+        "iconName": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "text" }
+    }
+}

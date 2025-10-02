@@ -1,0 +1,9 @@
+{
+    "collectionName": "components_business_service",
+    "info": { "displayName": "Service List Item" },
+    "attributes": {
+        "iconName": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "text" }
+    }
+}

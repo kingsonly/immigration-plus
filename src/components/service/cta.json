@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_service_ctas",
+  "info": {
+    "displayName": "CTA",
+    "description": "Call to action block"
+  },
+  "attributes": {
+    "text": {
+      "type": "string",
+      "required": true
+    },
+    "buttonLabel": {
+      "type": "string",
+      "required": true
+    },
+    "buttonLink": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

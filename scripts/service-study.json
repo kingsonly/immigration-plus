@@ -1,0 +1,532 @@
+{
+  "data": {
+    "title": "Study in Canada",
+    "slug": "study",
+    "summary": "Study permits and student pathways",
+    "blocks": [
+      {
+        "__component": "blocks.hero",
+        "icon": "GraduationCap",
+        "Title": "Study in Canada",
+        "Subtitle": "Your Academic Journey Begins Here",
+        "description": "<p>A Canadian education is more than a degree - it is a pathway to global opportunity, lifelong connections, and a future without borders.</p><p>Canada's education system delivers high-quality programs from secondary school to post-graduate study. Each year thousands of international students choose Canada to advance their education, build their future, and unlock long-term immigration pathways.</p>",
+        "ctas": [
+          {
+            "label": "Book Study Consultation",
+            "url": "/contact",
+            "variant": "default"
+          },
+          {
+            "label": "Download Study Guide",
+            "url": "/resources",
+            "variant": "outline"
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Your 4-step success roadmap",
+        "description": "Move from acceptance letter to permanent residence with a clear plan at every stage.",
+        "icon": "Target"
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Your 4-step success roadmap",
+        "description": "Follow these four phases to study, work, and settle in Canada.",
+        "Cards": [
+          {
+            "icon": "Target",
+            "title": "Step 01 - Assess and apply",
+            "description": "Select the right school and program while preparing a complete application.",
+            "lists": [
+              {
+                "listItem": "School and program selection guidance"
+              },
+              {
+                "listItem": "Designated Learning Institution (DLI) verification"
+              },
+              {
+                "listItem": "Study permit application support"
+              },
+              {
+                "listItem": "Document preparation and review"
+              }
+            ]
+          },
+          {
+            "icon": "BookOpen",
+            "title": "Step 02 - Study and work",
+            "description": "Understand on-campus, off-campus, and co-op opportunities while you study.",
+            "lists": [
+              {
+                "listItem": "On-campus employment guidance"
+              },
+              {
+                "listItem": "Off-campus work eligibility (20 hours per week)"
+              },
+              {
+                "listItem": "Co-op and internship program support"
+              },
+              {
+                "listItem": "Work permit compliance coaching"
+              }
+            ]
+          },
+          {
+            "icon": "Briefcase",
+            "title": "Step 03 - Post-graduation work permit",
+            "description": "Prepare early so you qualify for Canada's PGWP program.",
+            "lists": [
+              {
+                "listItem": "PGWP eligibility assessment"
+              },
+              {
+                "listItem": "Application timing guidance"
+              },
+              {
+                "listItem": "Document preparation support"
+              },
+              {
+                "listItem": "Work permit duration planning"
+              }
+            ]
+          },
+          {
+            "icon": "Award",
+            "title": "Step 04 - Apply for permanent residence",
+            "description": "Use Canadian education and experience to qualify for PR pathways.",
+            "lists": [
+              {
+                "listItem": "Express Entry profile optimization"
+              },
+              {
+                "listItem": "Provincial Nominee Program guidance"
+              },
+              {
+                "listItem": "Canadian Experience Class strategy"
+              },
+              {
+                "listItem": "PR application preparation"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Study permit eligibility and documentation",
+        "description": "Understand the core requirements and paperwork for a strong study permit application.",
+        "icon": "FileText"
+      },
+      {
+        "__component": "blocks.application-process",
+        "title": "Basic eligibility",
+        "icon": "CheckCircle",
+        "items": [
+          {
+            "listItem": "Letter of acceptance from a Designated Learning Institution (DLI)"
+          },
+          {
+            "listItem": "Proof of funds covering tuition, living costs, and return travel"
+          },
+          {
+            "listItem": "Background checks or police certificates when requested"
+          },
+          {
+            "listItem": "Medical exam if required by Immigration, Refugees and Citizenship Canada"
+          },
+          {
+            "listItem": "Demonstrate intention to leave Canada after studies"
+          }
+        ]
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Required documents",
+        "description": "Gather these documents before submitting your study permit application.",
+        "Cards": [
+          {
+            "icon": "FileText",
+            "title": "Letter of acceptance",
+            "description": "Issued by your Designated Learning Institution. Status: Required."
+          },
+          {
+            "icon": "User",
+            "title": "Proof of identity",
+            "description": "Valid passport or travel document. Status: Required."
+          },
+          {
+            "icon": "Building",
+            "title": "Proof of funds",
+            "description": "Tuition, living costs, and return travel. Status: Required."
+          },
+          {
+            "icon": "Mail",
+            "title": "Letter of explanation",
+            "description": "Statement of purpose outlining study goals. Status: Optional."
+          },
+          {
+            "icon": "Shield",
+            "title": "Provincial/Territorial Attestation Letter",
+            "description": "PAL or TAL confirming your study spot allocation. Status: Required unless exempt."
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Provincial/Territorial Attestation Letter (PAL/TAL)",
+        "description": "Confirm whether you need a PAL or TAL under the current provincial study quota.",
+        "icon": "Shield"
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "PAL/TAL guidance",
+        "description": "Check your program type to see if the attestation letter is required.",
+        "Cards": [
+          {
+            "icon": "Shield",
+            "title": "Who needs a PAL/TAL",
+            "lists": [
+              {
+                "listItem": "New undergraduate and graduate students"
+              },
+              {
+                "listItem": "Certificate and diploma program enrollees"
+              },
+              {
+                "listItem": "ESL or FSL program participants"
+              }
+            ]
+          },
+          {
+            "icon": "AlertCircle",
+            "title": "Not required for",
+            "lists": [
+              {
+                "listItem": "High school students"
+              },
+              {
+                "listItem": "Most master's and PhD students"
+              },
+              {
+                "listItem": "Exchange or visiting students"
+              },
+              {
+                "listItem": "Extensions at the same institution and level"
+              }
+            ]
+          },
+          {
+            "icon": "Info",
+            "title": "PAL/TAL quick facts",
+            "lists": [
+              {
+                "listItem": "Issued after you accept admission and pay any required deposit"
+              },
+              {
+                "listItem": "Requested by the Designated Learning Institution on your behalf"
+              },
+              {
+                "listItem": "Valid through the current provincial allocation period"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Medical exam requirements",
+        "description": "You may need a panel physician exam if any of the following apply.",
+        "Cards": [
+          {
+            "icon": "Heart",
+            "title": "Healthcare or education settings",
+            "description": "Required for studies that involve work with patients, children, or vulnerable people."
+          },
+          {
+            "icon": "Clock",
+            "title": "Extended stay",
+            "description": "Mandated when you plan to remain in Canada for longer than six months."
+          },
+          {
+            "icon": "Globe",
+            "title": "High-risk countries",
+            "description": "Needed if you have lived in a country with higher health screening requirements."
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Who we support",
+        "description": "Comprehensive assistance for international students at every academic level.",
+        "icon": "Users"
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Who we support",
+        "description": "Choose the service package that matches your education level and goals.",
+        "Cards": [
+          {
+            "icon": "BookOpen",
+            "title": "High school students",
+            "description": "Secondary education programs and preparation for post-secondary studies.",
+            "lists": [
+              {
+                "listItem": "School selection guidance"
+              },
+              {
+                "listItem": "Custodianship arrangements"
+              },
+              {
+                "listItem": "Minor applicant support"
+              },
+              {
+                "listItem": "Guardian documentation"
+              }
+            ]
+          },
+          {
+            "icon": "GraduationCap",
+            "title": "College and university",
+            "description": "Undergraduate and graduate degree pathways across Canada.",
+            "lists": [
+              {
+                "listItem": "Program comparison and admissions planning"
+              },
+              {
+                "listItem": "Co-op and internship strategy"
+              },
+              {
+                "listItem": "Study permit applications"
+              },
+              {
+                "listItem": "Scholarship and funding guidance"
+              }
+            ]
+          },
+          {
+            "icon": "Globe",
+            "title": "Language schools",
+            "description": "ESL, FSL, and vocational pathway programs.",
+            "lists": [
+              {
+                "listItem": "Language program placement"
+              },
+              {
+                "listItem": "Vocational training guidance"
+              },
+              {
+                "listItem": "Study permit applications"
+              },
+              {
+                "listItem": "Pathway-to-college planning"
+              }
+            ]
+          },
+          {
+            "icon": "Award",
+            "title": "Vocational programs",
+            "description": "Certificate and diploma options for skilled trades.",
+            "lists": [
+              {
+                "listItem": "Program selection and admissions"
+              },
+              {
+                "listItem": "Industry connections"
+              },
+              {
+                "listItem": "Work-study opportunities"
+              },
+              {
+                "listItem": "Career pathway planning"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Our study permit services",
+        "description": "End-to-end guidance from admissions to long-term immigration planning.",
+        "icon": "Briefcase"
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Our study permit services",
+        "description": "Choose the support you need for every stage of your application.",
+        "Cards": [
+          {
+            "icon": "Target",
+            "title": "School and program selection",
+            "description": "Match with DLIs that align with your education goals."
+          },
+          {
+            "icon": "FileText",
+            "title": "Statement of purpose",
+            "description": "Draft and refine a compelling study plan."
+          },
+          {
+            "icon": "Users",
+            "title": "Custodianship support",
+            "description": "Guidance for minors and parental authorization."
+          },
+          {
+            "icon": "CheckCircle",
+            "title": "Application support",
+            "description": "Complete study permit submissions with compliance checks."
+          },
+          {
+            "icon": "Briefcase",
+            "title": "PGWP planning",
+            "description": "Plan ahead to qualify for the Post-Graduation Work Permit."
+          },
+          {
+            "icon": "Award",
+            "title": "PR pathway guidance",
+            "description": "Map long-term options toward permanent residence."
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Work in Canada after graduation",
+        "description": "Set yourself up for success with the Post-Graduation Work Permit (PGWP).",
+        "icon": "Briefcase"
+      },
+      {
+        "__component": "blocks.application-process",
+        "title": "PGWP requirements",
+        "icon": "Briefcase",
+        "items": [
+          {
+            "listItem": "Complete a full-time program of at least eight months"
+          },
+          {
+            "listItem": "Apply within 90 days of receiving proof of graduation"
+          },
+          {
+            "listItem": "Hold a valid study permit when you apply"
+          },
+          {
+            "listItem": "Graduate from an eligible Designated Learning Institution"
+          },
+          {
+            "listItem": "Ensure your program qualifies for the PGWP"
+          }
+        ]
+      },
+      {
+        "__component": "blocks.application-process",
+        "title": "How we support your PGWP and PR goals",
+        "icon": "Star",
+        "items": [
+          {
+            "listItem": "Determine PGWP eligibility and ideal timing"
+          },
+          {
+            "listItem": "Prepare a complete and accurate PGWP application"
+          },
+          {
+            "listItem": "Plan the transition to Express Entry or provincial programs"
+          },
+          {
+            "listItem": "Provide strategic career and location planning for PR outcomes"
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Pathway to permanent residence",
+        "description": "Translate your education and Canadian experience into long-term status.",
+        "icon": "TrendingUp"
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Long-term PR support",
+        "description": "Build a pathway from studies and work experience to permanent residence.",
+        "Cards": [
+          {
+            "icon": "Target",
+            "title": "PR program exploration",
+            "description": "Understand Canadian Experience Class, Express Entry, and PNP options."
+          },
+          {
+            "icon": "Clock",
+            "title": "Timeline understanding",
+            "description": "Track eligibility milestones and work experience requirements."
+          },
+          {
+            "icon": "MapPin",
+            "title": "Strategic planning",
+            "description": "Align career choices and location with immigration pathways."
+          },
+          {
+            "icon": "FileText",
+            "title": "Application preparation",
+            "description": "Submit strong, compliant PR applications with RCIC guidance."
+          }
+        ]
+      },
+      {
+        "__component": "blocks.heading-section",
+        "Heading": "Ready to begin your Canadian education journey?",
+        "description": "A strong study permit application combines the right documents, clear intentions, and expert guidance. Our RCIC can help you navigate every requirement with confidence.",
+        "icon": "GraduationCap",
+        "cta": {
+          "label": "Book Study Consultation",
+          "url": "/contact",
+          "variant": "default"
+        }
+      },
+      {
+        "__component": "blocks.application-process",
+        "title": "Strong study permit checklist",
+        "icon": "CheckCircle",
+        "items": [
+          {
+            "listItem": "Accepted offer from a Designated Learning Institution"
+          },
+          {
+            "listItem": "PAL or TAL confirmation when required"
+          },
+          {
+            "listItem": "Proof of funds and detailed travel plans"
+          },
+          {
+            "listItem": "Clean background and medical clearance"
+          },
+          {
+            "listItem": "Clear intention to return home after completing studies"
+          }
+        ]
+      },
+      {
+        "__component": "blocks.card-grid",
+        "Heading": "Stay connected",
+        "description": "Choose the resource that helps you take the next step today.",
+        "Cards": [
+          {
+            "icon": "Phone",
+            "title": "Consult with an RCIC",
+            "description": "Book a call to review your study goals and immigration plan.",
+            "link": {
+              "label": "Book Consultation",
+              "url": "/contact",
+              "variant": "default"
+            }
+          },
+          {
+            "icon": "FileText",
+            "title": "Study resources",
+            "description": "Browse planning tools, document checklists, and success tips.",
+            "link": {
+              "label": "Visit Resources",
+              "url": "/resources",
+              "variant": "outline"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
