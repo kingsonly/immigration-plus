@@ -64,6 +64,25 @@
         "image": null
       }
     ],
-    "FooterCopyright": "© 2025 TENTACULAR IMMIGRATION SOLUTIONS LTD. All rights reserved."
+    "ContactDetails": [
+      {
+        "label": "Call Us",
+        "value": "+1 (604) 555-1234",
+        "type": "phone",
+        "href": "tel:+16045551234"
+      },
+      {
+        "label": "Email",
+        "value": "info@coming2canada.co",
+        "type": "email",
+        "href": "mailto:info@coming2canada.co"
+      },
+      {
+        "label": "Location",
+        "value": "Vancouver, British Columbia",
+        "type": "location"
+      }
+    ],
+    "FooterCopyright": "Ac 2025 TENTACULAR IMMIGRATION SOLUTIONS LTD. All rights reserved."
   }
 }

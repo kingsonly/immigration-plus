@@ -555,6 +555,7 @@ export interface LayoutFooter extends Struct.ComponentSchema {
     displayName: 'Footer';
   };
   attributes: {
+    ContactDetails: Schema.Attribute.Component<'shared.contact-detail', true>;
     FooterCopyright: Schema.Attribute.String;
     FooterLinks: Schema.Attribute.Component<'shared.nav-link', true>;
   };
@@ -657,6 +658,23 @@ export interface SharedComparisonRow extends Struct.ComponentSchema {
     icon: Schema.Attribute.String;
     lmiaRequired: Schema.Attribute.String;
     permitType: Schema.Attribute.String;
+  };
+}
+
+export interface SharedContactDetail extends Struct.ComponentSchema {
+  collectionName: 'components_shared_contact_details';
+  info: {
+    description: 'Single contact detail item for footer contact section.';
+    displayName: 'Contact Detail';
+  };
+  attributes: {
+    href: Schema.Attribute.String;
+    label: Schema.Attribute.String;
+    type: Schema.Attribute.Enumeration<
+      ['phone', 'email', 'location', 'other']
+    > &
+      Schema.Attribute.DefaultTo<'other'>;
+    value: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
 
@@ -910,6 +928,7 @@ declare module '@strapi/strapi' {
       'shared.button': SharedButton;
       'shared.card': SharedCard;
       'shared.comparison-row': SharedComparisonRow;
+      'shared.contact-detail': SharedContactDetail;
       'shared.cta': SharedCta;
       'shared.featured-item': SharedFeaturedItem;
       'shared.list-item': SharedListItem;

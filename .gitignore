@@ -24,6 +24,7 @@ AGENTS.md
 update-or-create-service.js
 upsert-single-type.js
 seeds/seed-resources.mjs
+tasks.md
 
 # uploads (keep out of git; store on S3/Cloudinary or persist on server)
 public/uploads/
