@@ -8,12 +8,21 @@ export type FooterLink = {
   url?: string | null;
 };
 
+export type ContactDetail = {
+  id: number;
+  label?: string | null;
+  value: string;
+  type?: "phone" | "email" | "location" | "other" | null;
+  href?: string | null;
+};
+
 export type FooterProps = {
   links: FooterLink[];
+  contactDetails?: ContactDetail[];
   copyright?: string | null;
 };
 
-function fallback(): FooterProps {
+function fallback(): Required<FooterProps> {
   return {
     links: [
       { id: 1, label: "Permanent Residency", url: "/services/permanent-residency" },
@@ -30,12 +39,61 @@ function fallback(): FooterProps {
       { id: 12, label: "Success Stories", url: "/success-stories" },
       { id: 13, label: "Contact", url: "/contact" }
     ],
-    copyright: "© 2025 TENTACULAR IMMIGRATION SOLUTIONS LTD. All rights reserved.",
+    contactDetails: [
+      {
+        id: 1,
+        label: "Call Us",
+        value: "+1 (604) 555-1234",
+        type: "phone",
+        href: "tel:+16045551234"
+      },
+      {
+        id: 2,
+        label: "Email",
+        value: "info@coming2canada.co",
+        type: "email",
+        href: "mailto:info@coming2canada.co"
+      },
+      {
+        id: 3,
+        label: "Location",
+        value: "Vancouver, British Columbia",
+        type: "location"
+      }
+    ],
+    copyright: "Ac 2025 TENTACULAR IMMIGRATION SOLUTIONS LTD. All rights reserved.",
   };
 }
 
+function resolveContactHref(detail: ContactDetail): string | null {
+  if (detail.href && detail.href.trim().length > 0) return detail.href;
+
+  const value = detail.value?.trim();
+  if (!value) return null;
+
+  if (detail.type === "phone") {
+    const digits = value.replace(/[^0-9+]/g, "");
+    return digits ? `tel:${digits}` : null;
+  }
+
+  if (detail.type === "email") {
+    return `mailto:${value}`;
+  }
+
+  return null;
+}
+
+function fallbackLabel(detail: ContactDetail): string | null {
+  if (detail.label && detail.label.trim()) return detail.label;
+  if (!detail.type) return null;
+  return detail.type.charAt(0).toUpperCase() + detail.type.slice(1);
+}
+
 export default function FooterDynamic(props: FooterProps) {
-  const data = props?.links && props.links.length ? props : fallback();
+  const fallbackData = fallback();
+  const links = props.links?.length ? props.links : fallbackData.links;
+  const contactDetails = props.contactDetails?.length ? props.contactDetails : fallbackData.contactDetails;
+  const copyright = props.copyright ?? fallbackData.copyright;
 
   return (
     <footer className="bg-gray-900 text-white py-12">
@@ -50,12 +108,33 @@ export default function FooterDynamic(props: FooterProps) {
             </div>
             <p className="text-gray-400 mb-4">TENTACULAR IMMIGRATION SOLUTIONS LTD</p>
             <p className="text-gray-400">Your trusted partner for Canadian immigration success.</p>
+
+            <ul className="mt-6 space-y-3 text-gray-400">
+              {contactDetails.map((detail) => {
+                const href = resolveContactHref(detail);
+                const label = fallbackLabel(detail);
+                const key = detail.id ?? `${detail.type ?? "detail"}-${detail.value}`;
+
+                return (
+                  <li key={key} className="flex flex-col">
+                    {label ? <span className="text-sm font-semibold text-white">{label}</span> : null}
+                    {href ? (
+                      <a href={href} className="hover:text-white transition">
+                        {detail.value}
+                      </a>
+                    ) : (
+                      <span>{detail.value}</span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
           </div>
 
           <div>
             <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
             <ul className="space-y-2 text-gray-400">
-              {data.links.slice(0, 8).map((l) => (
+              {links.slice(0, 8).map((l) => (
                 <li key={l.id}>
                   <Link href={l.url || "#"} className="hover:text-white">
                     {l.label}
@@ -68,7 +147,7 @@ export default function FooterDynamic(props: FooterProps) {
           <div>
             <h3 className="font-semibold text-lg mb-4">More</h3>
             <ul className="space-y-2 text-gray-400">
-              {data.links.slice(8).map((l) => (
+              {links.slice(8).map((l) => (
                 <li key={l.id}>
                   <Link href={l.url || "#"} className="hover:text-white">
                     {l.label}
@@ -95,7 +174,7 @@ export default function FooterDynamic(props: FooterProps) {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>{data.copyright}</p>
+          <p>{copyright}</p>
         </div>
       </div>
     </footer>

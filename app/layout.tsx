@@ -1,4 +1,4 @@
-﻿// app/layout.tsx
+// app/layout.tsx
 import type React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -46,6 +46,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         id: n.id,
         label: n.label,
         url: n.url || "#",
+      })) || [],
+    contactDetails:
+      global?.Footer?.ContactDetails?.map((detail) => ({
+        id: detail.id,
+        label: detail.label || null,
+        value: detail.value,
+        type: detail.type || null,
+        href: detail.href || null,
       })) || [],
     copyright: global?.Footer?.FooterCopyright,
   };

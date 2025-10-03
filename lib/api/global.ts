@@ -21,9 +21,18 @@ export type HeaderComponent = {
   NavLink: NavLink[];
 };
 
+export type FooterContactDetail = {
+  id: number;
+  label?: string | null;
+  value: string;
+  type?: "phone" | "email" | "location" | "other" | null;
+  href?: string | null;
+};
+
 export type FooterComponent = {
   id: number;
   FooterLinks: NavLink[];
+  ContactDetails: FooterContactDetail[];
   FooterCopyright?: string | null;
 };
 
@@ -41,7 +50,7 @@ export type GlobalResponse = {
 // Fetch Global with populated components
 export async function fetchGlobal(): Promise<GlobalResponse | null> {
   const base = process.env.NEXT_PUBLIC_STRAPI_URL || process.env.STRAPI_URL || "http://localhost:1337";
-  const url = `${base.replace(/\/$/, "")}/api/global?populate[Header][populate][NavLink][populate]=dropdown,image&populate[Header][populate]=Logo,NavLink&populate[Footer][populate]=FooterLinks&publicationState=preview`;
+  const url = `${base.replace(/\/$/, "")}/api/global?populate[Header][populate][NavLink][populate]=dropdown,image&populate[Header][populate]=Logo,NavLink&populate[Footer][populate]=FooterLinks,ContactDetails&publicationState=preview`;
 
   try {
     const res = await fetch(url, { cache: "no-store" });
@@ -107,6 +116,15 @@ export async function fetchGlobal(): Promise<GlobalResponse | null> {
                       }))
                     : [],
                 }))
+              : [],
+            ContactDetails: Array.isArray(data.Footer.ContactDetails)
+              ? data.Footer.ContactDetails.map((c: any) => ({
+                  id: c.id,
+                  label: c.label ?? null,
+                  value: c.value ?? "",
+                  type: c.type ?? null,
+                  href: c.href ?? null,
+                })).filter((c: FooterContactDetail) => Boolean(c.value))
               : [],
             FooterCopyright: data.Footer.FooterCopyright ?? null,
           }
