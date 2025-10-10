@@ -1,0 +1,69 @@
+{
+  "title": "Success Stories",
+  "description": "Real stories from real people who achieved their Canadian immigration dreams.",
+  "blocks": [
+    {
+      "__component": "blocks.hero",
+      "Title": "Success Stories",
+      "Subtitle": "Real People. Real Outcomes.",
+      "description": "<p>Our clients trusted us with their Canadian dreams — read how we got them across the finish line.</p>",
+      "ctas": [
+        { "label": "Start Your Journey", "url": "/contact", "variant": "default", "icon": "ArrowRight" },
+        { "label": "See Our Services", "url": "/services", "variant": "outline", "icon": "Info" }
+      ]
+    },
+    {
+      "__component": "blocks.stats-grid",
+      "Heading": "By the Numbers",
+      "description": "A snapshot of our track record",
+      "stats": [
+        { "number": "500+", "label": "Success Stories", "icon": "Users" },
+        { "number": "98%", "label": "Approval Rate", "icon": "Star" },
+        { "number": "50+", "label": "Countries", "icon": "MapPin" },
+        { "number": "15+", "label": "Years Experience", "icon": "Calendar" }
+      ]
+    },
+    {
+      "__component": "blocks.story-carousel",
+      "Heading": "Featured Success Stories",
+      "description": "Discover how our clients achieved their Canadian immigration goals",
+      "mode": "manual",
+      "limit": 10,
+      "stories": {
+        "set": [
+          { "slug": "sarah-michael-chen" },
+          { "slug": "priya-patel" },
+          { "slug": "ahmed-fatima-al-rashid" },
+          { "slug": "maria-rodriguez" }
+        ]
+      }
+    },
+    {
+      "__component": "blocks.testimonials-grid",
+      "Heading": "What Our Clients Say",
+      "description": "Hear from more clients who trusted us with their immigration journey",
+      "testimonials": [
+        { "name": "David Kim", "country": "South Korea", "program": "Canadian Experience Class", "rating": 5, "text": "Professional, knowledgeable, and always available to answer questions. They made my PR application stress-free." },
+        { "name": "Elena Volkov", "country": "Russia", "program": "Federal Skilled Trades", "rating": 5, "text": "I thought my trade skills wouldn't be enough, but they showed me the perfect pathway. Now I'm a permanent resident!" },
+        { "name": "James Thompson", "country": "UK", "program": "Provincial Nominee Program", "rating": 5, "text": "The team's expertise in PNP programs is outstanding. They found the perfect province match for my profile." },
+        { "name": "Aisha Okonkwo", "country": "Nigeria", "program": "Study Permit to PR", "rating": 5, "text": "From study permit to permanent residency - they guided me through every step of my Canadian journey." }
+      ]
+    },
+    {
+      "__component": "blocks.video-grid",
+      "Heading": "Video Testimonials",
+      "description": "Watch our clients share their immigration success stories",
+      "videos": [
+        { "name": "Roberto Silva", "country": "Brazil", "program": "Express Entry", "thumbnailUrl": "/placeholder.svg?height=300&width=400", "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+        { "name": "Li Wei", "country": "China", "program": "PNP - British Columbia", "thumbnailUrl": "/placeholder.svg?height=300&width=400", "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+        { "name": "Olumide Johnson", "country": "Nigeria", "program": "Family Sponsorship", "thumbnailUrl": "/placeholder.svg?height=300&width=400", "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+      ]
+    },
+    {
+      "__component": "blocks.cta-section",
+      "Heading": "Ready to Write Your Success Story?",
+      "description": "Join hundreds of successful immigrants who trusted us with their Canadian dreams. Your success story could be next!",
+      "cta": { "label": "Start Your Journey Today", "url": "/contact", "variant": "default", "icon": "ArrowRight" }
+    }
+  ]
+}

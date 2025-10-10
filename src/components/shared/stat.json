@@ -1,0 +1,9 @@
+{
+  "collectionName": "components_shared_stats",
+  "info": { "displayName": "Stat", "description": "" },
+  "attributes": {
+    "number": { "type": "string", "required": true },
+    "label": { "type": "string", "required": true },
+    "icon": { "type": "string" }
+  }
+}

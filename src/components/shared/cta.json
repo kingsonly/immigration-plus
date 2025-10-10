@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_shared_cta",
+  "info": { "displayName": "CTA" },
+  "options": {},
+  "attributes": {
+    "label": { "type": "string", "required": true },
+    "url": { "type": "string", "required": true },
+    "variant": {
+      "type": "enumeration",
+      "enum": ["default", "outline", "link"],
+      "default": "default"
+    },
+    "icon": { "type": "string" }
+  }
+}

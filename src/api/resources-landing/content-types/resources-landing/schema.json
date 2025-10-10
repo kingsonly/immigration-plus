@@ -1,0 +1,24 @@
+{
+  "kind": "singleType",
+  "collectionName": "resources_landings",
+  "info": { "singularName": "resources-landing", "pluralName": "resources-landings", "displayName": "Resources Landing" },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": { "i18n": { "localized": true } },
+  "attributes": {
+    "title": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
+    "description": { "type": "text", "pluginOptions": { "i18n": { "localized": true } } },
+    "blocks": {
+      "type": "dynamiczone",
+      "components": [
+        "blocks.hero",
+        "blocks.heading-section",
+        "blocks.resource-grid",
+        "blocks.tools-grid",
+        "blocks.news-list",
+        "blocks.featured-strip",
+        "blocks.newsletter-cta"
+      ],
+      "pluginOptions": { "i18n": { "localized": true } }
+    }
+  }
+}

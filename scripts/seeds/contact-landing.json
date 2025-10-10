@@ -1,0 +1,50 @@
+{
+  "blocks": [
+    {
+      "__component": "blocks.hero",
+      "Title": "Contact Us",
+      "Subtitle": "Ready to start your Canadian immigration journey?",
+      "description": "We’re here to answer your questions and guide you every step of the way."
+    },
+
+    { "__component": "blocks.contact-card", "title": "Phone", "icon": "Phone", "details": ["+1 (XXX) XXX-XXXX", "Mon-Fri 9AM-6PM EST"] },
+    { "__component": "blocks.contact-card", "title": "Email", "icon": "Mail", "details": ["info@coming2canada.co", "We respond within 24 hours"] },
+    { "__component": "blocks.contact-card", "title": "Office", "icon": "MapPin", "details": ["Toronto, Ontario", "Canada"] },
+    { "__component": "blocks.contact-card", "title": "Business Hours", "icon": "Clock", "details": ["Monday - Friday: 9AM - 6PM", "Saturday: 10AM - 4PM"] },
+
+    {
+      "__component": "blocks.contact-form",
+      "services": [
+        "Permanent Residency (PR)",
+        "Business Immigration",
+        "Study & Work Permits",
+        "Family Sponsorship",
+        "Provincial Nominee Program",
+        "Citizenship Application",
+        "Other"
+      ],
+      "successMessage": "Your message has been sent successfully. We'll get back to you within 24 hours.",
+      "redirectUrl": "/contact"
+    },
+
+    {
+      "__component": "blocks.calendly",
+      "title": "Book a Consultation",
+      "description": "Schedule a free 30-minute consultation with one of our licensed immigration consultants.",
+      "calendlyLink": "https://calendly.com/tentacular-immigration",
+      "expectations": [
+        "Comprehensive profile assessment",
+        "Discussion of available immigration programs",
+        "Timeline and process overview",
+        "Personalized recommendations",
+        "Next steps and action plan"
+      ]
+    },
+
+    { "__component": "blocks.faq", "question": "How long does the consultation take?", "answer": "Our initial consultation typically takes 30-45 minutes." },
+    { "__component": "blocks.faq", "question": "Do you charge for the initial consultation?", "answer": "No, we offer a free initial consultation to assess your profile and discuss your immigration options." },
+    { "__component": "blocks.faq", "question": "What documents should I prepare for the consultation?", "answer": "Please bring passports, educational credentials, work letters, language tests, and any previous applications." },
+    { "__component": "blocks.faq", "question": "How quickly can you respond to my inquiry?", "answer": "We typically respond within 24 hours on business days. For urgent matters, please call us." },
+    { "__component": "blocks.faq", "question": "Do you provide services in languages other than English?", "answer": "Yes, we can consult in French, Spanish, Mandarin, and Hindi." }
+  ]
+}

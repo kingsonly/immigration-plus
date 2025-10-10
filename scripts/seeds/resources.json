@@ -1,0 +1,132 @@
+{
+  "categories": [
+    { "name": "Immigration Guides", "slug": "guides" },
+    { "name": "Checklists", "slug": "checklists" },
+    { "name": "Calculators", "slug": "calculators" },
+    { "name": "Immigration News", "slug": "news" }
+  ],
+  "tags": [
+    { "name": "Express Entry", "slug": "express-entry" },
+    { "name": "CRS", "slug": "crs" },
+    { "name": "PNP", "slug": "pnp" },
+    { "name": "PR", "slug": "pr" },
+    { "name": "Documents", "slug": "documents" },
+    { "name": "News", "slug": "news" }
+  ],
+  "tools": [
+    {
+      "name": "CRS Score Calculator",
+      "slug": "crs-score-calculator",
+      "description": "Calculate your Express Entry CRS score.",
+      "icon": "Calculator",
+      "colorClass": "from-blue-500 to-blue-600",
+      "link": "/tools/crs-calculator"
+    },
+    {
+      "name": "Processing Time Tracker",
+      "slug": "processing-time-tracker",
+      "description": "Track current processing times.",
+      "icon": "Clock",
+      "colorClass": "from-green-500 to-green-600",
+      "link": "/tools/processing-times"
+    },
+    {
+      "name": "Checklist Generator",
+      "slug": "checklist-generator",
+      "description": "Generate personalized document checklists.",
+      "icon": "FileText",
+      "colorClass": "from-purple-500 to-purple-600",
+      "link": "/tools/checklist-generator"
+    },
+    {
+      "name": "Cost Calculator",
+      "slug": "cost-calculator",
+      "description": "Estimate your application costs.",
+      "icon": "Calculator",
+      "colorClass": "from-orange-500 to-orange-600",
+      "link": "/tools/cost-calculator"
+    }
+  ],
+  "resources": [
+    {
+      "title": "Complete Express Entry Guide 2024",
+      "slug": "express-entry-guide-2024",
+      "excerpt": "Everything you need to know about Express Entry.",
+      "content": "<p>Full steps, eligibility, documents, and strategy.</p>",
+      "type": "guide",
+      "readTime": "15 min read",
+      "author": "Sarah Johnson",
+      "publishedOn": "2024-01-15",
+      "lastUpdated": "2024-01-15T00:00:00.000Z",
+      "icon": "BookOpen",
+      "colorClass": "from-red-500 to-red-600",
+      "featured": true,
+      "downloadCount": 2500,
+      "tags": [
+        { "slug": "express-entry" },
+        { "slug": "crs" }
+      ],
+      "category": "guides"
+    },
+    {
+      "title": "Provincial Nominee Program Comparison",
+      "slug": "pnp-comparison",
+      "excerpt": "Find the best province for your profile.",
+      "content": "<p>Side-by-side PNP comparison tool.</p>",
+      "type": "calculator",
+      "readTime": "Interactive",
+      "author": "Team",
+      "publishedOn": "2024-01-10",
+      "lastUpdated": "2024-01-10T00:00:00.000Z",
+      "icon": "Calculator",
+      "colorClass": "from-red-600 to-pink-600",
+      "featured": true,
+      "downloadCount": 1800,
+      "tags": [
+        { "slug": "pnp" }
+      ],
+      "category": "calculators",
+      "toolLink": "/tools/pnp-comparison"
+    },
+    {
+      "title": "Document Checklist for PR Applications",
+      "slug": "pr-document-checklist",
+      "excerpt": "Complete PR checklist with tips to obtain each document.",
+      "content": "<p>Never miss a document again.</p>",
+      "type": "checklist",
+      "readTime": "5 min read",
+      "author": "Priya Patel",
+      "publishedOn": "2024-01-12",
+      "lastUpdated": "2024-01-12T00:00:00.000Z",
+      "icon": "CheckCircle",
+      "colorClass": "from-pink-600 to-red-500",
+      "featured": true,
+      "downloadCount": 3200,
+      "tags": [
+        { "slug": "pr" },
+        { "slug": "documents" }
+      ],
+      "category": "checklists"
+    },
+    {
+      "title": "Express Entry Draw Results - January 2024",
+      "slug": "express-entry-draw-jan-2024",
+      "excerpt": "Latest draw invited 3,500 candidates, min CRS 524.",
+      "content": "<p>Draw details and breakdown.</p>",
+      "type": "news",
+      "readTime": "6 min read",
+      "author": "Immigration Team",
+      "publishedOn": "2024-01-24",
+      "lastUpdated": "2024-01-24T00:00:00.000Z",
+      "icon": "Info",
+      "colorClass": "from-red-500 to-red-600",
+      "featured": false,
+      "downloadCount": 0,
+      "tags": [
+        { "slug": "express-entry" },
+        { "slug": "news" }
+      ],
+      "category": "news"
+    }
+  ]
+}

@@ -34,7 +34,7 @@ jobs:
           HOST=0.0.0.0
           # Strapi reads PORT from env/Passenger automatically, 1337 fallback:
           PORT=1337
-          PUBLIC_URL=https://c2c.skillzserver.com
+          PUBLIC_URL=https://cms.coming2canada.ca
 
           # Security — make sure these are strong, comma-separated keys for APP_KEYS
           APP_KEYS=${{ secrets.APP_KEYS }}

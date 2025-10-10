@@ -1,0 +1,20 @@
+{
+    "collectionName": "components_blocks_news_list",
+    "info": { "displayName": "News List" },
+    "options": {},
+    "attributes": {
+        "Heading": { "type": "string" },
+        "description": { "type": "text" },
+        "mode": {
+            "type": "enumeration",
+            "enum": ["auto", "manual"],
+            "default": "auto"
+        },
+        "resources": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::resource.resource"
+        },
+        "limit": { "type": "integer", "default": 4 }
+    }
+}

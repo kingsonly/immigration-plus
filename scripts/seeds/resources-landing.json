@@ -1,0 +1,101 @@
+{
+  "title": "Immigration Resources",
+  "description": "Library of guides, tools, and immigration news.",
+  "blocks": [
+    {
+      "__component": "blocks.hero",
+      "Title": "Immigration Resources",
+      "Subtitle": "Your Canadian Journey Toolkit",
+      "description": "<p>Guides, calculators, and the latest updates — all in one place.</p>",
+      "ctas": [
+        {
+          "label": "Browse Library",
+          "url": "/resources",
+          "variant": "default",
+          "icon": "ArrowRight"
+        },
+        {
+          "label": "Tools",
+          "url": "/tools",
+          "variant": "outline",
+          "icon": "Calculator"
+        }
+      ]
+    },
+    {
+      "__component": "blocks.heading-section",
+      "Heading": "Featured Resources",
+      "description": "Our most popular immigration resources",
+      "cta": {
+        "label": "View All",
+        "url": "/resources",
+        "variant": "link",
+        "icon": "ArrowRight"
+      }
+    },
+    {
+      "__component": "blocks.featured-strip",
+      "items": [
+        {
+          "title": "Express Entry Guide 2024",
+          "slug": "express-entry-guide-2024",
+          "icon": "BookOpen",
+          "colorClass": "from-red-500 to-red-600"
+        },
+        {
+          "title": "PNP Comparison",
+          "slug": "pnp-comparison",
+          "icon": "Calculator",
+          "colorClass": "from-red-600 to-pink-600"
+        },
+        {
+          "title": "PR Checklist",
+          "slug": "pr-document-checklist",
+          "icon": "CheckCircle",
+          "colorClass": "from-pink-600 to-red-500"
+        }
+      ]
+    },
+    {
+      "__component": "blocks.tools-grid",
+      "Heading": "Immigration Tools",
+      "description": "Interactive tools to plan your journey",
+      "tools": {
+        "set": [
+          { "slug": "crs-score-calculator" },
+          { "slug": "processing-time-tracker" },
+          { "slug": "checklist-generator" },
+          { "slug": "cost-calculator" }
+        ]
+      }
+    },
+    {
+      "__component": "blocks.news-list",
+      "Heading": "Latest Immigration News",
+      "description": "Recent updates and announcements",
+      "resources": { "set": [{ "slug": "express-entry-draw-jan-2024" }] }
+    },
+    {
+      "__component": "blocks.resource-grid",
+      "Heading": "Resource Library",
+      "description": "Browse all resources by category or search",
+      "category": { "slug": "guides" },
+      "resources": [
+        { "slug": "express-entry-guide-2024" },
+        { "slug": "pnp-comparison" },
+        { "slug": "pr-document-checklist" }
+      ]
+    },
+    {
+      "__component": "blocks.newsletter-cta",
+      "Heading": "Stay Updated",
+      "description": "No spam. Unsubscribe anytime.",
+      "cta": {
+        "label": "Subscribe",
+        "url": "/newsletter",
+        "variant": "default",
+        "icon": "Mail"
+      }
+    }
+  ]
+}

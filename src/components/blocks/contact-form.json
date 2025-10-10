@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_blocks_contact_form",
+  "info": { "displayName": "Contact Form", "icon": "email" },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "services": { "type": "json" },
+    "successMessage": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
+    "redirectUrl": { "type": "string" }
+  }
+}

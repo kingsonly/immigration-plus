@@ -1,0 +1,6 @@
+[
+  { "name": "Immigration Guides", "slug": "guides" },
+  { "name": "Checklists",         "slug": "checklists" },
+  { "name": "Calculators",        "slug": "calculators" },
+  { "name": "Immigration News",   "slug": "news" }
+]

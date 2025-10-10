@@ -1,0 +1,17 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tools",
+  "info": { "singularName": "tool", "pluralName": "tools", "displayName": "Tool" },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": { "i18n": { "localized": true } },
+  "attributes": {
+    "name": { "type": "string", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
+    "slug": { "type": "uid", "targetField": "name", "required": true },
+    "description": { "type": "text", "pluginOptions": { "i18n": { "localized": true } } },
+    "icon": { "type": "string" },
+    "colorClass": { "type": "string" },
+    "link": { "type": "string" },
+    "embedCode": { "type": "text" },
+    "image": { "type": "media", "multiple": false, "allowedTypes": ["images"] }
+  }
+}

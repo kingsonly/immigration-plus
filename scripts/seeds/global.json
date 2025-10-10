@@ -1,0 +1,88 @@
+{
+  "siteTitle": "Coming2Canada",
+  "siteDescription": "TENTACULAR IMMIGRATION SOLUTIONS LTD - Your trusted partner for Canadian immigration success.",
+  "contactEmail": "info@coming2canada.co",
+
+  "socialLinks": [],
+
+  "Header": {
+    "Logo": {
+      "label": "Coming2Canada",
+      "url": "/",
+      "icon": "",
+      "dropdown": [],
+      "image": null
+    },
+    "NavLink": [
+      { "label": "Home", "url": "/", "icon": "", "dropdown": [], "image": null },
+      { "label": "About", "url": "/about", "icon": "", "dropdown": [], "image": null },
+      {
+        "label": "Services",
+        "url": "/services",
+        "icon": "",
+        "dropdown": [
+          { "label": "Permanent Residency", "url": "/services/permanent-residency", "icon": "" },
+          { "label": "Business & Investor Immigration", "url": "/services/business-immigration", "icon": "" },
+          { "label": "Study", "url": "/services/study", "icon": "" },
+          { "label": "Work Permits", "url": "/services/work-permit", "icon": "" },
+          { "label": "Family Sponsorship", "url": "/services/family-sponsorship", "icon": "" },
+          { "label": "Visitor Visa", "url": "/services/visitors-visa", "icon": "" },
+          { "label": "Citizenship & Integration", "url": "/services/citizenship", "icon": "" },
+          { "label": "Refugee/Asylum Visa", "url": "/services/refugee-hc", "icon": "" },
+          { "label": "Recruitment", "url": "/services/recruitment", "icon": "" }
+        ],
+        "image": null
+      },
+      { "label": "Resources", "url": "/resources", "icon": "", "dropdown": [], "image": null },
+      { "label": "Success Stories", "url": "/success-stories", "icon": "", "dropdown": [], "image": null },
+      { "label": "Contact", "url": "/contact", "icon": "", "dropdown": [], "image": null }
+    ]
+  },
+
+  "Footer": {
+    "FooterLinks": [
+      { "label": "Permanent Residency", "url": "/services/permanent-residency", "icon": "", "dropdown": [], "image": null },
+      { "label": "Business Immigration", "url": "/services/business-immigration", "icon": "", "dropdown": [], "image": null },
+      { "label": "Study", "url": "/services/study", "icon": "", "dropdown": [], "image": null },
+      { "label": "Work Permits", "url": "/services/work-permit", "icon": "", "dropdown": [], "image": null },
+      { "label": "Family Sponsorship", "url": "/services/family-sponsorship", "icon": "", "dropdown": [], "image": null },
+      { "label": "Visitor Visa", "url": "/services/visitors-visa", "icon": "", "dropdown": [], "image": null },
+      { "label": "Citizenship & Integration", "url": "/services/citizenship", "icon": "", "dropdown": [], "image": null },
+      { "label": "Recruitment", "url": "/services/recruitment", "icon": "", "dropdown": [], "image": null },
+
+      { "label": "About Us", "url": "/about", "icon": "", "dropdown": [], "image": null },
+      { "label": "Immigration Programs", "url": "/programs", "icon": "", "dropdown": [], "image": null },
+      { "label": "Resources", "url": "/resources", "icon": "", "dropdown": [], "image": null },
+      { "label": "Success Stories", "url": "/success-stories", "icon": "", "dropdown": [], "image": null },
+      { "label": "Contact", "url": "/contact", "icon": "", "dropdown": [], "image": null },
+
+      {
+        "label": "RCIC/IRB Public Register",
+        "url": "https://register.college-ic.ca/Public-Register-EN/Licensee/Profile.aspx?ID=40974&b9100e1006f6=2#b9100e1006f6",
+        "icon": "",
+        "dropdown": [],
+        "image": null
+      }
+    ],
+    "ContactDetails": [
+      {
+        "label": "Call Us",
+        "value": "+1 (604) 555-1234",
+        "type": "phone",
+        "href": "tel:+16045551234"
+      },
+      {
+        "label": "Email",
+        "value": "info@coming2canada.co",
+        "type": "email",
+        "href": "mailto:info@coming2canada.co"
+      },
+      {
+        "label": "Location",
+        "value": "Vancouver, British Columbia",
+        "type": "location"
+      }
+    ],
+    "FooterCopyright": "Ac 2025 TENTACULAR IMMIGRATION SOLUTIONS LTD. All rights reserved."
+  }
+}

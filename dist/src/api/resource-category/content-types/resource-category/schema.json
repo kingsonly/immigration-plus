@@ -1,0 +1,11 @@
+{
+    "kind": "collectionType",
+    "collectionName": "resource_categories",
+    "info": { "singularName": "resource-category", "pluralName": "resource-categories", "displayName": "Resource Category" },
+    "options": { "draftAndPublish": true },
+    "pluginOptions": { "i18n": { "localized": true } },
+    "attributes": {
+        "name": { "type": "string", "required": true, "unique": true, "pluginOptions": { "i18n": { "localized": true } } },
+        "slug": { "type": "uid", "targetField": "name", "required": true }
+    }
+}

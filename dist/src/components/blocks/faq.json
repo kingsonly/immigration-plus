@@ -1,0 +1,9 @@
+{
+    "collectionName": "components_blocks_faq",
+    "info": { "displayName": "FAQ", "icon": "information" },
+    "options": { "draftAndPublish": false },
+    "attributes": {
+        "question": { "type": "string", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
+        "answer": { "type": "text", "required": true, "pluginOptions": { "i18n": { "localized": true } } }
+    }
+}

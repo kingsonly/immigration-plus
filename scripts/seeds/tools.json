@@ -1,0 +1,34 @@
+[
+  {
+    "name": "CRS Score Calculator",
+    "slug": "crs-score-calculator",
+    "description": "Calculate your Express Entry CRS score.",
+    "icon": "Calculator",
+    "colorClass": "from-blue-500 to-blue-600",
+    "link": "/tools/crs-calculator"
+  },
+  {
+    "name": "Processing Time Tracker",
+    "slug": "processing-time-tracker",
+    "description": "Track current processing times.",
+    "icon": "Clock",
+    "colorClass": "from-green-500 to-green-600",
+    "link": "/tools/processing-times"
+  },
+  {
+    "name": "Checklist Generator",
+    "slug": "checklist-generator",
+    "description": "Generate personalized document checklists.",
+    "icon": "FileText",
+    "colorClass": "from-purple-500 to-purple-600",
+    "link": "/tools/checklist-generator"
+  },
+  {
+    "name": "Cost Calculator",
+    "slug": "cost-calculator",
+    "description": "Estimate your application costs.",
+    "icon": "Calculator",
+    "colorClass": "from-orange-500 to-orange-600",
+    "link": "/tools/cost-calculator"
+  }
+]

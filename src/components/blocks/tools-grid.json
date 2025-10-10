@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_blocks_tools_grid",
+  "info": { "displayName": "Tools Grid" },
+  "options": {},
+  "attributes": {
+    "Heading": { "type": "string" },
+    "description": { "type": "text" },
+    "tools": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::tool.tool"
+    },
+    "limit": { "type": "integer", "default": 4 }
+  }
+}

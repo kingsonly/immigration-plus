@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_shared_testimonials",
+  "info": {
+    "displayName": "testimonial",
+    "icon": "quote",
+    "description": "Client testimonial with rating"
+  },
+  "options": {},
+  "attributes": {
+    "name": { "type": "string", "required": true },
+    "country": { "type": "string" },
+    "program": { "type": "string" },
+    "rating": { "type": "integer", "min": 1, "max": 5, "default": 5 },
+    "text": { "type": "text", "required": true },
+    "avatar": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}
