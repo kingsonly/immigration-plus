@@ -1,9 +1,0 @@
-{
-    "collectionName": "components_blocks_cta_section",
-    "info": { "displayName": "CTA Section", "description": "" },
-    "attributes": {
-        "Heading": { "type": "string" },
-        "description": { "type": "text" },
-        "cta": { "type": "component", "repeatable": false, "component": "shared.cta" }
-    }
-}

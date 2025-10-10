@@ -1,9 +1,0 @@
-{
-    "collectionName": "components_business_step",
-    "info": { "displayName": "How Step" },
-    "attributes": {
-        "stepNumber": { "type": "integer" },
-        "heading": { "type": "string" },
-        "text": { "type": "text" }
-    }
-}

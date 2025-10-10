@@ -1,9 +1,0 @@
-{
-    "collectionName": "components_blocks_testimonials_grid",
-    "info": { "displayName": "Testimonials Grid", "description": "" },
-    "attributes": {
-        "Heading": { "type": "string" },
-        "description": { "type": "text" },
-        "testimonials": { "type": "component", "repeatable": true, "component": "shared.testimonial" }
-    }
-}
