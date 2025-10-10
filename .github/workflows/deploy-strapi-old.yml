@@ -94,25 +94,44 @@ jobs:
             exit $exit_code
           fi
 
-     
       - name: Install production deps on server & restart app
         run: |
           ssh remote << 'EOF'
           set -e
           cd "${{ secrets.APP_ROOT }}"
-          # Clean any previous lock issues
-          rm -f package-lock.json
-          npm i --package-lock-only
-          npm ci --omit=dev
-          # We already built admin on CI; no need to rebuild here.
 
-          # Restart Node app (CloudLinux/Passenger)
-          # If cloudlinux-selector is available (Namecheap Shared):
+          # Run npm inside CloudLinux node environment
           if command -v cloudlinux-selector >/dev/null 2>&1; then
+            cloudlinux-selector run-node --app-root "${{ secrets.APP_ROOT }}" -- \
+              bash -c "
+                rm -f package-lock.json
+                npm i --package-lock-only
+                npm ci --omit=dev
+              "
             cloudlinux-selector stop  --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}" || true
             cloudlinux-selector start --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}"
           else
-            # Fallback Passenger restart (if available)
             mkdir -p tmp && touch tmp/restart.txt
           fi
           EOF
+      # - name: Install production deps on server & restart app
+      #   run: |
+      #     ssh remote << 'EOF'
+      #     set -e
+      #     cd "${{ secrets.APP_ROOT }}"
+      #     # Clean any previous lock issues
+      #     rm -f package-lock.json
+      #     npm i --package-lock-only
+      #     npm ci --omit=dev
+      #     # We already built admin on CI; no need to rebuild here.
+
+      #     # Restart Node app (CloudLinux/Passenger)
+      #     # If cloudlinux-selector is available (Namecheap Shared):
+      #     if command -v cloudlinux-selector >/dev/null 2>&1; then
+      #       cloudlinux-selector stop  --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}" || true
+      #       cloudlinux-selector start --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}"
+      #     else
+      #       # Fallback Passenger restart (if available)
+      #       mkdir -p tmp && touch tmp/restart.txt
+      #     fi
+      #     EOF
