@@ -1,9 +1,13 @@
-
+﻿
 import BusinessImmigrationPageComponent from "@/components/page/BusinessImmigrationPageComponent"
-import { fetchBusinessImmigrationPage } from "@/lib/contentfulModules/fetchBusinessImmigrationPage"
+import { getServiceBySlug } from "@/lib/strapi"
 
 export default async function BusinessImmigrationPage() {
-  const value = await fetchBusinessImmigrationPage()
-
-  return <BusinessImmigrationPageComponent value={value} />
+    const service = await getServiceBySlug("business-immigration")
+  const blocks = (service as any)?.blocks || (service as any)?.attributes?.blocks || []
+  const businessBlock = blocks.find((b: any) => b.__component === "blocks.business-immigration")
+  return <BusinessImmigrationPageComponent value={businessBlock || {}} />
 }
+
+
+

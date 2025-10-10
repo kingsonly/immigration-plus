@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { motion } from "framer-motion"
 import {
@@ -114,21 +114,21 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
   const startupFees = [
     {
       category: "Startup Team Participation",
-      range: "CAD 75,000 – CAD 250,000",
+      range: "CAD 75,000 â€“ CAD 250,000",
       description: "For entrepreneurs joining existing startup groups",
       details: ["Access to eligible startup", "Document preparation", "Founder alignment", "Business role allocation"],
       note: "Private-market fees, not charged by IRCC",
     },
     {
       category: "Designated Organization Support",
-      range: "CAD 10,000 – CAD 200,000",
+      range: "CAD 10,000 â€“ CAD 200,000",
       description: "Business incubators, angel investors, or venture capital funds",
       details: ["Business plan development", "Pitch coaching", "Due diligence", "Letter of Support"],
       note: "Varies based on business stage and potential",
     },
     {
       category: "Business Investment Capital",
-      range: "CAD 50,000 – CAD 250,000",
+      range: "CAD 50,000 â€“ CAD 250,000",
       description: "Funding the actual launch of your startup",
       details: ["Business setup costs", "Hiring and operations", "Development expenses", "Customer acquisition"],
       note: "IRCC expects genuine business activity",
@@ -139,8 +139,8 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
     {
       province: "British Columbia",
       program: "Entrepreneur Immigration",
-      netWorth: "≥ CAD $600,000",
-      investment: "≥ CAD $200,000",
+      netWorth: "â‰¥ CAD $600,000",
+      investment: "â‰¥ CAD $200,000",
       jobs: "1+ Canadian job",
       streams: ["Base Stream", "Regional Pilot", "Strategic Projects"],
       color: "from-blue-500 to-blue-600",
@@ -150,7 +150,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
       program: "Entrepreneur Stream (OINP)",
       netWorth: "$800K (GTA) / $400K (outside)",
       investment: "$600K (GTA) / $200K (outside)",
-      jobs: "1–2 full-time positions",
+      jobs: "1â€“2 full-time positions",
       streams: ["GTA Stream", "Outside GTA/ICT"],
       color: "from-green-500 to-green-600",
     },
@@ -166,7 +166,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
     {
       province: "Manitoba",
       program: "Entrepreneur Pathway",
-      netWorth: "≥ CAD $500,000",
+      netWorth: "â‰¥ CAD $500,000",
       investment: "$250K (Winnipeg) / $150K (outside)",
       jobs: "1+ full-time job",
       streams: ["Business Stream", "Farm Stream"],
@@ -225,44 +225,44 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
             className="text-center"
           >
             <div className="w-20 h-20 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <LucideIcon name={data.hero.icon} className="w-10 h-10 text-white" />
+              <LucideIcon name={data?.hero?.iconName || data?.hero?.icon || "Rocket"} className="w-10 h-10 text-white" />
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                {data.hero.title || "Business Immigration"}
+                {data?.hero?.title || "Business Immigration"}
               </span>
             </h1>
             <p className="text-2xl md:text-3xl font-semibold text-gray-800 mb-6">
-              {data.hero.subtitle || "Empowering Entrepreneurs, Investors & Self‑Employed Professionals to Launch and Grow in Canada"}
+              {data?.hero?.subtitle || "Empowering Entrepreneurs, Investors & Selfâ€‘Employed Professionals to Launch and Grow in Canada"}
 
             </p>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
-              {data.hero.body || `At TENTACULAR IMMIGRATION SOLUTIONS LTD, we guide ambitious business-minded individuals through Canada's
-              federal and provincial business immigration streams—helping you transition from startup idea to permanent
+              {data?.hero?.body || `At TENTACULAR IMMIGRATION SOLUTIONS LTD, we guide ambitious business-minded individuals through Canada's
+              federal and provincial business immigration streamsâ€”helping you transition from startup idea to permanent
               residency, legally and strategically.`}
 
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href={data.hero.primaryCTA.href || "/contact"}>
+              <Link href={data?.hero?.primaryCTA?.href || "/contact"}>
 
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-lg px-8 py-4 rounded-full"
                 >
                   <Calendar className="mr-2 w-5 h-5" />
-                  {data.hero.primaryCTA.label || `Book Free Business Consultation`}
+                  {data?.hero?.primaryCTA?.label || `Book Free Business Consultation`}
 
                 </Button>
               </Link>
 
-              <Link href={data.hero.secondaryCTA.href || "/contact"}>
+              <Link href={data?.hero?.secondaryCTA?.href || "/contact"}>
                 <Button
                   size="lg"
                   variant="outline"
                   className="border-red-500 text-red-600 hover:bg-red-50 text-lg px-8 py-4 rounded-full bg-transparent"
                 >
                   <FileText className="mr-2 w-5 h-5" />
-                  {data.hero.secondaryCTA.label || `Request Quote`}
+                  {data?.hero?.secondaryCTA?.label || `Request Quote`}
 
                 </Button>
               </Link>
@@ -303,7 +303,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
                     <div
                       className={`w-16 h-16 bg-gradient-to-r ${program.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
                     >
-                      <LucideIcon name={program.iconName} className="w-8 h-8 text-white" />
+                      <LucideIcon name={program.iconName || "FileText"} className="w-8 h-8 text-white" />
                     </div>
 
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">{program.title}</h3>
@@ -315,7 +315,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
                       {program?.requirements?.map((req: any, reqIndex: number) => (
                         <div key={reqIndex} className="flex items-start space-x-2">
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-600">{req}</span>
+                          <span className="text-sm text-gray-600">{typeof req === 'string' ? req : (req?.listItem ?? '')}</span>
                         </div>
                       ))}
                     </div>
@@ -402,7 +402,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
             <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">Our Start-Up Visa Services</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {
-                data.seServices.map((service: any, index: number) => (
+                (Array.isArray(data?.seServices) ? data.seServices : []).map((service: any, index: number) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, y: 30 }}
@@ -412,7 +412,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
                     <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
                       <CardContent className="p-6">
                         <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-                          <LucideIcon name={service.iconName} className="w-6 h-6 text-white" />
+                          <LucideIcon name={service.iconName || "CheckCircle"} className="w-6 h-6 text-white" />
                         </div>
                         <h4 className="text-lg font-bold text-gray-900 mb-3">{service.title}</h4>
                         <p className="text-gray-600 text-sm">{service.description}</p>
@@ -434,7 +434,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
               Start-Up Visa Program: Understanding the Fees
             </h3>
             <div className="space-y-8">
-              {data.fees.map((fee: any, index: number) => (
+              {(Array.isArray(data?.fees) ? data.fees : []).map((fee: any, index: number) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: -30 }}
@@ -494,7 +494,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
                   These are standard federal fees charged for all permanent residence applications.
                 </p>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {data.govFees.map((fee: any, index: number) => (
+                  {(Array.isArray(data?.govFees) ? data.govFees : []).map((fee: any, index: number) => (
                     <div key={index} className="bg-white rounded-lg p-4 border">
                       <h4 className="font-semibold text-gray-900 mb-1">{fee.category}</h4>
                       <p className="text-lg font-bold text-red-600">{fee.amount}</p>
@@ -510,10 +510,10 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <Card className="bg-gradient-to-r from-red-500 to-pink-600 text-white">
               <CardContent className="p-8 text-center">
-                <LucideIcon name={data.quoteCTA.iconName} className="w-12 h-12 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold mb-4">{data.quoteCTA.heading || `Start-Up Visa – Request a Quote`}</h3>
+                <LucideIcon name={data?.quoteCTA?.iconName || "Calendar"} className="w-12 h-12 mx-auto mb-4" />
+                <h3 className="text-2xl font-bold mb-4">{data?.quoteCTA?.heading || `Start-Up Visa - Request a Quote`}</h3>
                 <p className="text-xl mb-6 text-white/90">
-                  {data.quoteCTA.body || `Canada's Start-Up Visa Program offers permanent residence to entrepreneurs with innovative business
+                  {data?.quoteCTA?.body || `Canada's Start-Up Visa Program offers permanent residence to entrepreneurs with innovative business
                   ideas supported by a designated organization.`}
 
                 </p>
@@ -523,13 +523,13 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
                   business concept and immigration eligibility.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link href={data.quoteCTA.primaryCTA.href || "/contact"}>
+                  <Link href={data?.quoteCTA?.primaryCTA?.href || "/contact"}>
                     <Button
                       size="lg"
                       className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full font-semibold"
                     >
                       <Calendar className="mr-2 w-5 h-5" />
-                      {data.quoteCTA.primaryCTA.label || `Book Consultation`}
+                      {data?.quoteCTA?.primaryCTA?.label || `Book Consultation`}
 
                     </Button>
                   </Link>
@@ -538,16 +538,16 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
                     variant="outline"
                     className="border-white text-white hover:bg-white/10 text-lg px-8 py-4 rounded-full bg-transparent"
                     onClick={() => {
-                      window.location.href = `${data.quoteCTA.secondaryCTA.href}?subject=${data.quoteCTA.secondaryCTA.emailSubject}` || "mailto:info@coming2canada.co?subject=Canada Start-Up Visa Quote Request"
+                      const _href = (data?.quoteCTA?.secondaryCTA?.href || "mailto:info@coming2canada.co"); const _sub = (data?.quoteCTA?.secondaryCTA?.emailSubject || "Canada Start-Up Visa"); window.location.href = `${_href}?subject=${encodeURIComponent(_sub)}`
                     }}
                   >
                     <Mail className="mr-2 w-5 h-5" />
-                    {data.quoteCTA.secondaryCTA.label || `Request Quote`}
+                    {data?.quoteCTA?.secondaryCTA?.label || `Request Quote`}
 
                   </Button>
                 </div>
                 <p className="text-sm text-white/70 mt-4">
-                  Email us at info@coming2canada.co with "{data.quoteCTA.secondaryCTA.emailSubject || `Canada Start-Up Visa`}" in the subject line
+                  Email us at info@coming2canada.co with "{data?.quoteCTA?.secondaryCTA?.emailSubject || "Canada Start-Up Visa"}" in the subject line
                 </p>
               </CardContent>
             </Card>
@@ -588,7 +588,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
                   economy.
                 </p>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {data.pnpOverview.map((req: any, index: number) => (
+                  {(Array.isArray(data?.pnpOverview) ? data.pnpOverview : []).map((req: any, index: number) => (
                     <div key={index} className="bg-white rounded-lg p-4 border border-blue-200">
                       <h4 className="font-semibold text-gray-900 mb-1">{req.label}</h4>
                       <p className="text-gray-600 text-sm">{req.value}</p>
@@ -600,7 +600,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
           </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-8">
-            {data.streams.map((stream: any, index: number) => (
+            {(Array.isArray(data?.streams) ? data.streams : []).map((stream: any, index: number) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
@@ -721,7 +721,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
           >
             <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">What Counts as Economic Benefit?</h3>
             <div className="grid md:grid-cols-2 gap-8">
-              {c11Benefits.map((benefit, index) => (
+              {(data?.c11Benefits ?? c11Benefits).map((benefit, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 30 }}
@@ -732,7 +732,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
                     <CardContent className="p-6">
                       <div className="flex items-start space-x-4">
                         <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <benefit.icon className="w-6 h-6 text-white" />
+                          <LucideIcon name={benefit.iconName || "CheckCircle"} className="w-6 h-6 text-white"  />
                         </div>
                         <div>
                           <h4 className="text-lg font-bold text-gray-900 mb-2">{benefit.title}</h4>
@@ -759,7 +759,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
                   <div className="text-center">
                     <Clock className="w-8 h-8 text-blue-600 mx-auto mb-3" />
                     <h4 className="font-semibold text-gray-900 mb-2">Initial C11 Work Permit</h4>
-                    <p className="text-gray-600">Typically issued for 1–2 years</p>
+                    <p className="text-gray-600">Typically issued for 1-2 years</p>
                   </div>
                   <div className="text-center">
                     <ArrowRight className="w-8 h-8 text-blue-600 mx-auto mb-3" />
@@ -881,7 +881,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
                   <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
                     <CardContent className="p-6">
                       <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-700 rounded-xl flex items-center justify-center mx-auto mb-4">
-                        <service.icon className="w-6 h-6 text-white" />
+                        <LucideIcon name={service.iconName || "CheckCircle"} className="w-6 h-6 text-white"  />
                       </div>
                       <h4 className="text-lg font-bold text-gray-900 mb-3">{service.title}</h4>
                       <p className="text-gray-600 text-sm">{service.description}</p>
@@ -912,17 +912,17 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                icon: Building,
+                iconName: "Building",
                 title: "Continuous Business Ownership",
                 description: "Maintain active ownership or management of your Canadian business",
               },
               {
-                icon: Users,
+                iconName: "Users",
                 title: "Job Creation for Canadians",
                 description: "Demonstrate employment opportunities created for Canadian workers",
               },
               {
-                icon: CheckCircle,
+                iconName: "CheckCircle",
                 title: "Program Compliance",
                 description: "Stay compliant with all program rules and performance agreements",
               },
@@ -936,7 +936,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
                 <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300">
                   <CardContent className="p-8">
                     <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                      <requirement.icon className="w-8 h-8 text-white" />
+                      <LucideIcon name={requirement.iconName || "CheckCircle"} className="w-8 h-8 text-white"  />
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-4">{requirement.title}</h3>
                     <p className="text-gray-600">{requirement.description}</p>
@@ -984,7 +984,7 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
             </div>
             <h2 className="text-4xl font-bold text-white mb-6">Ready to Scale Your Business in Canada?</h2>
             <p className="text-xl text-white/90 mb-8">
-              Let's map your path—whether you're looking to launch a startup, invest, or self-employ. We're here to help
+              Let's map your path whether you're looking to launch a startup, invest, or self-employ. We're here to help
               you make your Canadian business dreams a reality.
             </p>
             <Link href="/contact">
@@ -1005,3 +1005,4 @@ export default function BusinessImmigrationPageComponent({ value }: { value: any
     </div>
   )
 }
+
