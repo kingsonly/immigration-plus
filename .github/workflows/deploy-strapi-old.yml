@@ -56,7 +56,7 @@ jobs:
       - name: Build Strapi admin (production)
         env:
           NODE_ENV: production
-          PUBLIC_URL: https://c2c.skillzserver.com
+          PUBLIC_URL: https://cms.coming2canada.ca
         run: NODE_ENV=production npm run build
       - name: Create rsync exclude file
         run: |
@@ -102,12 +102,7 @@ jobs:
 
           # Run npm inside CloudLinux node environment
           if command -v cloudlinux-selector >/dev/null 2>&1; then
-            cloudlinux-selector run-node --app-root "${{ secrets.APP_ROOT }}" -- \
-              bash -c "
-                rm -f package-lock.json
-                npm i --package-lock-only
-                npm ci --omit=dev
-              "
+            
             cloudlinux-selector stop  --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}" || true
             cloudlinux-selector start --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}"
           else
