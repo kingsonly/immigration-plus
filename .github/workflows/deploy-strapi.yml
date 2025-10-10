@@ -1,148 +1,157 @@
-name: deploy-strapi-namecheap
+# name: deploy-strapi-namecheap
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-    types: [ closed ]
-  workflow_dispatch:
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+#     types: [ closed ]
+#   workflow_dispatch:
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
 
-      - name: Use Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+#       - name: Use Node.js 20
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '20'
 
-      - name: Install deps (CI)
-        run: npm ci
+#       - name: Install deps (CI)
+#         run: npm ci
 
-      - name: Ensure app.js (Strapi v4/v5 aware) - create locally to rsync
-        shell: bash
-        run: |
-          set -euo pipefail
-          MAJOR="$(node -p "require('@strapi/strapi/package.json').version.split('.')[0]")"
-          if [ "$MAJOR" -ge 5 ]; then
-            echo "Detected Strapi v$MAJOR -> using dist/server.js entry"
-            printf "require('./dist/server.js');\n" > app.js
-          else
-            echo "Detected Strapi v$MAJOR -> using programmatic start"
-            cat > app.js <<'EOT'
-            const strapi = require('@strapi/strapi');
-            strapi().start();
-            EOT
-          fi
-          test -s app.js && head -n1 app.js
+#       - name: Ensure app.js (Strapi v4/v5 aware) - create locally to rsync
+#         shell: bash
+#         run: |
+#           set -euo pipefail
+#           MAJOR="$(node -p "require('@strapi/strapi/package.json').version.split('.')[0]")"
+#           if [ "$MAJOR" -ge 5 ]; then
+#             echo "Detected Strapi v$MAJOR -> using dist/server.js entry"
+#             printf "require('./dist/server.js');\n" > app.js
+#           else
+#             echo "Detected Strapi v$MAJOR -> using programmatic start"
+#             cat > app.js <<'EOT'
+#             const strapi = require('@strapi/strapi');
+#             strapi().start();
+#             EOT
+#           fi
+#           test -s app.js && head -n1 app.js
 
-      - name: Build Strapi (production)
-        env:
-          NODE_ENV: production
-          PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
-        run: npm run build
+#       - name: Build Strapi (production)
+#         env:
+#           NODE_ENV: production
+#           PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
+#         run: npm run build
 
-      - name: Prepare .env (from secrets)
-        shell: bash
-        run: |
-          set -euo pipefail
-          cat > .env << 'EOF'
-          NODE_ENV=production
-          HOST=0.0.0.0
-          # Passenger will provide PORT; keep a safe fallback:
-          PORT=1337
-          PUBLIC_URL=${{ secrets.PUBLIC_URL }}
+#       - name: Prepare .env (from secrets)
+#         shell: bash
+#         run: |
+#           set -euo pipefail
+#           cat > .env << 'EOF'
+#           NODE_ENV=production
+#           HOST=0.0.0.0
+#           # Passenger will provide PORT; keep a safe fallback:
+#           PORT=1337
+#           PUBLIC_URL=${{ secrets.PUBLIC_URL }}
 
-          # Security
-          APP_KEYS=${{ secrets.APP_KEYS }}
-          API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}
-          ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}
-          JWT_SECRET=${{ secrets.JWT_SECRET }}
-          TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}
+#           # Security
+#           APP_KEYS=${{ secrets.APP_KEYS }}
+#           API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}
+#           ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}
+#           JWT_SECRET=${{ secrets.JWT_SECRET }}
+#           TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}
 
-          # Database (prod = MySQL)
-          DATABASE_CLIENT=${{ secrets.DATABASE_CLIENT }}
-          DATABASE_HOST=${{ secrets.DATABASE_HOST }}
-          DATABASE_PORT=${{ secrets.DATABASE_PORT }}
-          DATABASE_NAME=${{ secrets.DATABASE_NAME }}
-          DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}
-          DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
-          DATABASE_SSL=false
-          EOF
+#           # Database (prod = MySQL)
+#           DATABASE_CLIENT=${{ secrets.DATABASE_CLIENT }}
+#           DATABASE_HOST=${{ secrets.DATABASE_HOST }}
+#           DATABASE_PORT=${{ secrets.DATABASE_PORT }}
+#           DATABASE_NAME=${{ secrets.DATABASE_NAME }}
+#           DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}
+#           DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
+#           DATABASE_SSL=false
+#           EOF
 
-      - name: Create rsync exclude file
-        run: |
-          cat > .rsync-exclude << 'EOF'
-          node_modules
-          .git
-          .github
-          .cache
-          tmp
-          build-server
-          Dockerfile
-          docker-compose.yml
-          rsync.log
-          # Keep uploads on the server
-          public/uploads
-          EOF
+#       - name: Create rsync exclude file
+#         run: |
+#           cat > .rsync-exclude << 'EOF'
+#           node_modules
+#           .git
+#           .github
+#           .cache
+#           tmp
+#           build-server
+#           Dockerfile
+#           docker-compose.yml
+#           rsync.log
+#           # Keep uploads on the server
+#           public/uploads
+#           EOF
 
-      - name: Add SSH key
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          {
-            echo "Host remote"
-            echo "  HostName ${{ secrets.SSH_HOST }}"
-            echo "  Port ${{ secrets.SSH_PORT }}"
-            echo "  User ${{ secrets.SSH_USER }}"
-            echo "  IdentityFile ~/.ssh/id_rsa"
-            echo "  StrictHostKeyChecking no"
-          } > ~/.ssh/config
+#       - name: Add SSH key
+#         shell: bash
+#         run: |
+#           set -euo pipefail
+#           mkdir -p ~/.ssh
+#           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+#           chmod 600 ~/.ssh/id_rsa
+#           {
+#             echo "Host remote"
+#             echo "  HostName ${{ secrets.SSH_HOST }}"
+#             echo "  Port ${{ secrets.SSH_PORT }}"
+#             echo "  User ${{ secrets.SSH_USER }}"
+#             echo "  IdentityFile ~/.ssh/id_rsa"
+#             echo "  StrictHostKeyChecking no"
+#           } > ~/.ssh/config
 
-      - name: Rsync to server (mirror, preserve .env & uploads)
-        shell: bash
-        run: |
-          set -euo pipefail
-          ssh remote "mkdir -p ${{ secrets.APP_ROOT }}"
-          rsync -az --delete --exclude-from='.rsync-exclude' \
-            ./ remote:${{ secrets.APP_ROOT }}/ || exit_code=$?
-          # rsync exit 24 = "some files vanished" (ignore)
-          if [ "${exit_code:-0}" -ne 0 ] && [ "$exit_code" -ne 24 ]; then
-            exit $exit_code
-          fi
+#       - name: Rsync to server (mirror, preserve .env & uploads)
+#         shell: bash
+#         run: |
+#           set -euo pipefail
+#           ssh remote "mkdir -p ${{ secrets.APP_ROOT }}"
+#           rsync -az --delete --exclude-from='.rsync-exclude' \
+#             ./ remote:${{ secrets.APP_ROOT }}/ || exit_code=$?
+#           # rsync exit 24 = "some files vanished" (ignore)
+#           if [ "${exit_code:-0}" -ne 0 ] && [ "$exit_code" -ne 24 ]; then
+#             exit $exit_code
+#           fi
 
-      - name: Install prod deps on server & restart app
-        shell: bash
-        run: |
-          set -euo pipefail
-          ssh -T remote "bash --noprofile --norc -se" <<'EOF'
-          set -euo pipefail
-          cd "${{ secrets.APP_ROOT }}"
+#       - name: Install prod deps on server & restart app
+#         shell: bash
+#         run: |
+#           set -euo pipefail
+#           ssh -T remote "bash --noprofile --norc -se" <<'EOF'
+#           set -euo pipefail
+#           cd "${{ secrets.APP_ROOT }}"
 
-          # Prefer CloudLinux Node.js Selector environment if available
-          if command -v cloudlinux-selector >/dev/null 2>&1; then
-            # Install production deps inside the selector env
-            cloudlinux-selector run --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}" -- npm ci --omit=dev
-            # Restart app
-            cloudlinux-selector stop  --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}" || true
-            cloudlinux-selector start --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}"
-          else
-            # Fallback: try nodevenv path for Node 20, else system npm
-            NPM="$HOME/nodevenv/${{ secrets.APP_ROOT }}/20/bin/npm"
-            if [ -x "$NPM" ]; then
-              "$NPM" ci --omit=dev
-            else
-              npm ci --omit=dev
-            fi
-            # Passenger restart fallback
-            mkdir -p tmp && touch tmp/restart.txt
-          fi
-          EOF
+#           # Prefer CloudLinux Node.js Selector environment if available
+#           if command -v cloudlinux-selector >/dev/null 2>&1; then
+#             # Install production deps inside the selector env
+#             cloudlinux-selector run --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}" -- npm ci --omit=dev
+#             # Restart app
+#             cloudlinux-selector stop  --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}" || true
+#             cloudlinux-selector start --json --interpreter nodejs --app-root "${{ secrets.APP_ROOT }}"
+#           else
+#             # Fallback: try nodevenv path for Node 20, else system npm
+#             NPM="$HOME/nodevenv/${{ secrets.APP_ROOT }}/20/bin/npm"
+#             if [ -x "$NPM" ]; then
+#               "$NPM" ci --omit=dev
+#             else
+#               npm ci --omit=dev
+#             fi
+#             # Passenger restart fallback
+#             mkdir -p tmp && touch tmp/restart.txt
+#           fi
+#           EOF
+
+#### just a test 
+#       - name: Rsync to server (mirror, preserve .env & uploads)
+#         shell: bash
+#         run: |
+#           set -euo pipefail
+#           ssh remote "mkdir -p ${{ secrets.APP_ROOT }}"
+#           rsync -az --delete --exclude-from='.rsync-exclude' \
+#             ./ remote:${{ secrets.APP_ROOT }}/
