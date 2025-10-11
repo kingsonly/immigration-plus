@@ -518,26 +518,5 @@ export function adaptResourcesLanding(api: StrapiResourcesLanding | null): Resou
     };
   });
 
-  try {
-    const fs = require("fs");
-    const path = require("path");
-    const target = path.join(process.cwd(), "tmp", "resourcesLanding-debug.json");
-    fs.mkdirSync(path.dirname(target), { recursive: true });
-    fs.writeFileSync(
-      target,
-      JSON.stringify(
-        {
-          featured: out.featuredStrip.slice(0, 5),
-          library: out.library.slice(0, 5),
-        },
-        null,
-        2
-      ),
-      "utf-8"
-    );
-  } catch {
-    /* ignore logging errors */
-  }
-
   return out;
 }
