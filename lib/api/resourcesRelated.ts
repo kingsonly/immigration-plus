@@ -1,8 +1,9 @@
 // lib/api/resourcesRelated.ts
 import type { StrapiResource } from "./resourceBySlug";
+import { normalizeResource } from "./resourceBySlug";
 
 export interface StrapiRelatedResponse {
-  data: StrapiResource[];
+  data: any[];
   meta: { pagination: { page: number; pageSize: number; pageCount: number; total: number } };
 }
 
@@ -31,11 +32,14 @@ export async function fetchRelatedResources(params: {
   url.searchParams.set("pagination[pageSize]", String(limit));
   url.searchParams.set("sort", "publishedOn:desc");
   url.searchParams.set("publicationState", "live");
-  url.searchParams.set("populate", ["category", "tags"].join(","));
+  url.searchParams.set("populate", ["category", "tags", "cover"].join(","));
 
   const res = await fetch(url.toString(), { cache: "no-store" });
   if (!res.ok) return [];
 
   const json: StrapiRelatedResponse = await res.json();
-  return json.data || [];
+  const data = Array.isArray(json.data) ? json.data : [];
+  return data
+    .map((node) => normalizeResource(node))
+    .filter(Boolean) as StrapiResource[];
 }

@@ -1,5 +1,7 @@
 // lib/api/resourceLists.ts
 
+import { normalizeResource } from "./resourceBySlug";
+
 export type StrapiTag = { id: number; slug: string; name?: string | null };
 export type StrapiCategory = { id: number; slug: string; name?: string | null };
 
@@ -15,6 +17,7 @@ export type StrapiResource = {
   lastUpdated?: string | null;
   tags?: StrapiTag[];
   category?: StrapiCategory | null;
+  cover?: { url: string; alt: string | null } | null;
 };
 
 const BASE =
@@ -45,6 +48,9 @@ function basePopulate() {
   p.set("populate[category][fields][0]", "slug");
   p.set("populate[category][fields][1]", "name");
 
+  // cover image
+  p.set("populate[cover]", "*");
+
   // preview + locale
   p.set("publicationState", "preview");
   p.set("locale", "en");
@@ -73,42 +79,39 @@ export async function fetchResourcesByCategorySlug(slug: string, pageSize = 24) 
   const json = await res.json();
   const items: any[] = json?.data || [];
 
+  const normalized = items.map((it) => normalizeResource(it)).filter(Boolean);
+
   // Best-effort: try to read category from the first item
   let category: StrapiCategory | null = null;
-  if (items[0]?.attributes?.category?.data) {
-    const c = items[0].attributes.category.data;
-    category = { id: c.id, slug: c.attributes.slug, name: c.attributes.name ?? null };
-  } else if (items[0]?.category) {
-    const c = items[0].category;
-    category = { id: c.id, slug: c.slug, name: c.name ?? null };
+  const first = normalized[0] as ReturnType<typeof normalizeResource> | undefined;
+  if (first?.category) {
+    category = {
+      id: first.category.id,
+      slug: first.category.slug ?? "",
+      name: first.category.name ?? null,
+    };
   }
 
-  const parsed: StrapiResource[] = items.map((it) => {
-    const a = it.attributes || it;
-    return {
-      id: it.id ?? a.id,
-      title: a.title ?? null,
-      slug: a.slug,
-      excerpt: a.excerpt ?? null,
-      type: a.type ?? null,
-      readTime: a.readTime ?? null,
-      author: a.author ?? null,
-      publishedOn: a.publishedOn ?? null,
-      lastUpdated: a.lastUpdated ?? null,
-      tags: (a.tags?.data || a.tags || []).map((t: any) => {
-        const ta = t.attributes || t;
-        return { id: t.id ?? ta.id, slug: ta.slug, name: ta.name ?? null };
-      }),
-      category:
-        a.category?.data || a.category
-          ? (() => {
-              const c = a.category.data || a.category;
-              const ca = c.attributes || c;
-              return { id: c.id ?? ca.id, slug: ca.slug, name: ca.name ?? null };
-            })()
-          : null,
-    };
-  });
+  const parsed: StrapiResource[] = (normalized as NonNullable<ReturnType<typeof normalizeResource>>[]).map((r) => ({
+    id: r.id,
+    title: r.title,
+    slug: r.slug,
+    excerpt: r.excerpt ?? null,
+    type: r.type ?? null,
+    readTime: r.readTime ?? null,
+    author: r.author ?? null,
+    publishedOn: r.publishedOn ?? null,
+    lastUpdated: r.lastUpdated ?? null,
+    cover: r.cover ?? null,
+    tags: (r.tags || []).map((t) => ({
+      id: t.id,
+      slug: t.slug,
+      name: t.name ?? null,
+    })),
+    category: r.category
+      ? { id: r.category.id, slug: r.category.slug ?? "", name: r.category.name ?? null }
+      : null,
+  }));
 
   return { items: parsed, category };
 }
@@ -131,45 +134,38 @@ export async function fetchResourcesByTagSlug(slug: string, pageSize = 24) {
   const json = await res.json();
   const items: any[] = json?.data || [];
 
+  const normalized = items.map((it) => normalizeResource(it)).filter(Boolean);
+
   // Best-effort: read tag from first item’s tags
   let tag: StrapiTag | null = null;
-  for (const it of items) {
-    const a = it.attributes || it;
-    const tags = a.tags?.data || a.tags || [];
-    const found = tags.find((t: any) => (t.attributes || t).slug === slug);
+  for (const entry of normalized as NonNullable<ReturnType<typeof normalizeResource>>[]) {
+    const found = (entry.tags || []).find((t) => t.slug === slug);
     if (found) {
-      const ta = found.attributes || found;
-      tag = { id: found.id ?? ta.id, slug: ta.slug, name: ta.name ?? null };
+      tag = { id: found.id, slug: found.slug, name: found.name ?? null };
       break;
     }
   }
 
-  const parsed: StrapiResource[] = items.map((it) => {
-    const a = it.attributes || it;
-    return {
-      id: it.id ?? a.id,
-      title: a.title ?? null,
-      slug: a.slug,
-      excerpt: a.excerpt ?? null,
-      type: a.type ?? null,
-      readTime: a.readTime ?? null,
-      author: a.author ?? null,
-      publishedOn: a.publishedOn ?? null,
-      lastUpdated: a.lastUpdated ?? null,
-      tags: (a.tags?.data || a.tags || []).map((t: any) => {
-        const ta = t.attributes || t;
-        return { id: t.id ?? ta.id, slug: ta.slug, name: ta.name ?? null };
-      }),
-      category:
-        a.category?.data || a.category
-          ? (() => {
-              const c = a.category.data || a.category;
-              const ca = c.attributes || c;
-              return { id: c.id ?? ca.id, slug: ca.slug, name: ca.name ?? null };
-            })()
-          : null,
-    };
-  });
+  const parsed: StrapiResource[] = (normalized as NonNullable<ReturnType<typeof normalizeResource>>[]).map((r) => ({
+    id: r.id,
+    title: r.title,
+    slug: r.slug,
+    excerpt: r.excerpt ?? null,
+    type: r.type ?? null,
+    readTime: r.readTime ?? null,
+    author: r.author ?? null,
+    publishedOn: r.publishedOn ?? null,
+    lastUpdated: r.lastUpdated ?? null,
+    cover: r.cover ?? null,
+    tags: (r.tags || []).map((t) => ({
+      id: t.id,
+      slug: t.slug,
+      name: t.name ?? null,
+    })),
+    category: r.category
+      ? { id: r.category.id, slug: r.category.slug ?? "", name: r.category.name ?? null }
+      : null,
+  }));
 
   return { items: parsed, tag };
 }

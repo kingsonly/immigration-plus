@@ -1,5 +1,7 @@
 // lib/mappers/resourcesLanding.ts
 import type { StrapiResourcesLanding } from "@/lib/api/resourcesLanding";
+import { normalizeResource } from "@/lib/api/resourceBySlug";
+import { toMediaAsset } from "@/lib/strapi";
 
 // ---------- FALLBACKS (your current hardcoded content) ----------
 const FALLBACK = {
@@ -19,9 +21,33 @@ const FALLBACK = {
     cta: { label: "View All", url: "/resources", variant: "link", icon: "ArrowRight" },
   },
   featuredStrip: [
-    { title: "Express Entry Guide 2024", slug: "express-entry-guide-2024", icon: "BookOpen", colorClass: "from-red-500 to-red-600" },
-    { title: "PNP Comparison", slug: "pnp-comparison", icon: "Calculator", colorClass: "from-red-600 to-pink-600" },
-    { title: "PR Checklist", slug: "pr-document-checklist", icon: "CheckCircle", colorClass: "from-pink-600 to-red-500" },
+    {
+      title: "Express Entry Guide 2024",
+      slug: "express-entry-guide-2024",
+      icon: "BookOpen",
+      colorClass: "from-red-500 to-red-600",
+      coverUrl: "/placeholder.jpg",
+      coverAlt: "Express Entry Guide 2024",
+      cover: { url: "/placeholder.jpg", alt: "Express Entry Guide 2024" },
+    },
+    {
+      title: "PNP Comparison",
+      slug: "pnp-comparison",
+      icon: "Calculator",
+      colorClass: "from-red-600 to-pink-600",
+      coverUrl: "/placeholder.jpg",
+      coverAlt: "PNP Comparison",
+      cover: { url: "/placeholder.jpg", alt: "PNP Comparison" },
+    },
+    {
+      title: "PR Checklist",
+      slug: "pr-document-checklist",
+      icon: "CheckCircle",
+      colorClass: "from-pink-600 to-red-500",
+      coverUrl: "/placeholder.jpg",
+      coverAlt: "PR Checklist",
+      cover: { url: "/placeholder.jpg", alt: "PR Checklist" },
+    },
   ],
   toolsHeading: {
     Heading: "Immigration Tools",
@@ -58,6 +84,8 @@ const FALLBACK = {
       dateISO: "2024-01-20",
       tags: ["Express Entry", "CRS", "Tips"],
       slug: "improve-crs-score",
+      coverUrl: "/placeholder.jpg",
+      coverAlt: "How to Improve Your CRS Score",
     },
     {
       title: "Study Permit Application Checklist",
@@ -69,6 +97,8 @@ const FALLBACK = {
       dateISO: "2024-01-18",
       tags: ["Study Permit", "Students", "Documents"],
       slug: "study-permit-application-checklist",
+      coverUrl: "/placeholder.jpg",
+      coverAlt: "Study Permit Application Checklist",
     },
     {
       title: "Business Immigration Requirements Calculator",
@@ -80,6 +110,8 @@ const FALLBACK = {
       dateISO: "2024-01-16",
       tags: ["Business Immigration", "Calculator", "Requirements"],
       slug: "business-immigration-requirements-calculator",
+      coverUrl: "/placeholder.jpg",
+      coverAlt: "Business Immigration Requirements Calculator",
     },
   ],
   newsletter: {
@@ -102,13 +134,34 @@ export interface ResourcesLandingProps {
     description?: string | null;
     cta?: { label: string; url: string; variant?: string | null; icon?: string | null } | null;
   };
-  featuredStrip: Array<{ title: string; slug: string; icon?: string | null; colorClass?: string | null }>;
+  featuredStrip: Array<{
+    title: string;
+    slug: string;
+    icon?: string | null;
+    colorClass?: string | null;
+    coverUrl: string | null;
+    coverAlt?: string | null;
+    cover?: { url: string; alt: string | null } | null;
+  }>;
   toolsHeading: { Heading: string; description?: string | null };
   tools: Array<{ name: string; description?: string | null; icon?: string | null; colorClass?: string | null; link?: string | null }>;
   newsHeading: { Heading: string; description?: string | null };
   news: Array<{ title: string; summary: string; dateLabel: string; category: string; urgent?: boolean; slug: string }>;
   libraryHeading: { Heading: string; description?: string | null };
-  library: Array<{ title: string; description: string; type: string; category: string; readTime: string; author: string; dateLabel: string; tags: string[]; slug: string }>;
+  library: Array<{
+    title: string;
+    description: string;
+    type: string;
+    category: string;
+    readTime: string;
+    author: string;
+    dateLabel: string;
+    tags: string[];
+    slug: string;
+    coverUrl: string | null;
+    coverAlt?: string | null;
+    cover?: { url: string; alt: string | null } | null;
+  }>;
   newsletter: { Heading: string; description?: string | null; cta?: { label: string; url: string; variant?: string | null; icon?: string | null } | null };
 }
 
@@ -134,7 +187,10 @@ export function adaptResourcesLanding(api: StrapiResourcesLanding | null): Resou
         ctas: FALLBACK.hero.ctas,
       },
       featuredHeading: FALLBACK.featuredHeading,
-      featuredStrip: FALLBACK.featuredStrip,
+      featuredStrip: FALLBACK.featuredStrip.map((i) => ({
+        ...i,
+        cover: i.cover ? { ...i.cover } : null,
+      })),
       toolsHeading: FALLBACK.toolsHeading,
       tools: FALLBACK.tools.map((t) => ({ ...t })),
       newsHeading: FALLBACK.newsHeading,
@@ -157,6 +213,9 @@ export function adaptResourcesLanding(api: StrapiResourcesLanding | null): Resou
         dateLabel: formatDateISO(r.dateISO),
         tags: r.tags,
         slug: r.slug,
+        coverUrl: r.coverUrl || null,
+        coverAlt: r.coverAlt || null,
+        cover: r.coverUrl ? { url: r.coverUrl, alt: r.coverAlt || r.title || null } : null,
       })),
       newsletter: FALLBACK.newsletter,
     };
@@ -171,7 +230,10 @@ export function adaptResourcesLanding(api: StrapiResourcesLanding | null): Resou
       ctas: FALLBACK.hero.ctas,
     },
     featuredHeading: { ...FALLBACK.featuredHeading },
-    featuredStrip: [...FALLBACK.featuredStrip],
+    featuredStrip: FALLBACK.featuredStrip.map((i) => ({
+      ...i,
+      cover: i.cover ? { ...i.cover } : null,
+    })),
     toolsHeading: { ...FALLBACK.toolsHeading },
     tools: FALLBACK.tools.map((t) => ({ ...t })),
     newsHeading: { ...FALLBACK.newsHeading },
@@ -194,6 +256,9 @@ export function adaptResourcesLanding(api: StrapiResourcesLanding | null): Resou
       dateLabel: formatDateISO(r.dateISO),
       tags: r.tags,
       slug: r.slug,
+      coverUrl: r.coverUrl || null,
+      coverAlt: r.coverAlt || null,
+      cover: r.coverUrl ? { url: r.coverUrl, alt: r.coverAlt || r.title || null } : null,
     })),
     newsletter: { ...FALLBACK.newsletter },
   };
@@ -250,12 +315,40 @@ export function adaptResourcesLanding(api: StrapiResourcesLanding | null): Resou
       }
       case "blocks.featured-strip": {
         if (Array.isArray(block.items) && block.items.length) {
-          out.featuredStrip = block.items.map((i) => ({
-            title: i.title,
-            slug: i.slug,
-            icon: i.icon || undefined,
-            colorClass: i.colorClass || "from-red-500 to-red-600",
-          }));
+          out.featuredStrip = (block.items as any[])
+            .map((i) => {
+              if (typeof i === "number") return null;
+              const resourceNode =
+                i?.resource?.data ||
+                i?.resource ||
+                i?.document?.data ||
+                i?.document ||
+                i;
+              const normalized = normalizeResource(resourceNode);
+              const coverAsset =
+                normalized?.cover ||
+                toMediaAsset(
+                  resourceNode?.cover ||
+                    resourceNode?.cover?.data ||
+                    (resourceNode?.attributes?.cover ?? resourceNode?.attributes?.cover?.data) ||
+                    i?.cover ||
+                    i?.cover?.data ||
+                    i?.image ||
+                    i?.image?.data ||
+                    null
+                );
+
+              return {
+                title: normalized?.title || i.title || "",
+                slug: normalized?.slug || i.slug || "",
+                icon: normalized?.icon || i.icon || undefined,
+                colorClass: i.colorClass || normalized?.colorClass || "from-red-500 to-red-600",
+                coverUrl: coverAsset?.url || null,
+                coverAlt: coverAsset?.alt || null,
+                cover: coverAsset || null,
+              };
+            })
+            .filter((item) => item && item.slug) as ResourcesLandingProps["featuredStrip"];
         }
         break;
       }
@@ -311,21 +404,77 @@ export function adaptResourcesLanding(api: StrapiResourcesLanding | null): Resou
         };
         if (Array.isArray(block.resources) && block.resources.length) {
           out.library = (block.resources as any[])
-            .map((r) =>
-              typeof r === "number"
-                ? null
-                : {
-                    title: r.title || "",
-                    description: r.excerpt || "",
-                    type: r.type || "guide",
-                    category: r?.category?.slug || "guides",
-                    readTime: r.readTime || "—",
-                    author: r.author || "—",
-                    dateLabel: formatDateISO(r.publishedOn || r.lastUpdated),
-                    tags: Array.isArray(r.tags) ? r.tags.map((t: any) => t?.name || t?.slug).filter(Boolean) : [],
-                    slug: r.slug || "",
-                  }
-            )
+            .map((r) => {
+              if (typeof r === "number") return null;
+              const resourceNode =
+                (r?.resource?.data || r?.resource) ??
+                (r?.document?.data || r?.document) ??
+                r;
+              if (!resourceNode) return null;
+
+              const normalized = normalizeResource(resourceNode);
+              if (!normalized) {
+                const coverAsset = toMediaAsset(
+                  resourceNode?.cover ??
+                    resourceNode?.cover?.data ??
+                    (resourceNode?.attributes?.cover ?? resourceNode?.attributes?.cover?.data) ??
+                    null
+                );
+                return {
+                  title: resourceNode?.title || resourceNode?.attributes?.title || "",
+                  description: resourceNode?.excerpt || resourceNode?.attributes?.excerpt || "",
+                  type: resourceNode?.type || resourceNode?.attributes?.type || "guide",
+                  category:
+                    resourceNode?.category?.slug ||
+                    resourceNode?.attributes?.category?.data?.attributes?.slug ||
+                    "guides",
+                  readTime: resourceNode?.readTime || resourceNode?.attributes?.readTime || "—",
+                  author: resourceNode?.author || resourceNode?.attributes?.author || "—",
+                  dateLabel: formatDateISO(
+                    resourceNode?.publishedOn ||
+                      resourceNode?.lastUpdated ||
+                      resourceNode?.attributes?.publishedOn ||
+                      resourceNode?.attributes?.lastUpdated
+                  ),
+                  tags: Array.isArray(resourceNode?.tags)
+                    ? resourceNode.tags.map((t: any) => t?.name || t?.slug).filter(Boolean)
+                    : Array.isArray(resourceNode?.attributes?.tags?.data)
+                    ? resourceNode.attributes.tags.data
+                        .map((t: any) => t?.attributes?.name || t?.attributes?.slug)
+                        .filter(Boolean)
+                    : [],
+                  slug:
+                    resourceNode?.slug ||
+                    resourceNode?.attributes?.slug ||
+                    "",
+                  coverUrl: coverAsset?.url || null,
+                  coverAlt: coverAsset?.alt || null,
+                  cover: coverAsset || null,
+                };
+              }
+              const coverAsset =
+                normalized.cover ??
+                toMediaAsset(
+                  resourceNode?.cover ??
+                    resourceNode?.cover?.data ??
+                    (resourceNode?.attributes?.cover ?? resourceNode?.attributes?.cover?.data) ??
+                    null
+                );
+              return {
+                title: normalized.title || "",
+                description: normalized.excerpt || "",
+                type: normalized.type || "guide",
+                category: normalized.category?.slug || "guides",
+                readTime: normalized.readTime || "—",
+                author: normalized.author || "—",
+                dateLabel: formatDateISO(normalized.publishedOn || normalized.lastUpdated),
+                tags: (normalized.tags || []).map((t) => t.name || t.slug).filter(Boolean),
+                slug: normalized.slug || "",
+                coverUrl: coverAsset?.url || null,
+                coverAlt: coverAsset?.alt || null,
+                cover: coverAsset || null,
+              };
+            })
             .filter(Boolean) as ResourcesLandingProps["library"];
         }
         break;
@@ -349,6 +498,25 @@ export function adaptResourcesLanding(api: StrapiResourcesLanding | null): Resou
         break;
     }
   }
+
+  // Backfill featured strip covers from library data if missing
+  const coverLookup = new Map<string, { url: string; alt: string | null }>();
+  out.library.forEach((entry) => {
+    if (entry.coverUrl) {
+      coverLookup.set(entry.slug, { url: entry.coverUrl, alt: entry.coverAlt || null });
+    }
+  });
+  out.featuredStrip = out.featuredStrip.map((item) => {
+    if (item.coverUrl || item.cover) return item;
+    const match = item.slug ? coverLookup.get(item.slug) : null;
+    if (!match) return item;
+    return {
+      ...item,
+      coverUrl: match.url,
+      coverAlt: match.alt,
+      cover: { url: match.url, alt: match.alt },
+    };
+  });
 
   return out;
 }

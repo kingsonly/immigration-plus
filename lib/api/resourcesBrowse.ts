@@ -20,6 +20,7 @@ export type StrapiResource = {
   type?: string | null;
   category?: { id: number; name?: string; slug?: string } | null;
   tags?: Array<{ id: number; name?: string; slug?: string }> | null;
+  cover?: { url?: string | null; alt?: string | null } | null;
 };
 
 export type StrapiListResponse = {
@@ -36,6 +37,7 @@ export async function fetchResourcesList(query: ResourcesListQuery): Promise<Str
   // populate only what we need (avoid "deep")
   u.searchParams.set("populate[tags]", "1");
   u.searchParams.set("populate[category]", "1");
+  u.searchParams.set("populate[cover]", "*");
 
   // filters
   if (query.q) {
