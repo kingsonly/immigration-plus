@@ -72,6 +72,72 @@ exports.default = strapi_1.factories.createCoreController("api::resources-landin
                 blocks: [],
             });
         }
+        const populateResourceById = async (id) => {
+            if (!id)
+                return null;
+            try {
+                return await strapi.entityService.findOne("api::resource.resource", id, {
+                    populate: {
+                        cover: { populate: "*" },
+                        category: { populate: "*" },
+                        tags: { populate: "*" },
+                    },
+                });
+            }
+            catch (err) {
+                strapi.log.warn(`[resources-landing] failed to hydrate resource ${id}: ${err}`);
+                return null;
+            }
+        };
+        const wrapRelation = (entity) => ({
+            data: {
+                id: entity.id,
+                attributes: entity,
+            },
+        });
+        const hydrateResourceBlocks = async (entry) => {
+            if (!entry || !Array.isArray(entry.blocks))
+                return entry;
+            const hydrateEntry = async (item) => {
+                var _a, _b;
+                if (typeof item === "number")
+                    return item;
+                const resourceRel = ((_a = item === null || item === void 0 ? void 0 : item.resource) === null || _a === void 0 ? void 0 : _a.data) ||
+                    (item === null || item === void 0 ? void 0 : item.resource) ||
+                    ((_b = item === null || item === void 0 ? void 0 : item.document) === null || _b === void 0 ? void 0 : _b.data) ||
+                    (item === null || item === void 0 ? void 0 : item.document) ||
+                    item;
+                const resourceId = resourceRel === null || resourceRel === void 0 ? void 0 : resourceRel.id;
+                if (!resourceId)
+                    return item;
+                const populated = await populateResourceById(resourceId);
+                if (!populated)
+                    return item;
+                if (item.resource) {
+                    item.resource = wrapRelation(populated);
+                }
+                else if (item.document) {
+                    item.document = wrapRelation(populated);
+                }
+                else {
+                    Object.assign(item, populated);
+                }
+                return item;
+            };
+            const hydratedBlocks = await Promise.all(entry.blocks.map(async (block) => {
+                if ((block === null || block === void 0 ? void 0 : block.__component) === "blocks.resource-grid" && Array.isArray(block.resources)) {
+                    const enrichedResources = await Promise.all(block.resources.map(hydrateEntry));
+                    return { ...block, resources: enrichedResources };
+                }
+                if ((block === null || block === void 0 ? void 0 : block.__component) === "blocks.featured-strip" && Array.isArray(block.items)) {
+                    const enrichedItems = await Promise.all(block.items.map(hydrateEntry));
+                    return { ...block, items: enrichedItems };
+                }
+                return block;
+            }));
+            return { ...entry, blocks: hydratedBlocks };
+        };
+        doc = await hydrateResourceBlocks(doc);
         // Sanitize + respond
         const sanitized = await this.sanitizeOutput(doc, ctx);
         return this.transformResponse(sanitized);

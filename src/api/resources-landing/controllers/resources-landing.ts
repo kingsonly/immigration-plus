@@ -81,6 +81,80 @@ export default factories.createCoreController(
         });
       }
 
+      const populateResourceById = async (id: number) => {
+        if (!id) return null;
+        try {
+          return await strapi.entityService.findOne("api::resource.resource", id, {
+            populate: {
+              cover: { populate: "*" },
+              category: { populate: "*" },
+              tags: { populate: "*" },
+            },
+          });
+        } catch (err) {
+          strapi.log.warn(`[resources-landing] failed to hydrate resource ${id}: ${err}`);
+          return null;
+        }
+      };
+
+      const wrapRelation = (entity: any) => ({
+        data: {
+          id: entity.id,
+          attributes: entity,
+        },
+      });
+
+      const hydrateResourceBlocks = async (entry: any) => {
+        if (!entry || !Array.isArray(entry.blocks)) return entry;
+
+        const hydrateEntry = async (item: any) => {
+          if (typeof item === "number") return item;
+
+          const resourceRel =
+            item?.resource?.data ||
+            item?.resource ||
+            item?.document?.data ||
+            item?.document ||
+            item;
+
+          const resourceId = resourceRel?.id;
+          if (!resourceId) return item;
+
+          const populated = await populateResourceById(resourceId);
+          if (!populated) return item;
+
+          if (item.resource) {
+            item.resource = wrapRelation(populated);
+          } else if (item.document) {
+            item.document = wrapRelation(populated);
+          } else {
+            Object.assign(item, populated);
+          }
+
+          return item;
+        };
+
+        const hydratedBlocks = await Promise.all(
+          entry.blocks.map(async (block: any) => {
+            if (block?.__component === "blocks.resource-grid" && Array.isArray(block.resources)) {
+              const enrichedResources = await Promise.all(block.resources.map(hydrateEntry));
+              return { ...block, resources: enrichedResources };
+            }
+
+            if (block?.__component === "blocks.featured-strip" && Array.isArray(block.items)) {
+              const enrichedItems = await Promise.all(block.items.map(hydrateEntry));
+              return { ...block, items: enrichedItems };
+            }
+
+            return block;
+          })
+        );
+
+        return { ...entry, blocks: hydratedBlocks };
+      };
+
+      doc = await hydrateResourceBlocks(doc);
+
       // Sanitize + respond
       const sanitized = await this.sanitizeOutput(doc, ctx);
       return this.transformResponse(sanitized);
