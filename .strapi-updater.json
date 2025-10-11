@@ -1,11 +1,5 @@
 {
-<<<<<<< HEAD
     "latest": "5.27.0",
     "lastUpdateCheck": 1760155319340,
     "lastNotification": 1760155536167
-=======
-	"latest": "5.27.0",
-	"lastUpdateCheck": 1760155319340,
-	"lastNotification": 1760155536167
->>>>>>> 8aa0abe1 (Merge origin/main into feature/dev: ignore dist/ and remove tracked build artifacts)
 }
