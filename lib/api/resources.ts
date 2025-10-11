@@ -1,11 +1,13 @@
 // lib/api/resources.ts
 
+import { normalizeResource } from "./resourceBySlug";
+
 export type StrapiTag = { id: number; slug: string; name?: string | null };
 export type StrapiCategory = { id: number; slug: string; name?: string | null };
 
 export type StrapiResource = {
   id: number;
-  documentId?: string;
+  documentId?: string | null;
   title?: string | null;
   slug: string;
   excerpt?: string | null;
@@ -21,6 +23,7 @@ export type StrapiResource = {
   downloadCount?: number | null;
   externalLink?: string | null;
   toolLink?: string | null;
+  cover?: { url: string; alt: string | null } | null;
   tags?: StrapiTag[];
   category?: StrapiCategory | null;
 };
@@ -61,6 +64,9 @@ function buildPopulateQueryForResource() {
   p.set("populate[category][fields][0]", "slug");
   p.set("populate[category][fields][1]", "name");
 
+  // cover image
+  p.set("populate[cover]", "*");
+
   // show drafts too (preview)
   p.set("publicationState", "preview");
 
@@ -91,37 +97,39 @@ export async function fetchResourceBySlug(slug: string): Promise<StrapiResource 
     const item = Array.isArray(json?.data) ? json.data[0] : null;
     if (!item) return null;
 
-    // Strapi v4/v5 may wrap attributes; your API looked unwrapped already. Handle both.
-    const attributes = item.attributes || item;
+    const normalized = normalizeResource(item);
+    if (!normalized) return null;
+
     return {
-      id: item.id ?? attributes.id,
-      documentId: attributes.documentId,
-      title: attributes.title ?? null,
-      slug: attributes.slug,
-      excerpt: attributes.excerpt ?? null,
-      content: attributes.content ?? null,
-      type: attributes.type ?? null,
-      readTime: attributes.readTime ?? null,
-      author: attributes.author ?? null,
-      publishedOn: attributes.publishedOn ?? null,
-      lastUpdated: attributes.lastUpdated ?? null,
-      icon: attributes.icon ?? null,
-      colorClass: attributes.colorClass ?? null,
-      featured: attributes.featured ?? null,
-      downloadCount: attributes.downloadCount ?? null,
-      externalLink: attributes.externalLink ?? null,
-      toolLink: attributes.toolLink ?? null,
-      tags: (attributes.tags?.data || attributes.tags || []).map((t: any) => {
-        const a = t.attributes || t;
-        return { id: t.id ?? a.id, slug: a.slug, name: a.name ?? null };
-      }),
-      category: attributes.category
-        ? (() => {
-            const c = attributes.category.data || attributes.category;
-            if (!c) return null;
-            const a = c.attributes || c;
-            return { id: c.id ?? a.id, slug: a.slug, name: a.name ?? null };
-          })()
+      id: normalized.id,
+      documentId: normalized.documentId ?? null,
+      title: normalized.title,
+      slug: normalized.slug,
+      excerpt: normalized.excerpt ?? null,
+      content: normalized.content ?? null,
+      type: normalized.type ?? null,
+      readTime: normalized.readTime ?? null,
+      author: normalized.author ?? null,
+      publishedOn: normalized.publishedOn ?? null,
+      lastUpdated: normalized.lastUpdated ?? null,
+      icon: normalized.icon ?? null,
+      colorClass: normalized.colorClass ?? null,
+      featured: normalized.featured ?? null,
+      downloadCount: normalized.downloadCount ?? null,
+      externalLink: normalized.externalLink ?? null,
+      toolLink: normalized.toolLink ?? null,
+      cover: normalized.cover ?? null,
+      tags: (normalized.tags || []).map((t) => ({
+        id: t.id,
+        slug: t.slug,
+        name: t.name ?? null,
+      })),
+      category: normalized.category
+        ? {
+            id: normalized.category.id,
+            slug: normalized.category.slug ?? null,
+            name: normalized.category.name ?? null,
+          }
         : null,
     };
   } catch {
@@ -150,40 +158,41 @@ export async function fetchRelatedResources(type: string, excludeSlug: string, l
     if (!res.ok) return [];
     const json = await res.json();
     const arr: any[] = json?.data || [];
-    return arr.map((item) => {
-      const attributes = item.attributes || item;
-      return {
-        id: item.id ?? attributes.id,
-        documentId: attributes.documentId,
-        title: attributes.title ?? null,
-        slug: attributes.slug,
-        excerpt: attributes.excerpt ?? null,
-        content: attributes.content ?? null,
-        type: attributes.type ?? null,
-        readTime: attributes.readTime ?? null,
-        author: attributes.author ?? null,
-        publishedOn: attributes.publishedOn ?? null,
-        lastUpdated: attributes.lastUpdated ?? null,
-        icon: attributes.icon ?? null,
-        colorClass: attributes.colorClass ?? null,
-        featured: attributes.featured ?? null,
-        downloadCount: attributes.downloadCount ?? null,
-        externalLink: attributes.externalLink ?? null,
-        toolLink: attributes.toolLink ?? null,
-        tags: (attributes.tags?.data || attributes.tags || []).map((t: any) => {
-          const a = t.attributes || t;
-          return { id: t.id ?? a.id, slug: a.slug, name: a.name ?? null };
-        }),
-        category: attributes.category
-          ? (() => {
-              const c = attributes.category.data || attributes.category;
-              if (!c) return null;
-              const a = c.attributes || c;
-              return { id: c.id ?? a.id, slug: a.slug, name: a.name ?? null };
-            })()
+    return arr
+      .map((item) => normalizeResource(item))
+      .filter(Boolean)
+      .map((normalized) => ({
+        id: normalized!.id,
+        documentId: normalized!.documentId ?? null,
+        title: normalized!.title,
+        slug: normalized!.slug,
+        excerpt: normalized!.excerpt ?? null,
+        content: normalized!.content ?? null,
+        type: normalized!.type ?? null,
+        readTime: normalized!.readTime ?? null,
+        author: normalized!.author ?? null,
+        publishedOn: normalized!.publishedOn ?? null,
+        lastUpdated: normalized!.lastUpdated ?? null,
+        icon: normalized!.icon ?? null,
+        colorClass: normalized!.colorClass ?? null,
+        featured: normalized!.featured ?? null,
+        downloadCount: normalized!.downloadCount ?? null,
+        externalLink: normalized!.externalLink ?? null,
+        toolLink: normalized!.toolLink ?? null,
+        cover: normalized!.cover ?? null,
+        tags: (normalized!.tags || []).map((t) => ({
+          id: t.id,
+          slug: t.slug,
+          name: t.name ?? null,
+        })),
+        category: normalized!.category
+          ? {
+              id: normalized!.category.id,
+              slug: normalized!.category.slug ?? null,
+              name: normalized!.category.name ?? null,
+            }
           : null,
-      };
-    });
+      }));
   } catch {
     return [];
   }

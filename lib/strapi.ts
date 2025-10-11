@@ -69,3 +69,37 @@ export async function fetchJSON<T = any>(path: string, opts: FetchOpts = {}): Pr
 
   return (await res.json()) as T;
 }
+
+type StrapiMediaLike = {
+  url?: string | null;
+  alternativeText?: string | null;
+  caption?: string | null;
+  name?: string | null;
+  formats?: Record<
+    string,
+    {
+      url?: string | null;
+    }
+  >;
+};
+
+/** Returns an absolute URL + alt text for a Strapi media object (v4/v5 compatible). */
+export function toMediaAsset(media: any): { url: string; alt: string | null } | null {
+  const node = media?.data ?? media;
+  if (!node) return null;
+
+  const attributes: StrapiMediaLike = node.attributes || node;
+  const pickUrl =
+    attributes.url ||
+    attributes.formats?.large?.url ||
+    attributes.formats?.medium?.url ||
+    attributes.formats?.small?.url ||
+    attributes.formats?.thumbnail?.url;
+
+  if (!pickUrl) return null;
+
+  const url = pickUrl.startsWith("http") ? pickUrl : `${STRAPI_URL}${pickUrl}`;
+  const alt = attributes.alternativeText ?? attributes.caption ?? attributes.name ?? null;
+
+  return { url, alt };
+}

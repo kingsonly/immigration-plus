@@ -11,6 +11,8 @@ export type ResourceListItem = {
   author: string;
   dateLabel: string;
   tags: string[];
+  coverUrl: string | null;
+  coverAlt?: string | null;
 };
 
 export type ResourceListProps = {
@@ -37,6 +39,8 @@ export function adaptCategoryList(
     author: r.author || "",
     dateLabel: fmt(r.publishedOn || r.lastUpdated),
     tags: Array.isArray(r.tags) ? r.tags.map((t) => t.name || t.slug).filter(Boolean) : [],
+    coverUrl: r.cover?.url || null,
+    coverAlt: r.cover?.alt || null,
   }));
   return { heading: `Category: ${heading}`, subheading: `${items.length} item(s)`, items };
 }
@@ -56,6 +60,8 @@ export function adaptTagList(
     author: r.author || "",
     dateLabel: fmt(r.publishedOn || r.lastUpdated),
     tags: Array.isArray(r.tags) ? r.tags.map((t) => t.name || t.slug).filter(Boolean) : [],
+    coverUrl: r.cover?.url || null,
+    coverAlt: r.cover?.alt || null,
   }));
   return { heading: `Tag: ${heading}`, subheading: `${items.length} item(s)`, items };
 }

@@ -16,9 +16,10 @@ function IconByName({
   name?: string | null;
   className?: string;
 }) {
+  const fallback = (Lucide as any).Wrench || (Lucide as any).Settings || ((Lucide as any).Square ?? (() => null));
   const Comp =
-    (name && (Lucide as any)[name as keyof typeof Lucide]) || (Lucide as any).Tool;
-  const Icon = (Comp || Lucide.Tool) as React.ComponentType<{ className?: string }>;
+    (name && (Lucide as any)[name as keyof typeof Lucide]) || fallback;
+  const Icon = Comp as React.ComponentType<{ className?: string }>;
   return <Icon className={className} />;
 }
 

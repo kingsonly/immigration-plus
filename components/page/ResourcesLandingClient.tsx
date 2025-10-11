@@ -11,14 +11,31 @@ import { getIcon } from "@/lib/api/icons";
 import type { ResourcesLandingProps } from "@/lib/mappers/resourcesLanding";
 import { useMemo, useState } from "react";
 import { AlertCircle, BookOpen, Calculator, CheckCircle, Info, User, Calendar, ExternalLink, Lightbulb, Search, Filter, ArrowRight } from "lucide-react";
+import { resolveCoverMedia } from "@/lib/utils/cover";
 
 export default function ResourcesLandingClient({ initialData }: { initialData: ResourcesLandingProps }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
+  const typeToGroup = (type?: string | null) => {
+    switch (type) {
+      case "guide":
+        return "guides";
+      case "checklist":
+        return "checklists";
+      case "calculator":
+        return "calculators";
+      case "news":
+        return "news";
+      default:
+        return "guides";
+    }
+  };
+
   const categories = useMemo(() => {
     const counts = initialData.library.reduce<Record<string, number>>((acc, r) => {
-      acc[r.category] = (acc[r.category] || 0) + 1;
+      const key = typeToGroup(r.type);
+      acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {});
     return [
@@ -26,7 +43,7 @@ export default function ResourcesLandingClient({ initialData }: { initialData: R
       { id: "guides", label: "Immigration Guides", count: counts["guides"] || 0 },
       { id: "checklists", label: "Checklists", count: counts["checklists"] || 0 },
       { id: "calculators", label: "Calculators", count: counts["calculators"] || 0 },
-      { id: "news", label: "Immigration News", count: initialData.news.length || 0 },
+      { id: "news", label: "Immigration News", count: counts["news"] || 0 },
     ];
   }, [initialData]);
 
@@ -38,7 +55,7 @@ export default function ResourcesLandingClient({ initialData }: { initialData: R
         r.title.toLowerCase().includes(term) ||
         r.description.toLowerCase().includes(term) ||
         r.tags.some((t) => t.toLowerCase().includes(term));
-      const matchesCategory = selectedCategory === "all" || r.category === selectedCategory;
+      const matchesCategory = selectedCategory === "all" || typeToGroup(r.type) === selectedCategory;
       return matchesSearch && matchesCategory;
     });
   }, [initialData.library, searchTerm, selectedCategory]);
@@ -122,16 +139,25 @@ export default function ResourcesLandingClient({ initialData }: { initialData: R
           <div className="grid lg:grid-cols-3 gap-8">
             {initialData.featuredStrip.map((item, idx) => {
               const href = item.slug ? `/resources/${item.slug}` : "#";
+              const { url: coverSrc, alt: coverAlt } = resolveCoverMedia(item);
               return (
                 <motion.div key={idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: idx * 0.1 }}>
                   <Link href={href} className="block group" aria-label={`Open ${item.title}`}>
-                    <Card className="h-full hover:shadow-xl transition-all duration-300">
-                      <CardContent className="p-6">
+                    <Card className="group h-full hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
+                      <div className="relative h-40 bg-gray-100 overflow-hidden">
+                        <img
+                          src={coverSrc}
+                          alt={coverAlt || item.title}
+                          className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                          loading={idx < 2 ? "eager" : "lazy"}
+                        />
+                      </div>
+                      <CardContent className="p-6 flex-1 flex flex-col">
                         <div className={`w-16 h-16 bg-gradient-to-r ${item.colorClass || "from-red-500 to-red-600"} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                           {renderIcon(item.icon, "w-8 h-8 text-white")}
                         </div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                        <div className="flex items-center justify-between">
+                        <h3 className="text-xl font-bold text-gray-900 mb-3 flex-1">{item.title}</h3>
+                        <div className="mt-auto flex items-center justify-between pt-2">
                           <Button className={`bg-gradient-to-r ${item.colorClass || "from-red-500 to-red-600"} hover:opacity-90`}>
                             View
                             <ArrowRight className="ml-2 w-4 h-4" />
@@ -196,7 +222,7 @@ export default function ResourcesLandingClient({ initialData }: { initialData: R
                 <motion.div key={index} initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
                   <Card className="hover:shadow-lg transition-shadow duration-300">
                     <CardContent className="p-6">
-                      <div className="flex items-start justify-between">
+                      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
                             {news.urgent && (
@@ -212,8 +238,8 @@ export default function ResourcesLandingClient({ initialData }: { initialData: R
                           <h3 className="text-xl font-bold text-gray-900 mb-2">{news.title}</h3>
                           <p className="text-gray-600">{news.summary}</p>
                         </div>
-                        <Link href={href}>
-                          <Button variant="outline" size="sm" className="ml-4 bg-transparent">
+                        <Link href={href} className="md:ml-4">
+                          <Button variant="outline" size="sm" className="bg-transparent w-full md:w-auto">
                             Read More
                             <ExternalLink className="ml-2 w-4 h-4" />
                           </Button>
@@ -283,10 +309,19 @@ export default function ResourcesLandingClient({ initialData }: { initialData: R
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredResources.map((resource, index) => {
               const href = resource.slug ? `/resources/${resource.slug}` : "#";
+              const { url: coverSrc, alt: coverAlt } = resolveCoverMedia(resource);
               return (
                 <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
-                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
-                    <CardContent className="p-6">
+                  <Card className="group h-full hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col">
+                    <div className="relative h-40 bg-gray-100 overflow-hidden">
+                      <img
+                        src={coverSrc}
+                        alt={coverAlt || resource.title}
+                        className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                        loading={index < 3 ? "eager" : "lazy"}
+                      />
+                    </div>
+                    <CardContent className="p-6 flex-1 flex flex-col">
                       <div className="flex items-center space-x-2 mb-3">
                         <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-red-600 rounded-lg flex items-center justify-center">
                           {resource.type === "guide" && <BookOpen className="w-4 h-4 text-white" />}
@@ -297,15 +332,15 @@ export default function ResourcesLandingClient({ initialData }: { initialData: R
                         <span className="text-xs text-gray-500 uppercase font-medium">{resource.type}</span>
                       </div>
                       <h3 className="text-lg font-bold text-gray-900 mb-2">{resource.title}</h3>
-                      <p className="text-gray-600 text-sm mb-4">{resource.description}</p>
-                      <div className="flex flex-wrap gap-1 mb-4">
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-3">{resource.description}</p>
+                      <div className="flex flex-wrap gap-1 mt-2">
                         {resource.tags.slice(0, 3).map((tag, tagIndex) => (
                           <span key={tagIndex} className="px-2 py-1 bg-red-50 text-red-600 text-xs rounded-full">
                             {tag}
                           </span>
                         ))}
                       </div>
-                      <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
+                      <div className="flex items-center justify-between text-xs text-gray-500 mt-4">
                         <div className="flex items-center space-x-1">
                           <User className="w-3 h-3" />
                           <span>{resource.author}</span>
@@ -315,7 +350,7 @@ export default function ResourcesLandingClient({ initialData }: { initialData: R
                           <span>{resource.dateLabel}</span>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between">
+                      <div className="mt-auto flex items-center justify-between pt-4">
                         <span className="text-sm text-gray-600">{resource.readTime}</span>
                         <Link href={href}>
                           <Button size="sm" className="bg-gradient-to-r from-red-500 to-red-600 hover:opacity-90">

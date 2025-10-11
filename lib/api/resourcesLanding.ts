@@ -90,6 +90,7 @@ type StrapiBlock =
             type?: string | null;
             category?: any;
             tags?: any[];
+            cover?: any;
           }
       >;
     }
@@ -118,6 +119,7 @@ type StrapiBlock =
             type?: string | null;
             category?: any;
             tags?: any[];
+            cover?: any;
           }
       >;
     }

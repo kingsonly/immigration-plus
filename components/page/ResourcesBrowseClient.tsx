@@ -1,7 +1,7 @@
 // components/page/ResourcesBrowseClient.tsx
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BookOpen, Calculator, CheckCircle, Info, Calendar, User, ArrowRight, Search, Filter } from "lucide-react";
+import { resolveCoverMedia } from "@/lib/utils/cover";
 
 export type BrowseClientProps = {
   // echo filters back
@@ -34,6 +35,8 @@ export type BrowseClientProps = {
     author: string;
     dateLabel: string;
     tags: string[];
+    coverUrl: string | null;
+    coverAlt?: string | null;
   }>;
 
   // pagination
@@ -61,6 +64,11 @@ export default function ResourcesBrowseClient({ initialData }: { initialData: Br
 
   const page = Math.max(parseInt(sp.get("page") || String(initialData.page || 1), 10) || 1, 1);
   const pageSize = Math.max(parseInt(sp.get("pageSize") || String(initialData.pageSize || 12), 10) || 12, 1);
+
+  const [searchValue, setSearchValue] = useState(q);
+  useEffect(() => {
+    setSearchValue(q);
+  }, [q]);
 
   const onSet = (patch: Record<string, string | number | undefined>) => {
     const params = new URLSearchParams(sp.toString());
@@ -96,6 +104,13 @@ export default function ResourcesBrowseClient({ initialData }: { initialData: Br
   };
 
   const typeOptions = useMemo(() => initialData.typeOptions, [initialData]);
+  const handleSearch = () => {
+    onSet({ q: searchValue.trim() });
+  };
+  const handleClearAll = () => {
+    setSearchValue("");
+    onSet({ q: "", category: "all", type: TYPE_ANY, page: 1 });
+  };
 
   return (
     <div className="min-h-screen bg-white pt-16">
@@ -112,21 +127,31 @@ export default function ResourcesBrowseClient({ initialData }: { initialData: Br
       {/* Filters */}
       <section className="py-12 bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-            <div className="relative flex-1 max-w-md w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <Input
-                type="text"
-                placeholder="Search resources..."
-                defaultValue={q}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    const val = (e.target as HTMLInputElement).value;
-                    onSet({ q: val });
-                  }
-                }}
-                className="pl-10"
-              />
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex w-full flex-col md:flex-row md:items-center md:gap-3">
+              <div className="relative flex-1 max-w-md w-full">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Input
+                  type="text"
+                  placeholder="Search resources..."
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSearch();
+                    }
+                  }}
+                  className="pl-10"
+                />
+              </div>
+              <div className="mt-3 flex gap-2 md:mt-0">
+                <Button onClick={handleSearch} className="bg-gradient-to-r from-red-500 to-red-600 hover:opacity-90">
+                  Search
+                </Button>
+                <Button variant="outline" onClick={handleClearAll}>
+                  Clear Filters
+                </Button>
+              </div>
             </div>
 
             <div className="flex items-center gap-4">
@@ -171,7 +196,7 @@ export default function ResourcesBrowseClient({ initialData }: { initialData: Br
             <div className="text-center py-24">
               <p className="text-gray-500 text-lg">No results. Try adjusting your filters.</p>
               <div className="mt-6">
-                <Button onClick={() => onSet({ q: "", category: "all", type: TYPE_ANY, page: 1 })}>Clear filters</Button>
+                <Button onClick={handleClearAll}>Clear filters</Button>
               </div>
             </div>
           ) : (
@@ -179,6 +204,7 @@ export default function ResourcesBrowseClient({ initialData }: { initialData: Br
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {initialData.items.map((resource, index) => {
                   const href = resource.slug ? `/resources/${resource.slug}` : "#";
+                  const { url: coverSrc, alt: coverAlt } = resolveCoverMedia(resource);
                   return (
                     <motion.div
                       key={`${resource.slug}-${index}`}
@@ -186,8 +212,16 @@ export default function ResourcesBrowseClient({ initialData }: { initialData: Br
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: index * 0.06 }}
                     >
-                      <Card className="h-full hover:shadow-lg transition-shadow duration-300">
-                        <CardContent className="p-6">
+                      <Card className="group h-full hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col">
+                        <div className="relative h-40 bg-gray-100 overflow-hidden">
+                          <img
+                            src={coverSrc}
+                            alt={coverAlt || resource.title}
+                            className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                            loading={index < 3 ? "eager" : "lazy"}
+                          />
+                        </div>
+                        <CardContent className="p-6 flex-1 flex flex-col">
                           <div className="flex items-center space-x-2 mb-3">
                             <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-red-600 rounded-lg flex items-center justify-center">
                               {resource.type === "guide" && <BookOpen className="w-4 h-4 text-white" />}
@@ -199,7 +233,7 @@ export default function ResourcesBrowseClient({ initialData }: { initialData: Br
                           </div>
 
                           <h3 className="text-lg font-bold text-gray-900 mb-2">{resource.title}</h3>
-                          <p className="text-gray-600 text-sm mb-4">{resource.description}</p>
+                          <p className="text-gray-600 text-sm mb-4 line-clamp-3">{resource.description}</p>
 
                           <div className="flex flex-wrap gap-1 mb-4">
                             {(resource.tags || []).slice(0, 3).map((tag, tagIndex) => (
@@ -220,7 +254,7 @@ export default function ResourcesBrowseClient({ initialData }: { initialData: Br
                             </div>
                           </div>
 
-                          <div className="flex items-center justify-between">
+                          <div className="mt-auto flex items-center justify-between pt-4">
                             <span className="text-sm text-gray-600">{resource.readTime}</span>
                             <Link href={href}>
                               <Button size="sm" className="bg-gradient-to-r from-red-500 to-red-600 hover:opacity-90">

@@ -1,4 +1,5 @@
 // lib/mappers/resourcesList.ts
+import { normalizeResource } from "@/lib/api/resourceBySlug";
 import type { StrapiListResponse } from "@/lib/api/resourcesBrowse";
 
 const TYPE_ANY = "__any";
@@ -18,17 +19,22 @@ export function adaptResourcesList(
   query: { q: string; category: string; type: string; page: number; pageSize: number }
 ) {
   const items =
-    api?.data?.map((r) => ({
-      slug: r.slug,
-      title: r.title || "",
-      description: r.excerpt || "",
-      type: r.type || "guide",
-      category: r.category?.slug || "guides",
-      readTime: r.readTime || "—",
-      author: r.author || "—",
-      dateLabel: formatDateISO(r.publishedOn || r.lastUpdated),
-      tags: (r.tags || []).map((t) => t?.name || t?.slug || "").filter(Boolean),
-    })) ?? [];
+    api?.data
+      ?.map((raw) => normalizeResource(raw))
+      .filter(Boolean)
+      .map((r) => ({
+        slug: r!.slug,
+        title: r!.title || "",
+        description: r!.excerpt || "",
+        type: r!.type || "guide",
+        category: r!.category?.slug || "guides",
+        readTime: r!.readTime || "—",
+        author: r!.author || "—",
+        dateLabel: formatDateISO(r!.publishedOn || r!.lastUpdated),
+        tags: (r!.tags || []).map((t) => t?.name || t?.slug || "").filter(Boolean),
+        coverUrl: r!.cover?.url || null,
+        coverAlt: r!.cover?.alt || null,
+      })) ?? [];
 
   const counts = items.reduce<Record<string, number>>((acc, r) => {
     acc[r.category] = (acc[r.category] || 0) + 1;

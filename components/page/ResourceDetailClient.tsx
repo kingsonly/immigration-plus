@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, BookOpen, Calculator, CheckCircle, Info, ArrowRight, Tag } from "lucide-react";
 import type { ResourceDetailProps, RelatedCard } from "@/lib/mappers/resourceDetail";
+import { resolveCoverMedia } from "@/lib/utils/cover";
 
 function TypeIcon({ type, className }: { type?: string; className?: string }) {
   switch (type) {
@@ -30,6 +31,8 @@ export default function ResourceDetailClient({
   data: ResourceDetailProps;
   related: RelatedCard[];
 }) {
+  const heroCover = resolveCoverMedia(data);
+
   return (
     <div className="min-h-screen bg-white pt-16">
       {/* Header */}
@@ -86,6 +89,14 @@ export default function ResourceDetailClient({
               )}
             </div>
           )}
+
+          <div className="mt-8 rounded-3xl overflow-hidden shadow-md bg-gray-100">
+            <img
+              src={heroCover.url}
+              alt={heroCover.alt || data.title}
+              className="w-full h-64 md:h-80 object-cover"
+            />
+          </div>
         </div>
       </section>
 
@@ -126,36 +137,49 @@ export default function ResourceDetailClient({
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Related Resources</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {related.map((r, i) => (
-                <motion.div
-                  key={r.slug}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: i * 0.06 }}
-                >
-                  <Card className="h-full hover:shadow-lg transition">
-                    <CardContent className="p-6">
+              {related.map((r, i) => {
+                const cover = resolveCoverMedia(r);
+                return (
+                  <motion.div
+                    key={r.slug}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: i * 0.06 }}
+                  >
+                  <Card className="group h-full hover:shadow-lg transition overflow-hidden flex flex-col">
+                    <div className="relative h-36 bg-gray-100 overflow-hidden">
+                      <img
+                        src={cover.url}
+                        alt={cover.alt || r.title}
+                        className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                        loading={i < 3 ? "eager" : "lazy"}
+                      />
+                    </div>
+                    <CardContent className="p-6 flex-1 flex flex-col">
                       <div className="flex items-center space-x-2 mb-3">
                         <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-red-600 rounded-lg flex items-center justify-center">
                           <TypeIcon type={r.type} className="w-4 h-4 text-white" />
                         </div>
                         <span className="text-xs text-gray-500 uppercase font-medium">{r.type}</span>
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-2">{r.title}</h3>
-                      <p className="text-sm text-gray-600 line-clamp-3 mb-4">{r.summary}</p>
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-2">{r.title}</h3>
+                        <p className="text-sm text-gray-600 line-clamp-3 mb-4">{r.summary}</p>
                       <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
                         <span>{r.category}</span>
                         <span>{r.dateLabel}</span>
                       </div>
-                      <Link href={`/resources/${r.slug}`}>
-                        <Button size="sm" className="bg-gradient-to-r from-red-500 to-red-600 hover:opacity-90">
-                          Read More
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
+                      <div className="mt-auto pt-4 flex justify-end">
+                        <Link href={`/resources/${r.slug}`}>
+                          <Button size="sm" className="bg-gradient-to-r from-red-500 to-red-600 hover:opacity-90">
+                            Read More
+                          </Button>
+                        </Link>
+                      </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </section>

@@ -11,6 +11,8 @@ export type IndexItem = {
   author: string;
   dateLabel: string;
   tags: string[];
+  coverUrl: string | null;
+  coverAlt?: string | null;
 };
 
 export type IndexProps = {
@@ -43,6 +45,8 @@ export function adaptResourcesIndex(
     author: r.author || "",
     dateLabel: fmt(r.publishedOn || r.lastUpdated),
     tags: (r.tags || []).map((t) => t.name || t.slug).filter(Boolean),
+    coverUrl: r.cover?.url || null,
+    coverAlt: r.cover?.alt || null,
   }));
 
   const categoryOptions = [{ value: "", label: "All categories" }].concat(

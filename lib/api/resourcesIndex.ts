@@ -1,5 +1,7 @@
 // lib/api/resourcesIndex.ts
 
+import { normalizeResource } from "./resourceBySlug";
+
 export type ApiTag = { id: number; slug: string; name?: string | null };
 export type ApiCategory = { id: number; slug: string; name?: string | null };
 
@@ -15,6 +17,7 @@ export type ApiResource = {
   lastUpdated?: string | null;
   tags?: ApiTag[];
   category?: ApiCategory | null;
+  cover?: { url: string; alt: string | null } | null;
 };
 
 export type IndexFetchParams = {
@@ -58,6 +61,9 @@ function basePopulate() {
   p.set("populate[category][fields][0]", "slug");
   p.set("populate[category][fields][1]", "name");
 
+  // cover image
+  p.set("populate[cover]", "*");
+
   // preview + locale
   p.set("publicationState", "preview");
   p.set("locale", "en");
@@ -73,36 +79,30 @@ function parseResources(json: any): { items: ApiResource[]; pagination: IndexRes
   const list: any[] = json?.data || [];
   const meta = json?.meta?.pagination || { page: 1, pageSize: list.length, pageCount: 1, total: list.length };
 
-  const items: ApiResource[] = list.map((node) => {
-    const a = node.attributes || node;
-    const tagsRaw = a.tags?.data || a.tags || [];
-    const catRaw = a.category?.data || a.category || null;
+  const normalized = list.map((node) => normalizeResource(node)).filter(Boolean) as NonNullable<ReturnType<
+    typeof normalizeResource
+  >>[];
 
-    const tags: ApiTag[] = tagsRaw.map((t: any) => {
-      const ta = t.attributes || t;
-      return { id: t.id ?? ta.id, slug: ta.slug, name: ta.name ?? null };
-    });
-
-    let category: ApiCategory | null = null;
-    if (catRaw) {
-      const ca = catRaw.attributes || catRaw;
-      category = { id: catRaw.id ?? ca.id, slug: ca.slug, name: ca.name ?? null };
-    }
-
-    return {
-      id: node.id ?? a.id,
-      slug: a.slug,
-      title: a.title ?? null,
-      excerpt: a.excerpt ?? null,
-      type: a.type ?? null,
-      readTime: a.readTime ?? null,
-      author: a.author ?? null,
-      publishedOn: a.publishedOn ?? null,
-      lastUpdated: a.lastUpdated ?? null,
-      tags,
-      category,
-    };
-  });
+  const items: ApiResource[] = normalized.map((r) => ({
+    id: r.id,
+    slug: r.slug,
+    title: r.title,
+    excerpt: r.excerpt ?? null,
+    type: r.type ?? null,
+    readTime: r.readTime ?? null,
+    author: r.author ?? null,
+    publishedOn: r.publishedOn ?? null,
+    lastUpdated: r.lastUpdated ?? null,
+    cover: r.cover ?? null,
+    tags: (r.tags || []).map((t) => ({
+      id: t.id,
+      slug: t.slug,
+      name: t.name ?? null,
+    })),
+    category: r.category
+      ? { id: r.category.id, slug: r.category.slug ?? "", name: r.category.name ?? null }
+      : null,
+  }));
 
   return { items, pagination: meta };
 }

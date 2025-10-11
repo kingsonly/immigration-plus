@@ -27,6 +27,8 @@ export type ResourceDetailProps = {
   toolLink?: string | null;
   category?: { slug?: string | null; name?: string | null } | null;
   tags: Array<{ slug: string; name: string }>;
+  coverUrl: string | null;
+  coverAlt?: string | null;
 };
 
 export function adaptResourceDetail(api: StrapiResource | null): ResourceDetailProps | null {
@@ -49,6 +51,8 @@ export function adaptResourceDetail(api: StrapiResource | null): ResourceDetailP
     tags: (api.tags || [])
       .map((t) => ({ slug: t.slug || "", name: t.name || t.slug || "" }))
       .filter((t) => t.slug),
+    coverUrl: api.cover?.url || null,
+    coverAlt: api.cover?.alt || null,
   };
 }
 
@@ -60,6 +64,8 @@ export type RelatedCard = {
   dateLabel: string;
   category: string;
   tags: string[];
+  coverUrl: string | null;
+  coverAlt?: string | null;
 };
 
 export function adaptRelated(list: StrapiResource[]): RelatedCard[] {
@@ -71,5 +77,7 @@ export function adaptRelated(list: StrapiResource[]): RelatedCard[] {
     dateLabel: formatDateISO(r.publishedOn || r.lastUpdated),
     category: r.category?.name || r.category?.slug || "",
     tags: (r.tags || []).map((t) => t?.name || t?.slug || "").filter(Boolean),
+    coverUrl: r.cover?.url || null,
+    coverAlt: r.cover?.alt || null,
   }));
 }
