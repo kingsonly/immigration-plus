@@ -69,25 +69,49 @@ export function normalizeResource(node: any): StrapiResource | null {
   };
 }
 
+// export async function fetchResourceBySlug(slug: string): Promise<StrapiResource | null> {
+//   const base = process.env.NEXT_PUBLIC_STRAPI_URL || process.env.STRAPI_URL || "http://localhost:1337";
+//   const url = new URL(`${base.replace(/\/$/, "")}/api/resources`);
+//   url.searchParams.set("filters[slug][$eq]", slug);
+//   url.searchParams.set("pagination[pageSize]", "1");
+//   url.searchParams.set("publicationState", "live");
+//   url.searchParams.set(
+//     "populate",
+//     ["category", "tags", "cover"].join(",")
+//   );
+
+//   const res = await fetch(url.toString(), {
+//     method: "GET",
+//     cache: "no-store", // reflect Strapi edits immediately; switch to revalidate if you prefer
+//   });
+
+//   if (!res.ok) return null;
+
+//   const json: StrapiResourceResponse = await res.json();
+//   const item = Array.isArray(json.data) ? json.data[0] : null;
+//   return normalizeResource(item);
+// }
+
 export async function fetchResourceBySlug(slug: string): Promise<StrapiResource | null> {
   const base = process.env.NEXT_PUBLIC_STRAPI_URL || process.env.STRAPI_URL || "http://localhost:1337";
-  const url = new URL(`${base.replace(/\/$/, "")}/api/resources`);
-  url.searchParams.set("filters[slug][$eq]", slug);
-  url.searchParams.set("pagination[pageSize]", "1");
-  url.searchParams.set("publicationState", "live");
-  url.searchParams.set(
-    "populate",
-    ["category", "tags", "cover"].join(",")
-  );
+  const url = new URL(`${base.replace(/\/$/, "")}/api/resources/slug/${encodeURIComponent(slug)}`);
+  // url.searchParams.set("filters[slug][$eq]", slug);
+  // url.searchParams.set("pagination[pageSize]", "1");
+  // url.searchParams.set("publicationState", "live");
+  // url.searchParams.set(
+  //   "populate",
+  //   ["category", "tags", "cover"].join(",")
+  // );
 
   const res = await fetch(url.toString(), {
     method: "GET",
     cache: "no-store", // reflect Strapi edits immediately; switch to revalidate if you prefer
   });
 
-  if (!res.ok) return null;
 
+
+  if (!res.ok) return null;
   const json: StrapiResourceResponse = await res.json();
-  const item = Array.isArray(json.data) ? json.data[0] : null;
+  const item = Array.isArray(json.data) ? json.data[0] : json.data;
   return normalizeResource(item);
 }
