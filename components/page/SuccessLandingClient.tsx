@@ -3,9 +3,10 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import * as Lucide from "lucide-react";
-import { Star, Quote, MapPin, Calendar, ChevronLeft, ChevronRight, Play, Users } from "lucide-react";
+import { Star, Quote, MapPin, Calendar, ChevronLeft, ChevronRight, Play, Users, User } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import Link from "next/link";
 import type { SuccessLandingProps } from "@/lib/mappers/successLanding";
 
@@ -30,6 +31,35 @@ export default function SuccessLandingClient({ initialData }: { initialData: Suc
   const prev = () => setActive((p) => (p - 1 + Math.max(1, filteredStories.length)) % Math.max(1, filteredStories.length));
 
   const activeStory = filteredStories[active] || filteredStories[0] || stories[0];
+  const [videoModal, setVideoModal] = useState<SuccessLandingProps["videos"]["items"][number] | null>(null);
+
+  const openVideo = (video: SuccessLandingProps["videos"]["items"][number]) => {
+    if (video.url || video.videoFileUrl) {
+      setVideoModal(video);
+    }
+  };
+
+  const closeVideo = () => setVideoModal(null);
+
+  const toEmbedUrl = (url: string) => {
+    if (!url) return "";
+    try {
+      const parsed = new URL(url);
+      if (parsed.hostname.includes("youtube.com") || parsed.hostname.includes("youtu.be")) {
+        if (parsed.hostname.includes("youtu.be")) {
+          const id = parsed.pathname.replace("/", "");
+          if (id) return `https://www.youtube.com/embed/${id}?autoplay=1`;
+        }
+        const vid = parsed.searchParams.get("v");
+        if (vid) {
+          return `https://www.youtube.com/embed/${vid}?autoplay=1`;
+        }
+      }
+      return url;
+    } catch {
+      return url;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white pt-16">
@@ -222,17 +252,31 @@ export default function SuccessLandingClient({ initialData }: { initialData: Suc
               <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: i * 0.1 }}>
                 <Card className="h-full hover:shadow-lg transition-shadow duration-300">
                   <CardContent className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      {t.avatarUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={t.avatarUrl}
+                          alt={t.avatarAlt || t.name}
+                          className="w-12 h-12 rounded-full object-cover border border-red-100"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center">
+                          <User className="w-6 h-6" />
+                        </div>
+                      )}
+                      <div>
+                        <p className="font-semibold text-gray-900">{t.name}</p>
+                        {t.country && <p className="text-sm text-gray-500">{t.country}</p>}
+                        {t.program && <p className="text-sm text-red-600 font-medium">{t.program}</p>}
+                      </div>
+                    </div>
                     <div className="flex items-center space-x-1 mb-4">
                       {Array.from({ length: Math.max(1, Math.min(5, t.rating)) }).map((_, k) => (
                         <Star key={k} className="w-5 h-5 text-yellow-400 fill-current" />
                       ))}
                     </div>
                     <p className="text-gray-600 mb-4 italic">"{t.text}"</p>
-                    <div className="border-t pt-4">
-                      <p className="font-semibold text-gray-900">{t.name}</p>
-                      {t.country && <p className="text-sm text-gray-500">{t.country}</p>}
-                      {t.program && <p className="text-sm text-red-600 font-medium">{t.program}</p>}
-                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -254,22 +298,46 @@ export default function SuccessLandingClient({ initialData }: { initialData: Suc
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {initialData.videos.items.map((v, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: i * 0.1 }}>
-                <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group cursor-pointer">
-                  <div className="relative">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={v.thumbnailUrl || "/placeholder.svg"} alt={v.name} className="w-full h-48 object-cover" />
-                    <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
-                      <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <Play className="w-8 h-8 text-red-600 ml-1" />
+                {v.url || v.videoFileUrl ? (
+                  <button type="button" onClick={() => openVideo(v)} className="group block w-full text-left focus:outline-none">
+                    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                      <div className="relative">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={v.thumbnailUrl || "/placeholder.svg"}
+                          alt={v.thumbnailAlt || v.name}
+                          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
+                          <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <Play className="w-8 h-8 text-red-600 ml-1" />
+                          </div>
+                        </div>
+                      </div>
+                      <CardContent className="p-4">
+                        <h3 className="font-semibold text-gray-900 mb-1">{v.name}</h3>
+                        {v.country && <p className="text-sm text-gray-500 mb-1">{v.country}</p>}
+                        {v.program && <p className="text-sm text-red-600 font-medium">{v.program}</p>}
+                      </CardContent>
+                    </Card>
+                  </button>
+                ) : (
+                  <Card className="overflow-hidden border-dashed hover:shadow-lg transition-shadow duration-300">
+                    <div className="relative">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={v.thumbnailUrl || "/placeholder.svg"} alt={v.thumbnailAlt || v.name} className="w-full h-48 object-cover opacity-80" />
+                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                        <div className="w-16 h-16 bg-white/80 rounded-full flex items-center justify-center">
+                          <Play className="w-8 h-8 text-red-400 ml-1" />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <CardContent className="p-4">
-                    <h3 className="font-semibold text-gray-900 mb-1">{v.name}</h3>
-                    {v.country && <p className="text-sm text-gray-500 mb-1">{v.country}</p>}
-                    {v.program && <p className="text-sm text-red-600 font-medium">{v.program}</p>}
-                  </CardContent>
-                </Card>
+                    <CardContent className="p-4">
+                      <h3 className="font-semibold text-gray-900 mb-1">{v.name}</h3>
+                      <p className="text-sm text-gray-500">Video coming soon</p>
+                    </CardContent>
+                  </Card>
+                )}
               </motion.div>
             ))}
           </div>
@@ -290,6 +358,38 @@ export default function SuccessLandingClient({ initialData }: { initialData: Suc
           </motion.div>
         </div>
       </section>
+
+      <Dialog open={!!videoModal} onOpenChange={(open) => { if (!open) closeVideo(); }}>
+        <DialogContent className="max-w-3xl border-none bg-transparent p-0 shadow-none">
+          {videoModal && (
+            <div className="overflow-hidden rounded-2xl bg-black">
+              <div className="aspect-video w-full">
+                {videoModal.videoFileUrl ? (
+                  <video
+                    src={videoModal.videoFileUrl}
+                    controls
+                    autoPlay
+                    poster={videoModal.thumbnailUrl || undefined}
+                    className="h-full w-full"
+                  />
+                ) : (
+                  <iframe
+                    src={toEmbedUrl(videoModal.url || "")}
+                    title={videoModal.name}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="h-full w-full"
+                  />
+                )}
+              </div>
+              <div className="bg-white p-4">
+                <h3 className="font-semibold text-gray-900">{videoModal.name}</h3>
+                {videoModal.program && <p className="text-sm text-red-600">{videoModal.program}</p>}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

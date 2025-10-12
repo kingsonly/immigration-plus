@@ -6,7 +6,6 @@
 # next.js
 /.next/
 /out/
-
 # production
 /build
 
@@ -25,3 +24,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+story.json
+story_all.json
+success-landing.json
+success-landing-populated.json
+success-landing-raw.json
+success-landing-star.json
+success-stories.json
+upload-files.json
+upload-testimonial-files.json
