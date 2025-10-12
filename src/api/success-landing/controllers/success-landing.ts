@@ -10,10 +10,53 @@ export default factories.createCoreController(
       // Accept incoming query bits (locale, publicationState, etc.)
       const { locale, publicationState } = ctx.query || {};
 
-      // IMPORTANT for v5 DZ: second-level populate must be "*"
       const populate = {
         blocks: {
-          populate: "*", // allow all second-level links in polymorphic DZ
+          populate: "*",
+          on: {
+            "blocks.story-carousel": {
+              populate: {
+                stories: {
+                  populate: {
+                    image: {
+                      populate: "*",
+                    },
+                  },
+                },
+              },
+            },
+            "blocks.hero": {
+              populate: {
+                image: true,
+                ctas: true,
+              },
+            },
+            "blocks.video-grid": {
+              populate: {
+                videos: {
+                  populate: {
+                    thumbnail: {
+                      populate: "*",
+                    },
+                    videoFile: {
+                      populate: "*",
+                    },
+                  },
+                },
+              },
+            },
+            "blocks.testimonials-grid": {
+              populate: {
+                testimonials: {
+                  populate: {
+                    avatar: {
+                      populate: "*",
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       } as any;
 

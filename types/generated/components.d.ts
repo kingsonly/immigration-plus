@@ -876,7 +876,9 @@ export interface SharedVideo extends Struct.ComponentSchema {
     country: Schema.Attribute.String;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     program: Schema.Attribute.String;
+    thumbnail: Schema.Attribute.Media<'images'>;
     thumbnailUrl: Schema.Attribute.String;
+    videoFile: Schema.Attribute.Media<'videos'>;
     videoUrl: Schema.Attribute.String;
   };
 }

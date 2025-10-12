@@ -6,6 +6,16 @@
     "country": { "type": "string" },
     "program": { "type": "string" },
     "thumbnailUrl": { "type": "string" },
-    "videoUrl": { "type": "string" }
+    "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "videoUrl": { "type": "string" },
+    "videoFile": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["videos"]
+    }
   }
 }
