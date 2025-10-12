@@ -1,5 +1,14 @@
 // lib/mappers/successLanding.ts
 import type { StrapiSuccessLanding } from "@/lib/api/successLanding";
+import { toMediaAsset } from "@/lib/strapi";
+
+const STRAPI_BASE_URL = (process.env.NEXT_PUBLIC_STRAPI_URL || process.env.STRAPI_URL || "").replace(/\/$/, "");
+
+function ensureAbsoluteUrl(value?: string | null): string | null {
+  if (!value) return null;
+  if (/^https?:\/\//i.test(value)) return value;
+  return STRAPI_BASE_URL ? `${STRAPI_BASE_URL}${value}` : value;
+}
 
 export type SuccessLandingProps = {
   hero: {
@@ -20,6 +29,7 @@ export type SuccessLandingProps = {
       program?: string | null;
       timeline?: string | null;
       imageUrl?: string | null;
+      imageAlt?: string | null;
       quote?: string | null;
       story?: string | null;
       outcome?: string | null;
@@ -30,12 +40,28 @@ export type SuccessLandingProps = {
   testimonials: {
     Heading: string;
     description?: string | null;
-    items: Array<{ name: string; country?: string | null; program?: string | null; rating: number; text: string }>;
+    items: Array<{
+      name: string;
+      country?: string | null;
+      program?: string | null;
+      rating: number;
+      text: string;
+      avatarUrl?: string | null;
+      avatarAlt?: string | null;
+    }>;
   };
   videos: {
     Heading: string;
     description?: string | null;
-    items: Array<{ name: string; country?: string | null; program?: string | null; thumbnailUrl?: string | null; url?: string | null }>;
+    items: Array<{
+      name: string;
+      country?: string | null;
+      program?: string | null;
+      thumbnailUrl?: string | null;
+      thumbnailAlt?: string | null;
+      url?: string | null;
+      videoFileUrl?: string | null;
+    }>;
   };
   cta: {
     Heading: string;
@@ -206,12 +232,32 @@ export function adaptSuccessLanding(api: StrapiSuccessLanding | null): SuccessLa
                     country: s.country || null,
                     program: s.program || null,
                     timeline: s.timeline || null,
-                    imageUrl:
-                      typeof s.image === "string"
-                        ? s.image
-                        : s.image?.url
-                        ? s.image.url
-                        : null,
+                    imageUrl: (() => {
+                      const asset = toMediaAsset(s.image);
+                      if (asset) return asset.url;
+                      if (typeof s.image === "string") return s.image;
+                      const media = s.image?.data?.attributes || s.image;
+                      const rel =
+                        media?.formats?.medium?.url ||
+                        media?.formats?.small?.url ||
+                        media?.url ||
+                        null;
+                      if (!rel) return null;
+                      const base = (process.env.NEXT_PUBLIC_STRAPI_URL || process.env.STRAPI_URL || "").replace(/\/$/, "");
+                      return rel.startsWith("http") ? rel : base ? `${base}${rel}` : rel;
+                    })(),
+                    imageAlt: (() => {
+                      const asset = toMediaAsset(s.image);
+                      if (asset) return asset.alt;
+                      if (typeof s.image === "string") return null;
+                      const media = s.image?.data?.attributes || s.image;
+                      return (
+                        media?.alternativeText ||
+                        media?.caption ||
+                        media?.name ||
+                        null
+                      );
+                    })(),
                     quote: s.quote || null,
                     story: s.story || null,
                     outcome: s.outcome || null,
@@ -272,14 +318,37 @@ export function adaptSuccessLanding(api: StrapiSuccessLanding | null): SuccessLa
         out.testimonials.Heading = block.Heading || FALLBACK.testimonials.Heading;
         out.testimonials.description = block.description || FALLBACK.testimonials.description;
         out.testimonials.items = Array.isArray(block.testimonials) && block.testimonials.length ?
-           block.testimonials.map((t) => ({
-            name: t.name || "",
-            country: t.country || null,
-            program: t.program || null,
-            rating: Math.max(1, Math.min(5, t.rating ?? 5)),
-            text: t.text || "",
-            
-          }))
+           block.testimonials.map((t) => {
+            const media = toMediaAsset(t.avatar);
+            let avatarUrl = media?.url || null;
+            let avatarAlt = media?.alt || null;
+
+            if (!avatarUrl && typeof t.avatar === "string") {
+              avatarUrl = ensureAbsoluteUrl(t.avatar);
+            } else if (!avatarUrl && t.avatar?.url) {
+              avatarUrl = ensureAbsoluteUrl(t.avatar.url);
+              avatarAlt = t.avatar.alternativeText || t.avatar.caption || t.avatar.name || avatarAlt;
+            } else if (!avatarUrl && t.avatar?.data?.attributes) {
+              const attrs = t.avatar.data.attributes;
+              avatarUrl = ensureAbsoluteUrl(
+                attrs?.formats?.thumbnail?.url ||
+                  attrs?.formats?.small?.url ||
+                  attrs?.url ||
+                  null
+              );
+              avatarAlt = attrs?.alternativeText || attrs?.caption || attrs?.name || avatarAlt;
+            }
+
+            return {
+              name: t.name || "",
+              country: t.country || null,
+              program: t.program || null,
+              rating: Math.max(1, Math.min(5, t.rating ?? 5)),
+              text: t.text || "",
+              avatarUrl,
+              avatarAlt,
+            };
+          })
         : [];
         break;
       }
@@ -287,13 +356,30 @@ export function adaptSuccessLanding(api: StrapiSuccessLanding | null): SuccessLa
         out.videos.Heading = block.Heading || FALLBACK.videos.Heading;
         out.videos.description = block.description || FALLBACK.videos.description;
         if (Array.isArray(block.videos) && block.videos.length) {
-          out.videos.items = block.videos.map((v) => ({
-            name: v.name || "",
-            country: v.country || null,
-            program: v.program || null,
-            thumbnailUrl: v.thumbnailUrl || null,
-            url: v.url || null,
-          }));
+          out.videos.items = block.videos.map((v) => {
+            const thumbAsset = toMediaAsset(v.thumbnail);
+            const videoAsset = toMediaAsset(v.videoFile);
+
+            const thumbnailUrl =
+              thumbAsset?.url ||
+              ensureAbsoluteUrl(
+                typeof v.thumbnail === "string" ? v.thumbnail : v.thumbnailUrl || null
+              );
+
+            const videoFileUrl =
+              videoAsset?.url ||
+              (typeof v.videoFile === "string" ? ensureAbsoluteUrl(v.videoFile) : null);
+
+            return {
+              name: v.name || "",
+              country: v.country || null,
+              program: v.program || null,
+              thumbnailUrl,
+              thumbnailAlt: thumbAsset?.alt || null,
+              url: ensureAbsoluteUrl(v.url || v.videoUrl || null),
+              videoFileUrl,
+            };
+          });
         }
         break;
       }

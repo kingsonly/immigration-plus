@@ -74,7 +74,10 @@ export type SuccessBlock =
         country?: string | null;
         program?: string | null;
         thumbnailUrl?: string | null;
+        thumbnail?: any;
         url?: string | null;
+        videoUrl?: string | null;
+        videoFile?: any;
       }>;
     }
   | {
@@ -105,12 +108,11 @@ export async function fetchSuccessLanding(): Promise<StrapiSuccessLanding | null
     process.env.STRAPI_URL ||
     "http://localhost:1337";
 
+  const cleanedBase = base.replace(/\/$/, "");
+
   // Let the custom controller do the population.
   // Keep publicationState=preview if you want drafts on frontend.
-  const url = `${base.replace(
-    /\/$/,
-    ""
-  )}/api/success-landing?locale=en&publicationState=preview`;
+  const url = `${cleanedBase}/api/success-landing?locale=en&publicationState=preview`;
 
   try {
     const res = await fetch(url, {
@@ -123,6 +125,64 @@ export async function fetchSuccessLanding(): Promise<StrapiSuccessLanding | null
     const json = await res.json();
     const data = json?.data;
     if (!data) return null;
+
+    const blocks = Array.isArray(data.blocks) ? data.blocks : [];
+
+    // While the backend exposes a slug endpoint, some hosted environments strip media
+    // relations from the success-landing payload. Fill in the gap by re-fetching the
+    // affected success stories directly so carousel items can show their images.
+    const slugsNeedingImages = new Set<string>();
+    for (const block of blocks) {
+      if (!block || block.__component !== "blocks.story-carousel") continue;
+      const stories = Array.isArray(block.stories) ? block.stories : [];
+      for (const raw of stories) {
+        if (!raw || typeof raw === "number") continue;
+        const media = raw.image?.data?.attributes || raw.image;
+        if (!media?.url && raw.slug) {
+          slugsNeedingImages.add(raw.slug);
+        }
+      }
+    }
+
+    if (slugsNeedingImages.size) {
+      try {
+        const storyUrl = new URL(`${cleanedBase}/api/success-stories`);
+        storyUrl.searchParams.set("populate", "image");
+        storyUrl.searchParams.set("publicationState", "preview");
+
+        const storyRes = await fetch(storyUrl.toString(), { method: "GET", cache: "no-store" });
+        if (storyRes.ok) {
+          const storyJson = await storyRes.json();
+          const list = Array.isArray(storyJson.data) ? storyJson.data : [];
+          const slugToImage = new Map<string, any>();
+
+          for (const node of list) {
+            const attrs = node?.attributes || node;
+            if (!attrs?.slug || !attrs.image) continue;
+            if (slugsNeedingImages.has(attrs.slug)) {
+              slugToImage.set(attrs.slug, attrs.image);
+            }
+          }
+
+          if (slugToImage.size) {
+            for (const block of blocks) {
+              if (!block || block.__component !== "blocks.story-carousel") continue;
+              const stories = Array.isArray(block.stories) ? block.stories : [];
+              block.stories = stories.map((raw: any) => {
+                if (!raw || typeof raw === "number" || !raw.slug) return raw;
+                const media = raw.image?.data?.attributes || raw.image;
+                if (!media?.url && slugToImage.has(raw.slug)) {
+                  raw.image = slugToImage.get(raw.slug);
+                }
+                return raw;
+              });
+            }
+          }
+        }
+      } catch {
+        // ignore enrichment failures; carousel will fall back to placeholders
+      }
+    }
 
     return {
       id: data.id,
