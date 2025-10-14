@@ -1,5 +1,6 @@
 // app/api/contact/route.ts
 import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 type Payload = {
   firstName: string;
@@ -82,7 +83,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // (Optional) trigger email via Strapi email plugin or another service later
+    await sendNotification(body).catch((err) => {
+      console.error("Failed to send contact notification", err);
+    });
 
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (e: any) {
@@ -91,4 +94,52 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
+}
+
+function canSendEmail() {
+  return (
+    !!process.env.NEWSLETTER_NOTIFICATION_EMAIL &&
+    !!process.env.SMTP_HOST &&
+    !!process.env.SMTP_PORT &&
+    !!process.env.SMTP_USER &&
+    !!process.env.SMTP_PASS
+  );
+}
+
+async function sendNotification(payload: Payload) {
+  if (!canSendEmail()) return;
+
+  const port = Number(process.env.SMTP_PORT);
+  const secure = process.env.SMTP_SECURE === "true" || port === 465;
+
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port,
+    secure,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+
+  const lines = [
+    "New contact inquiry",
+    "",
+    `Name: ${payload.firstName} ${payload.lastName}`,
+    `Email: ${payload.email}`,
+    payload.phone ? `Phone: ${payload.phone}` : null,
+    payload.service ? `Service: ${payload.service}` : null,
+    "",
+    "Message:",
+    payload.message,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM || process.env.SMTP_USER,
+    to: process.env.NEWSLETTER_NOTIFICATION_EMAIL,
+    subject: "New website inquiry",
+    text: lines,
+  });
 }

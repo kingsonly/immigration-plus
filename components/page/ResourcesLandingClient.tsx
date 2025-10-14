@@ -4,8 +4,9 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import NewsletterForm from "@/components/forms/NewsletterForm";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getIcon } from "@/lib/api/icons";
 import type { ResourcesLandingProps } from "@/lib/mappers/resourcesLanding";
@@ -384,15 +385,7 @@ export default function ResourcesLandingClient({ initialData }: { initialData: R
             {initialData.newsletter.description && (
               <p className="text-xl text-white/90 mb-8">{initialData.newsletter.description}</p>
             )}
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-              <Input type="email" placeholder="Enter your email address" className="flex-1 bg-white" />
-              <Link href={initialData.newsletter.cta?.url || "#"}>
-                <Button className="bg-white text-red-600 hover:bg-gray-100 font-semibold">
-                  {initialData.newsletter.cta?.label || "Subscribe"}
-                </Button>
-              </Link>
-            </div>
-            <p className="text-white/70 text-sm mt-4">No spam, unsubscribe at any time. We respect your privacy.</p>
+            <NewsletterForm className="max-w-md mx-auto" source="resources-landing" />
           </motion.div>
         </div>
       </section>
