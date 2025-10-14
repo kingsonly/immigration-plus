@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "newsletter_subscribers",
+  "info": {
+    "displayName": "Newsletter Subscriber",
+    "singularName": "newsletter-subscriber",
+    "pluralName": "newsletter-subscribers",
+    "description": "Email addresses opted in to the newsletter"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["subscribed", "unsubscribed"],
+      "default": "subscribed",
+      "required": true
+    },
+    "source": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "json"
+    },
+    "confirmed": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}
