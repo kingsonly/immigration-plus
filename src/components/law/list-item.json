@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_law_list_items",
+  "info": {
+    "displayName": "List Item"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
+

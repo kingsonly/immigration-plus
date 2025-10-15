@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_law_feature_grids",
+  "info": {
+    "displayName": "Feature Grid"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": true
+    },
+    "subheading": {
+      "type": "text"
+    },
+    "items": {
+      "type": "component",
+      "component": "law.value-card",
+      "repeatable": true,
+      "required": true
+    }
+  }
+}
+

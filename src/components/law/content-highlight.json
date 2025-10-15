@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_law_content_highlights",
+  "info": {
+    "displayName": "Content Highlight"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "bullets": {
+      "type": "component",
+      "repeatable": true,
+      "component": "law.bullet-item"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "kind": "singleType",
+  "collectionName": "law_site_setting",
+  "info": {
+    "displayName": "Law Site Setting",
+    "singularName": "law-site-setting",
+    "pluralName": "law-site-settings",
+    "description": "Global settings for the law firm website"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "brandName": {
+      "type": "string"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false
+    },
+    "topContacts": {
+      "type": "component",
+      "repeatable": true,
+      "component": "law.contact-point"
+    },
+    "socialLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.social-link"
+    },
+    "navigation": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.nav-link"
+    },
+    "footer": {
+      "type": "component",
+      "component": "layout.footer"
+    },
+    "footerNote": {
+      "type": "text"
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo"
+    }
+  }
+}
+

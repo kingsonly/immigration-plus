@@ -1,0 +1,43 @@
+{
+  "collectionName": "components_law_hero_blocks",
+  "info": {
+    "displayName": "Hero Block"
+  },
+  "options": {},
+  "attributes": {
+    "eyebrow": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "background": {
+      "type": "media",
+      "multiple": false
+    },
+    "primaryCta": {
+      "type": "component",
+      "component": "law.cta-button"
+    },
+    "secondaryCta": {
+      "type": "component",
+      "component": "law.cta-button"
+    },
+    "phoneLabel": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "string"
+    },
+    "phoneHref": {
+      "type": "string"
+    }
+  }
+}

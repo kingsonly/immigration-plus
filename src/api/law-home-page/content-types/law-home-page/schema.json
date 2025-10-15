@@ -1,0 +1,61 @@
+{
+  "kind": "singleType",
+  "collectionName": "law_home_page",
+  "info": {
+    "displayName": "Law Home Page",
+    "singularName": "law-home-page",
+    "pluralName": "law-home-pages",
+    "description": "Homepage content for the law firm site"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "hero": {
+      "type": "component",
+      "component": "law.hero-block"
+    },
+    "practiceHeading": {
+      "type": "string"
+    },
+    "practiceDescription": {
+      "type": "richtext"
+    },
+    "practiceAreas": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::law-practice-area.law-practice-area"
+    },
+    "notaryHighlight": {
+      "type": "component",
+      "component": "law.content-highlight"
+    },
+    "legalAidHighlight": {
+      "type": "component",
+      "component": "law.content-highlight"
+    },
+    "aboutBlock": {
+      "type": "component",
+      "component": "law.about-block"
+    },
+    "testimonialsHeading": {
+      "type": "string"
+    },
+    "testimonialsSubheading": {
+      "type": "text"
+    },
+    "testimonials": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::law-testimonial.law-testimonial"
+    },
+    "contactCta": {
+      "type": "component",
+      "component": "law.contact-cta"
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "kind": "collectionType",
+  "collectionName": "law_practice_areas",
+  "info": {
+    "displayName": "Law Practice Area",
+    "singularName": "law-practice-area",
+    "pluralName": "law-practice-areas",
+    "description": "Practice areas for the law firm website"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "cardSummary": {
+      "type": "text"
+    },
+    "icon": {
+      "type": "string"
+    },
+    "backgroundImage": {
+      "type": "media",
+      "multiple": false
+    },
+    "services": {
+      "type": "component",
+      "repeatable": true,
+      "component": "law.service-card"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false
+    },
+    "intro": {
+      "type": "richtext"
+    },
+    "body": {
+      "type": "richtext"
+    },
+    "order": {
+      "type": "integer"
+    }
+  }
+}

@@ -616,6 +616,396 @@ export interface ApiInquiryInquiry extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiLawAboutPageLawAboutPage extends Struct.SingleTypeSchema {
+  collectionName: 'law_about_page';
+  info: {
+    description: 'About page content for the law firm site';
+    displayName: 'Law About Page';
+    pluralName: 'law-about-pages';
+    singularName: 'law-about-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::law-about-page.law-about-page'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    sections: Schema.Attribute.DynamicZone<
+      [
+        'law.hero-simple',
+        'law.mission-section',
+        'law.feature-grid',
+        'law.team-section',
+        'law.simple-cta',
+      ]
+    >;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiLawBlogPageLawBlogPage extends Struct.SingleTypeSchema {
+  collectionName: 'law_blog_page';
+  info: {
+    description: 'Blog landing page for the law firm site';
+    displayName: 'Law Blog Page';
+    pluralName: 'law-blog-pages';
+    singularName: 'law-blog-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    hero: Schema.Attribute.Component<'law.hero-block', false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::law-blog-page.law-blog-page'
+    > &
+      Schema.Attribute.Private;
+    newsletter: Schema.Attribute.Component<'law.newsletter-signup', false>;
+    posts: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::law-blog-post.law-blog-post'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiLawBlogPostLawBlogPost extends Struct.CollectionTypeSchema {
+  collectionName: 'law_blog_posts';
+  info: {
+    description: 'Blog posts for the law firm site';
+    displayName: 'Law Blog Post';
+    pluralName: 'law-blog-posts';
+    singularName: 'law-blog-post';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    author: Schema.Attribute.String;
+    category: Schema.Attribute.String;
+    content: Schema.Attribute.RichText;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    excerpt: Schema.Attribute.Text;
+    heroImage: Schema.Attribute.Media;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::law-blog-post.law-blog-post'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    publishedDate: Schema.Attribute.Date;
+    readTime: Schema.Attribute.String;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiLawContactPageLawContactPage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'law_contact_page';
+  info: {
+    description: 'Contact page for the law firm site';
+    displayName: 'Law Contact Page';
+    pluralName: 'law-contact-pages';
+    singularName: 'law-contact-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::law-contact-page.law-contact-page'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    sections: Schema.Attribute.DynamicZone<
+      [
+        'law.hero-simple',
+        'law.contact-info-section',
+        'law.contact-cta',
+        'law.simple-cta',
+      ]
+    >;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiLawHomePageLawHomePage extends Struct.SingleTypeSchema {
+  collectionName: 'law_home_page';
+  info: {
+    description: 'Homepage content for the law firm site';
+    displayName: 'Law Home Page';
+    pluralName: 'law-home-pages';
+    singularName: 'law-home-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    aboutBlock: Schema.Attribute.Component<'law.about-block', false>;
+    contactCta: Schema.Attribute.Component<'law.contact-cta', false>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    hero: Schema.Attribute.Component<'law.hero-block', false>;
+    legalAidHighlight: Schema.Attribute.Component<
+      'law.content-highlight',
+      false
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::law-home-page.law-home-page'
+    > &
+      Schema.Attribute.Private;
+    notaryHighlight: Schema.Attribute.Component<'law.content-highlight', false>;
+    practiceAreas: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::law-practice-area.law-practice-area'
+    >;
+    practiceDescription: Schema.Attribute.RichText;
+    practiceHeading: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    testimonials: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::law-testimonial.law-testimonial'
+    >;
+    testimonialsHeading: Schema.Attribute.String;
+    testimonialsSubheading: Schema.Attribute.Text;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiLawNotaryPageLawNotaryPage extends Struct.SingleTypeSchema {
+  collectionName: 'law_notary_page';
+  info: {
+    description: 'Notary services landing page for the law site';
+    displayName: 'Law Notary Page';
+    pluralName: 'law-notary-pages';
+    singularName: 'law-notary-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::law-notary-page.law-notary-page'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    sections: Schema.Attribute.DynamicZone<
+      [
+        'law.hero-block',
+        'law.service-grid',
+        'blocks.process-steps-block',
+        'law.contact-cta',
+      ]
+    >;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiLawPracticeAreaLawPracticeArea
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'law_practice_areas';
+  info: {
+    description: 'Practice areas for the law firm website';
+    displayName: 'Law Practice Area';
+    pluralName: 'law-practice-areas';
+    singularName: 'law-practice-area';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    backgroundImage: Schema.Attribute.Media;
+    body: Schema.Attribute.RichText;
+    cardSummary: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    heroImage: Schema.Attribute.Media;
+    icon: Schema.Attribute.String;
+    intro: Schema.Attribute.RichText;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::law-practice-area.law-practice-area'
+    > &
+      Schema.Attribute.Private;
+    order: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    services: Schema.Attribute.Component<'law.service-card', true>;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiLawPracticeAreasPageLawPracticeAreasPage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'law_practice_areas_page';
+  info: {
+    description: 'Landing page for all practice areas';
+    displayName: 'Law Practice Areas Page';
+    pluralName: 'law-practice-areas-pages';
+    singularName: 'law-practice-areas-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    cta: Schema.Attribute.Component<'law.simple-cta', false>;
+    hero: Schema.Attribute.Component<'law.hero-simple', false>;
+    introduction: Schema.Attribute.RichText;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::law-practice-areas-page.law-practice-areas-page'
+    > &
+      Schema.Attribute.Private;
+    practiceAreas: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::law-practice-area.law-practice-area'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiLawSiteSettingLawSiteSetting
+  extends Struct.SingleTypeSchema {
+  collectionName: 'law_site_setting';
+  info: {
+    description: 'Global settings for the law firm website';
+    displayName: 'Law Site Setting';
+    pluralName: 'law-site-settings';
+    singularName: 'law-site-setting';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    brandName: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    footer: Schema.Attribute.Component<'layout.footer', false>;
+    footerNote: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::law-site-setting.law-site-setting'
+    > &
+      Schema.Attribute.Private;
+    logo: Schema.Attribute.Media;
+    navigation: Schema.Attribute.Component<'shared.nav-link', true>;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    socialLinks: Schema.Attribute.Component<'shared.social-link', true>;
+    topContacts: Schema.Attribute.Component<'law.contact-point', true>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiLawTestimonialLawTestimonial
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'law_testimonials';
+  info: {
+    description: 'Client testimonials for the law firm website';
+    displayName: 'Law Testimonial';
+    pluralName: 'law-testimonials';
+    singularName: 'law-testimonial';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::law-testimonial.law-testimonial'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    order: Schema.Attribute.Integer;
+    photo: Schema.Attribute.Media;
+    publishedAt: Schema.Attribute.DateTime;
+    quote: Schema.Attribute.RichText & Schema.Attribute.Required;
+    rating: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 5;
+          min: 1;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<5>;
+    role: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiNewsletterSubscriberNewsletterSubscriber
   extends Struct.CollectionTypeSchema {
   collectionName: 'newsletter_subscribers';
@@ -1787,6 +2177,16 @@ declare module '@strapi/strapi' {
       'api::global.global': ApiGlobalGlobal;
       'api::homepage.homepage': ApiHomepageHomepage;
       'api::inquiry.inquiry': ApiInquiryInquiry;
+      'api::law-about-page.law-about-page': ApiLawAboutPageLawAboutPage;
+      'api::law-blog-page.law-blog-page': ApiLawBlogPageLawBlogPage;
+      'api::law-blog-post.law-blog-post': ApiLawBlogPostLawBlogPost;
+      'api::law-contact-page.law-contact-page': ApiLawContactPageLawContactPage;
+      'api::law-home-page.law-home-page': ApiLawHomePageLawHomePage;
+      'api::law-notary-page.law-notary-page': ApiLawNotaryPageLawNotaryPage;
+      'api::law-practice-area.law-practice-area': ApiLawPracticeAreaLawPracticeArea;
+      'api::law-practice-areas-page.law-practice-areas-page': ApiLawPracticeAreasPageLawPracticeAreasPage;
+      'api::law-site-setting.law-site-setting': ApiLawSiteSettingLawSiteSetting;
+      'api::law-testimonial.law-testimonial': ApiLawTestimonialLawTestimonial;
       'api::newsletter-subscriber.newsletter-subscriber': ApiNewsletterSubscriberNewsletterSubscriber;
       'api::resource-category.resource-category': ApiResourceCategoryResourceCategory;
       'api::resource-tag.resource-tag': ApiResourceTagResourceTag;

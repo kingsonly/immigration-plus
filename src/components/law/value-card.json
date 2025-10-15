@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_law_value_cards",
+  "info": {
+    "displayName": "Value Card"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

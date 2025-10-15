@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_law_hero_simples",
+  "info": {
+    "displayName": "Hero Simple"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "background": {
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

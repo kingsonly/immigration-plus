@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_law_contact_info_sections",
+  "info": {
+    "displayName": "Contact Info Section"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "cards": {
+      "type": "component",
+      "component": "law.contact-info-card",
+      "repeatable": true,
+      "required": true
+    }
+  }
+}

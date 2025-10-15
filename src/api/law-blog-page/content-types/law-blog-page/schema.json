@@ -1,0 +1,32 @@
+{
+  "kind": "singleType",
+  "collectionName": "law_blog_page",
+  "info": {
+    "displayName": "Law Blog Page",
+    "singularName": "law-blog-page",
+    "pluralName": "law-blog-pages",
+    "description": "Blog landing page for the law firm site"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "hero": {
+      "type": "component",
+      "component": "law.hero-block"
+    },
+    "posts": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::law-blog-post.law-blog-post"
+    },
+    "newsletter": {
+      "type": "component",
+      "component": "law.newsletter-signup"
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo"
+    }
+  }
+}

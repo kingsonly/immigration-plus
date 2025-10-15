@@ -1,0 +1,28 @@
+{
+  "kind": "singleType",
+  "collectionName": "law_contact_page",
+  "info": {
+    "displayName": "Law Contact Page",
+    "singularName": "law-contact-page",
+    "pluralName": "law-contact-pages",
+    "description": "Contact page for the law firm site"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "sections": {
+      "type": "dynamiczone",
+      "components": [
+        "law.hero-simple",
+        "law.contact-info-section",
+        "law.contact-cta",
+        "law.simple-cta"
+      ]
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo"
+    }
+  }
+}

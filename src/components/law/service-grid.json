@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_law_service_grids",
+  "info": {
+    "displayName": "Service Grid"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "services": {
+      "type": "component",
+      "component": "law.service-card",
+      "repeatable": true,
+      "required": true
+    }
+  }
+}

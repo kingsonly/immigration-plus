@@ -1,0 +1,30 @@
+{
+  "kind": "singleType",
+  "collectionName": "law_about_page",
+  "info": {
+    "displayName": "Law About Page",
+    "singularName": "law-about-page",
+    "pluralName": "law-about-pages",
+    "description": "About page content for the law firm site"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "sections": {
+      "type": "dynamiczone",
+      "components": [
+        "law.hero-simple",
+        "law.mission-section",
+        "law.feature-grid",
+        "law.team-section",
+        "law.simple-cta"
+      ]
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo"
+    }
+  }
+}
+

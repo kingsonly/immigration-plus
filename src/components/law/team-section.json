@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_law_team_sections",
+  "info": {
+    "displayName": "Team Section"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": true
+    },
+    "subheading": {
+      "type": "text"
+    },
+    "members": {
+      "type": "component",
+      "component": "law.team-member",
+      "repeatable": true,
+      "required": true
+    }
+  }
+}
+

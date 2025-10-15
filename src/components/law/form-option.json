@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_law_form_options",
+  "info": {
+    "displayName": "Form Option"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "value": {
+      "type": "string"
+    }
+  }
+}

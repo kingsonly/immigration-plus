@@ -1,0 +1,36 @@
+{
+  "kind": "singleType",
+  "collectionName": "law_practice_areas_page",
+  "info": {
+    "displayName": "Law Practice Areas Page",
+    "singularName": "law-practice-areas-page",
+    "pluralName": "law-practice-areas-pages",
+    "description": "Landing page for all practice areas"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "hero": {
+      "type": "component",
+      "component": "law.hero-simple"
+    },
+    "introduction": {
+      "type": "richtext"
+    },
+    "practiceAreas": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::law-practice-area.law-practice-area"
+    },
+    "cta": {
+      "type": "component",
+      "component": "law.simple-cta"
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo"
+    }
+  }
+}
+

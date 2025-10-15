@@ -1,0 +1,28 @@
+{
+  "kind": "singleType",
+  "collectionName": "law_notary_page",
+  "info": {
+    "displayName": "Law Notary Page",
+    "singularName": "law-notary-page",
+    "pluralName": "law-notary-pages",
+    "description": "Notary services landing page for the law site"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "sections": {
+      "type": "dynamiczone",
+      "components": [
+        "law.hero-block",
+        "law.service-grid",
+        "blocks.process-steps-block",
+        "law.contact-cta"
+      ]
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo"
+    }
+  }
+}

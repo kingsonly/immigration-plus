@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_law_bullet_items",
+  "info": {
+    "displayName": "Bullet Item"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "icon": {
+      "type": "string"
+    }
+  }
+}

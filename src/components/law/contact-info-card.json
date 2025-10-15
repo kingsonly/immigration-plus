@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_law_contact_info_cards",
+  "info": {
+    "displayName": "Contact Info Card"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "lines": {
+      "type": "component",
+      "component": "law.list-item",
+      "repeatable": true
+    }
+  }
+}

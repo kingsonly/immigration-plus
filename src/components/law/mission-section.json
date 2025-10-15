@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_law_mission_sections",
+  "info": {
+    "displayName": "Mission Section"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": true
+    },
+    "body": {
+      "type": "richtext"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false
+    },
+    "cta": {
+      "type": "component",
+      "component": "law.cta-button"
+    }
+  }
+}
+

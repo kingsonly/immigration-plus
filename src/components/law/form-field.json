@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_law_form_fields",
+  "info": {
+    "displayName": "Form Field"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "fieldType": {
+      "type": "enumeration",
+      "enum": ["text", "email", "tel", "textarea", "select"],
+      "default": "text"
+    },
+    "placeholder": {
+      "type": "string"
+    },
+    "required": {
+      "type": "boolean",
+      "default": false
+    },
+    "options": {
+      "type": "component",
+      "component": "law.form-option",
+      "repeatable": true
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "collectionName": "components_law_about_blocks",
+  "info": {
+    "displayName": "About Block"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": true
+    },
+    "intro": {
+      "type": "richtext"
+    },
+    "secondaryText": {
+      "type": "richtext"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false
+    },
+    "whyTitle": {
+      "type": "string"
+    },
+    "whyItems": {
+      "type": "component",
+      "repeatable": true,
+      "component": "law.bullet-item"
+    },
+    "valuesTitle": {
+      "type": "string"
+    },
+    "values": {
+      "type": "component",
+      "repeatable": true,
+      "component": "law.value-card"
+    }
+  }
+}

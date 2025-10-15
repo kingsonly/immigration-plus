@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_law_contact_points",
+  "info": {
+    "displayName": "Contact Point"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string",
+      "required": true
+    },
+    "href": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "string"
+    }
+  }
+}

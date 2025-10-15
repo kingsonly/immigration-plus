@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_law_newsletter_signups",
+  "info": {
+    "displayName": "Newsletter Signup"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "emailPlaceholder": {
+      "type": "string"
+    },
+    "buttonLabel": {
+      "type": "string"
+    },
+    "disclaimer": {
+      "type": "text"
+    }
+  }
+}

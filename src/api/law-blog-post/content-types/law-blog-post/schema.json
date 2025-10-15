@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "law_blog_posts",
+  "info": {
+    "displayName": "Law Blog Post",
+    "singularName": "law-blog-post",
+    "pluralName": "law-blog-posts",
+    "description": "Blog posts for the law firm site"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "excerpt": {
+      "type": "text"
+    },
+    "publishedDate": {
+      "type": "date"
+    },
+    "author": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "readTime": {
+      "type": "string"
+    },
+    "content": {
+      "type": "richtext"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

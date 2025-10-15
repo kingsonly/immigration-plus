@@ -1,0 +1,27 @@
+{
+    "collectionName":  "components_law_team_members",
+    "info":  {
+                 "displayName":  "Team Member"
+             },
+    "options":  {
+
+                },
+    "attributes":  {
+                       "name":  {
+                                    "type":  "string",
+                                    "required":  true
+                                },
+                       "role":  {
+                                    "type":  "string"
+                                },
+                       "photo":  {
+                                     "type":  "media",
+                                     "multiple":  false
+                                 },
+                       "details":  {
+                                       "type":  "component",
+                                       "component":  "law.list-item",
+                                       "repeatable":  true
+                                   }
+                   }
+}

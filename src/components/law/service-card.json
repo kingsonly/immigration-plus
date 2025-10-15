@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_law_service_cards",
+  "info": {
+    "displayName": "Service Card"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "summary": {
+      "type": "text"
+    },
+    "details": {
+      "type": "component",
+      "component": "law.list-item",
+      "repeatable": true
+    }
+  }
+}
+

@@ -549,6 +549,308 @@ export interface BusinessStream extends Struct.ComponentSchema {
   };
 }
 
+export interface LawAboutBlock extends Struct.ComponentSchema {
+  collectionName: 'components_law_about_blocks';
+  info: {
+    displayName: 'About Block';
+  };
+  attributes: {
+    heading: Schema.Attribute.String & Schema.Attribute.Required;
+    image: Schema.Attribute.Media;
+    intro: Schema.Attribute.RichText;
+    secondaryText: Schema.Attribute.RichText;
+    values: Schema.Attribute.Component<'law.value-card', true>;
+    valuesTitle: Schema.Attribute.String;
+    whyItems: Schema.Attribute.Component<'law.bullet-item', true>;
+    whyTitle: Schema.Attribute.String;
+  };
+}
+
+export interface LawBulletItem extends Struct.ComponentSchema {
+  collectionName: 'components_law_bullet_items';
+  info: {
+    displayName: 'Bullet Item';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface LawContactCta extends Struct.ComponentSchema {
+  collectionName: 'components_law_contact_ctas';
+  info: {
+    displayName: 'Contact CTA';
+  };
+  attributes: {
+    contactPoints: Schema.Attribute.Component<'law.contact-point', true>;
+    description: Schema.Attribute.RichText;
+    formDescription: Schema.Attribute.Text;
+    formFields: Schema.Attribute.Component<'law.form-field', true>;
+    formSubmitLabel: Schema.Attribute.String;
+    formTitle: Schema.Attribute.String;
+    heading: Schema.Attribute.String & Schema.Attribute.Required;
+    primaryCta: Schema.Attribute.Component<'law.cta-button', false>;
+    secondaryCta: Schema.Attribute.Component<'law.cta-button', false>;
+    whatToExpect: Schema.Attribute.Component<'law.bullet-item', true>;
+  };
+}
+
+export interface LawContactInfoCard extends Struct.ComponentSchema {
+  collectionName: 'components_law_contact_info_cards';
+  info: {
+    displayName: 'Contact Info Card';
+  };
+  attributes: {
+    icon: Schema.Attribute.String;
+    lines: Schema.Attribute.Component<'law.list-item', true>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface LawContactInfoSection extends Struct.ComponentSchema {
+  collectionName: 'components_law_contact_info_sections';
+  info: {
+    displayName: 'Contact Info Section';
+  };
+  attributes: {
+    cards: Schema.Attribute.Component<'law.contact-info-card', true> &
+      Schema.Attribute.Required;
+    description: Schema.Attribute.RichText;
+    heading: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface LawContactPoint extends Struct.ComponentSchema {
+  collectionName: 'components_law_contact_points';
+  info: {
+    displayName: 'Contact Point';
+  };
+  attributes: {
+    href: Schema.Attribute.String;
+    icon: Schema.Attribute.String;
+    label: Schema.Attribute.String;
+    value: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface LawContentHighlight extends Struct.ComponentSchema {
+  collectionName: 'components_law_content_highlights';
+  info: {
+    displayName: 'Content Highlight';
+  };
+  attributes: {
+    bullets: Schema.Attribute.Component<'law.bullet-item', true>;
+    description: Schema.Attribute.RichText;
+    image: Schema.Attribute.Media;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface LawCtaButton extends Struct.ComponentSchema {
+  collectionName: 'components_law_cta_buttons';
+  info: {
+    description: '';
+    displayName: 'CTA Button';
+  };
+  attributes: {
+    icon: Schema.Attribute.String;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    url: Schema.Attribute.String & Schema.Attribute.Required;
+    variant: Schema.Attribute.Enumeration<
+      ['default', 'outline', 'ghost', 'link']
+    > &
+      Schema.Attribute.DefaultTo<'default'>;
+  };
+}
+
+export interface LawFeatureGrid extends Struct.ComponentSchema {
+  collectionName: 'components_law_feature_grids';
+  info: {
+    displayName: 'Feature Grid';
+  };
+  attributes: {
+    heading: Schema.Attribute.String & Schema.Attribute.Required;
+    items: Schema.Attribute.Component<'law.value-card', true> &
+      Schema.Attribute.Required;
+    subheading: Schema.Attribute.Text;
+  };
+}
+
+export interface LawFormField extends Struct.ComponentSchema {
+  collectionName: 'components_law_form_fields';
+  info: {
+    displayName: 'Form Field';
+  };
+  attributes: {
+    fieldType: Schema.Attribute.Enumeration<
+      ['text', 'email', 'tel', 'textarea', 'select']
+    > &
+      Schema.Attribute.DefaultTo<'text'>;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    options: Schema.Attribute.Component<'law.form-option', true>;
+    placeholder: Schema.Attribute.String;
+    required: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+  };
+}
+
+export interface LawFormOption extends Struct.ComponentSchema {
+  collectionName: 'components_law_form_options';
+  info: {
+    displayName: 'Form Option';
+  };
+  attributes: {
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    value: Schema.Attribute.String;
+  };
+}
+
+export interface LawHeroBlock extends Struct.ComponentSchema {
+  collectionName: 'components_law_hero_blocks';
+  info: {
+    displayName: 'Hero Block';
+  };
+  attributes: {
+    background: Schema.Attribute.Media;
+    description: Schema.Attribute.RichText;
+    eyebrow: Schema.Attribute.String;
+    phoneHref: Schema.Attribute.String;
+    phoneLabel: Schema.Attribute.String;
+    phoneNumber: Schema.Attribute.String;
+    primaryCta: Schema.Attribute.Component<'law.cta-button', false>;
+    secondaryCta: Schema.Attribute.Component<'law.cta-button', false>;
+    subtitle: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface LawHeroSimple extends Struct.ComponentSchema {
+  collectionName: 'components_law_hero_simples';
+  info: {
+    displayName: 'Hero Simple';
+  };
+  attributes: {
+    background: Schema.Attribute.Media;
+    subtitle: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface LawListItem extends Struct.ComponentSchema {
+  collectionName: 'components_law_list_items';
+  info: {
+    displayName: 'List Item';
+  };
+  attributes: {
+    text: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface LawMissionSection extends Struct.ComponentSchema {
+  collectionName: 'components_law_mission_sections';
+  info: {
+    displayName: 'Mission Section';
+  };
+  attributes: {
+    body: Schema.Attribute.RichText;
+    cta: Schema.Attribute.Component<'law.cta-button', false>;
+    heading: Schema.Attribute.String & Schema.Attribute.Required;
+    image: Schema.Attribute.Media;
+  };
+}
+
+export interface LawNewsletterSignup extends Struct.ComponentSchema {
+  collectionName: 'components_law_newsletter_signups';
+  info: {
+    displayName: 'Newsletter Signup';
+  };
+  attributes: {
+    buttonLabel: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    disclaimer: Schema.Attribute.Text;
+    emailPlaceholder: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface LawServiceCard extends Struct.ComponentSchema {
+  collectionName: 'components_law_service_cards';
+  info: {
+    displayName: 'Service Card';
+  };
+  attributes: {
+    details: Schema.Attribute.Component<'law.list-item', true>;
+    icon: Schema.Attribute.String;
+    summary: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface LawServiceGrid extends Struct.ComponentSchema {
+  collectionName: 'components_law_service_grids';
+  info: {
+    displayName: 'Service Grid';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    services: Schema.Attribute.Component<'law.service-card', true> &
+      Schema.Attribute.Required;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface LawSimpleCta extends Struct.ComponentSchema {
+  collectionName: 'components_law_simple_ctas';
+  info: {
+    displayName: 'Simple CTA';
+  };
+  attributes: {
+    description: Schema.Attribute.RichText;
+    primaryCta: Schema.Attribute.Component<'law.cta-button', false>;
+    secondaryCta: Schema.Attribute.Component<'law.cta-button', false>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface LawTeamMember extends Struct.ComponentSchema {
+  collectionName: 'components_law_team_members';
+  info: {
+    displayName: 'Team Member';
+  };
+  attributes: {
+    details: Schema.Attribute.Component<'law.list-item', true>;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    photo: Schema.Attribute.Media;
+    role: Schema.Attribute.String;
+  };
+}
+
+export interface LawTeamSection extends Struct.ComponentSchema {
+  collectionName: 'components_law_team_sections';
+  info: {
+    displayName: 'Team Section';
+  };
+  attributes: {
+    heading: Schema.Attribute.String & Schema.Attribute.Required;
+    members: Schema.Attribute.Component<'law.team-member', true> &
+      Schema.Attribute.Required;
+    subheading: Schema.Attribute.Text;
+  };
+}
+
+export interface LawValueCard extends Struct.ComponentSchema {
+  collectionName: 'components_law_value_cards';
+  info: {
+    displayName: 'Value Card';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface LayoutFooter extends Struct.ComponentSchema {
   collectionName: 'components_layout_footers';
   info: {
@@ -922,6 +1224,28 @@ declare module '@strapi/strapi' {
       'business.service': BusinessService;
       'business.step': BusinessStep;
       'business.stream': BusinessStream;
+      'law.about-block': LawAboutBlock;
+      'law.bullet-item': LawBulletItem;
+      'law.contact-cta': LawContactCta;
+      'law.contact-info-card': LawContactInfoCard;
+      'law.contact-info-section': LawContactInfoSection;
+      'law.contact-point': LawContactPoint;
+      'law.content-highlight': LawContentHighlight;
+      'law.cta-button': LawCtaButton;
+      'law.feature-grid': LawFeatureGrid;
+      'law.form-field': LawFormField;
+      'law.form-option': LawFormOption;
+      'law.hero-block': LawHeroBlock;
+      'law.hero-simple': LawHeroSimple;
+      'law.list-item': LawListItem;
+      'law.mission-section': LawMissionSection;
+      'law.newsletter-signup': LawNewsletterSignup;
+      'law.service-card': LawServiceCard;
+      'law.service-grid': LawServiceGrid;
+      'law.simple-cta': LawSimpleCta;
+      'law.team-member': LawTeamMember;
+      'law.team-section': LawTeamSection;
+      'law.value-card': LawValueCard;
       'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;
       'service.cta': ServiceCta;
