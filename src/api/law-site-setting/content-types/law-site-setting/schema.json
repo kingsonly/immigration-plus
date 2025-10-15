@@ -14,9 +14,15 @@
     "brandName": {
       "type": "string"
     },
+    "tagline": {
+      "type": "string"
+    },
     "logo": {
       "type": "media",
-      "multiple": false
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "topContacts": {
       "type": "component",

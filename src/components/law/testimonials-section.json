@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_law_testimonials_sections",
+  "info": {
+    "displayName": "Testimonials Section"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": true
+    },
+    "subheading": {
+      "type": "text"
+    },
+    "testimonials": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::law-testimonial.law-testimonial"
+    }
+  }
+}

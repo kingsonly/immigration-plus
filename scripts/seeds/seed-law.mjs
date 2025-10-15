@@ -1451,6 +1451,7 @@ const notaryPageSections = [
 
 const siteSettingData = {
   brandName: "Bekwyn Law PC",
+  tagline: "Dedication that defends. Integrity that endures.",
   logo: null,
   topContacts: [
     makeContactPoint({ label: "Main", value: "+1 (289) 838-2982", href: "tel:+12898382982", icon: "Phone" }),
@@ -1518,6 +1519,10 @@ const siteSettingData = {
     },
   ],
   footer: {
+    logo: null,
+    logoAlt: "Bekwyn Law PC logo",
+    companyName: "Bekwyn Law PC",
+    companyTagline: "Your trusted legal partners across Ontario.",
     FooterLinks: [
       { label: "Immigration & Refugee Law", url: "/practice-areas/immigration-refugee-law", icon: null, dropdown: [], image: null },
       { label: "Family Law", url: "/practice-areas/family-law", icon: null, dropdown: [], image: null },
@@ -1647,10 +1652,103 @@ async function main() {
   await setSingle('law-site-setting', siteSettingData);
 
   console.log("Seeding home page...");
-  await setSingle('law-home-page', {
-    ...homePageData,
-    practiceAreas: practiceAreasData.map((area) => practiceAreaIdBySlug[area.slug]).filter(Boolean),
-    testimonials: testimonialsData.map((item) => testimonialIdByName[item.name]).filter(Boolean),
+  const practiceAreaIds = practiceAreasData.map((area) => practiceAreaIdBySlug[area.slug]).filter(Boolean);
+  const testimonialIds = testimonialsData.map((item) => testimonialIdByName[item.name]).filter(Boolean);
+
+  const homePageSections = [];
+
+  if (homePageData.hero) {
+    const hero = homePageData.hero;
+    homePageSections.push({
+      __component: "law.hero-block",
+      eyebrow: hero.eyebrow || null,
+      title: hero.title,
+      subtitle: hero.subtitle || null,
+      description: hero.description || null,
+      background: hero.background || null,
+      primaryCta: hero.primaryCta || null,
+      secondaryCta: hero.secondaryCta || null,
+      phoneLabel: hero.phoneLabel || null,
+      phoneNumber: hero.phoneNumber || null,
+      phoneHref: hero.phoneHref || null,
+    });
+  }
+
+  if (homePageData.practiceHeading) {
+    homePageSections.push({
+      __component: "law.practice-section",
+      heading: homePageData.practiceHeading,
+      description: homePageData.practiceDescription || null,
+      practiceAreas: practiceAreaIds,
+    });
+  }
+
+  if (homePageData.notaryHighlight) {
+    const section = homePageData.notaryHighlight;
+    homePageSections.push({
+      __component: "law.content-highlight",
+      title: section.title,
+      description: section.description || null,
+      bullets: section.bullets || [],
+      image: section.image || null,
+    });
+  }
+
+  if (homePageData.legalAidHighlight) {
+    const section = homePageData.legalAidHighlight;
+    homePageSections.push({
+      __component: "law.content-highlight",
+      title: section.title,
+      description: section.description || null,
+      bullets: section.bullets || [],
+      image: section.image || null,
+    });
+  }
+
+  if (homePageData.aboutBlock) {
+    const about = homePageData.aboutBlock;
+    homePageSections.push({
+      __component: "law.about-block",
+      heading: about.heading,
+      intro: about.intro || null,
+      secondaryText: about.secondaryText || null,
+      image: about.image || null,
+      whyTitle: about.whyTitle || null,
+      whyItems: about.whyItems || [],
+      valuesTitle: about.valuesTitle || null,
+      values: about.values || [],
+    });
+  }
+
+  if (homePageData.testimonialsHeading) {
+    homePageSections.push({
+      __component: "law.testimonials-section",
+      heading: homePageData.testimonialsHeading,
+      subheading: homePageData.testimonialsSubheading || null,
+      testimonials: testimonialIds,
+    });
+  }
+
+  if (homePageData.contactCta) {
+    const contact = homePageData.contactCta;
+    homePageSections.push({
+      __component: "law.contact-cta",
+      heading: contact.heading,
+      description: contact.description || null,
+      contactPoints: contact.contactPoints || [],
+      whatToExpect: contact.whatToExpect || [],
+      primaryCta: contact.primaryCta || null,
+      secondaryCta: contact.secondaryCta || null,
+      formTitle: contact.formTitle || null,
+      formDescription: contact.formDescription || null,
+      formSubmitLabel: contact.formSubmitLabel || null,
+      formFields: contact.formFields || [],
+    });
+  }
+
+  await setSingle("law-home-page", {
+    sections: homePageSections,
+    seo: null,
   });
 
   console.log("Seeding practice areas page...");

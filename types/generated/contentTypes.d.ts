@@ -776,37 +776,27 @@ export interface ApiLawHomePageLawHomePage extends Struct.SingleTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    aboutBlock: Schema.Attribute.Component<'law.about-block', false>;
-    contactCta: Schema.Attribute.Component<'law.contact-cta', false>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    hero: Schema.Attribute.Component<'law.hero-block', false>;
-    legalAidHighlight: Schema.Attribute.Component<
-      'law.content-highlight',
-      false
-    >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::law-home-page.law-home-page'
     > &
       Schema.Attribute.Private;
-    notaryHighlight: Schema.Attribute.Component<'law.content-highlight', false>;
-    practiceAreas: Schema.Attribute.Relation<
-      'manyToMany',
-      'api::law-practice-area.law-practice-area'
-    >;
-    practiceDescription: Schema.Attribute.RichText;
-    practiceHeading: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
-    seo: Schema.Attribute.Component<'shared.seo', false>;
-    testimonials: Schema.Attribute.Relation<
-      'manyToMany',
-      'api::law-testimonial.law-testimonial'
+    sections: Schema.Attribute.DynamicZone<
+      [
+        'law.hero-block',
+        'law.practice-section',
+        'law.content-highlight',
+        'law.about-block',
+        'law.testimonials-section',
+        'law.contact-cta',
+      ]
     >;
-    testimonialsHeading: Schema.Attribute.String;
-    testimonialsSubheading: Schema.Attribute.Text;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -951,11 +941,12 @@ export interface ApiLawSiteSettingLawSiteSetting
       'api::law-site-setting.law-site-setting'
     > &
       Schema.Attribute.Private;
-    logo: Schema.Attribute.Media;
+    logo: Schema.Attribute.Media<'images'>;
     navigation: Schema.Attribute.Component<'shared.nav-link', true>;
     publishedAt: Schema.Attribute.DateTime;
     seo: Schema.Attribute.Component<'shared.seo', false>;
     socialLinks: Schema.Attribute.Component<'shared.social-link', true>;
+    tagline: Schema.Attribute.String;
     topContacts: Schema.Attribute.Component<'law.contact-point', true>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

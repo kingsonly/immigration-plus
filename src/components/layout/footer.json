@@ -5,6 +5,22 @@
   },
   "options": {},
   "attributes": {
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "logoAlt": {
+      "type": "string"
+    },
+    "companyName": {
+      "type": "string"
+    },
+    "companyTagline": {
+      "type": "text"
+    },
     "FooterLinks": {
       "type": "component",
       "component": "shared.nav-link",

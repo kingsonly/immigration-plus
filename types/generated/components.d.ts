@@ -774,6 +774,21 @@ export interface LawNewsletterSignup extends Struct.ComponentSchema {
   };
 }
 
+export interface LawPracticeSection extends Struct.ComponentSchema {
+  collectionName: 'components_law_practice_sections';
+  info: {
+    displayName: 'Practice Section';
+  };
+  attributes: {
+    description: Schema.Attribute.RichText;
+    heading: Schema.Attribute.String & Schema.Attribute.Required;
+    practiceAreas: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::law-practice-area.law-practice-area'
+    >;
+  };
+}
+
 export interface LawServiceCard extends Struct.ComponentSchema {
   collectionName: 'components_law_service_cards';
   info: {
@@ -839,6 +854,21 @@ export interface LawTeamSection extends Struct.ComponentSchema {
   };
 }
 
+export interface LawTestimonialsSection extends Struct.ComponentSchema {
+  collectionName: 'components_law_testimonials_sections';
+  info: {
+    displayName: 'Testimonials Section';
+  };
+  attributes: {
+    heading: Schema.Attribute.String & Schema.Attribute.Required;
+    subheading: Schema.Attribute.Text;
+    testimonials: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::law-testimonial.law-testimonial'
+    >;
+  };
+}
+
 export interface LawValueCard extends Struct.ComponentSchema {
   collectionName: 'components_law_value_cards';
   info: {
@@ -857,9 +887,13 @@ export interface LayoutFooter extends Struct.ComponentSchema {
     displayName: 'Footer';
   };
   attributes: {
+    companyName: Schema.Attribute.String;
+    companyTagline: Schema.Attribute.Text;
     ContactDetails: Schema.Attribute.Component<'shared.contact-detail', true>;
     FooterCopyright: Schema.Attribute.String;
     FooterLinks: Schema.Attribute.Component<'shared.nav-link', true>;
+    logo: Schema.Attribute.Media<'images'>;
+    logoAlt: Schema.Attribute.String;
   };
 }
 
@@ -1240,11 +1274,13 @@ declare module '@strapi/strapi' {
       'law.list-item': LawListItem;
       'law.mission-section': LawMissionSection;
       'law.newsletter-signup': LawNewsletterSignup;
+      'law.practice-section': LawPracticeSection;
       'law.service-card': LawServiceCard;
       'law.service-grid': LawServiceGrid;
       'law.simple-cta': LawSimpleCta;
       'law.team-member': LawTeamMember;
       'law.team-section': LawTeamSection;
+      'law.testimonials-section': LawTestimonialsSection;
       'law.value-card': LawValueCard;
       'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;
