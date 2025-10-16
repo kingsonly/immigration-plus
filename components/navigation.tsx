@@ -8,6 +8,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Menu, X } from "lucide-react";
 import Image from "next/image";
 
+type MediaAsset = {
+  url: string;
+  alt: string | null;
+};
+
 export type NavDropdown = {
   id: number;
   label: string;
@@ -20,64 +25,84 @@ export type NavLink = {
   label: string;
   url?: string | null;
   icon?: string | null;
-  image?: any;
+  image?: MediaAsset | null;
   dropdown?: NavDropdown[];
 };
 
 export type HeaderProps = {
   logoLabel?: string;
   logoHref?: string;
+  logoImage?: MediaAsset | null;
   nav: NavLink[];
 };
 
 function buildFallback(): HeaderProps {
+  const nav = [
+    { id: 1, label: "Home", url: "/" },
+    { id: 2, label: "About", url: "/about" },
+    {
+      id: 3,
+      label: "Services",
+      url: "/services",
+      dropdown: [
+        { id: 31, label: "Permanent Residency", url: "/services/permanent-residency" },
+        { id: 32, label: "Business & Investor Immigration", url: "/services/business-immigration" },
+        { id: 33, label: "Study", url: "/services/study" },
+        { id: 34, label: "Work Permits", url: "/services/work-permit" },
+        { id: 35, label: "Family Sponsorship", url: "/services/family-sponsorship" },
+        { id: 36, label: "Visitor Visa", url: "/services/visitors-visa" },
+        { id: 37, label: "Citizenship & Integration", url: "/services/citizenship" },
+        { id: 38, label: "Refugee/Asylum Visa", url: "/services/refugee-hc" },
+        { id: 39, label: "Recruitment", url: "/services/recruitment" }
+      ]
+    },
+    { id: 4, label: "Resources", url: "/resources" },
+    { id: 5, label: "Success Stories", url: "/success-stories" },
+    { id: 6, label: "Contact", url: "/contact" }
+  ].map((item) => ({
+    ...item,
+    image: null,
+  })) as NavLink[];
+
   return {
     logoLabel: "Coming2Canada",
     logoHref: "/",
-    nav: [
-      { id: 1, label: "Home", url: "/" },
-      { id: 2, label: "About", url: "/about" },
-      {
-        id: 3,
-        label: "Services",
-        url: "/services",
-        dropdown: [
-          { id: 31, label: "Permanent Residency", url: "/services/permanent-residency" },
-          { id: 32, label: "Business & Investor Immigration", url: "/services/business-immigration" },
-          { id: 33, label: "Study", url: "/services/study" },
-          { id: 34, label: "Work Permits", url: "/services/work-permit" },
-          { id: 35, label: "Family Sponsorship", url: "/services/family-sponsorship" },
-          { id: 36, label: "Visitor Visa", url: "/services/visitors-visa" },
-          { id: 37, label: "Citizenship & Integration", url: "/services/citizenship" },
-          { id: 38, label: "Refugee/Asylum Visa", url: "/services/refugee-hc" },
-          { id: 39, label: "Recruitment", url: "/services/recruitment" }
-        ]
-      },
-      { id: 4, label: "Resources", url: "/resources" },
-      { id: 5, label: "Success Stories", url: "/success-stories" },
-      { id: 6, label: "Contact", url: "/contact" }
-    ]
+    logoImage: { url: "/logo.png", alt: "Coming2Canada logo" },
+    nav,
   };
 }
 
 export default function NavigationClient(props: HeaderProps) {
-  const data = props?.nav && props.nav.length ? props : buildFallback();
+  const fallbackData = useMemo(() => buildFallback(), []);
 
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
   const pathname = usePathname();
 
-  const navItems = useMemo(() => data.nav, [data.nav]);
+  const navItems = props.nav && props.nav.length ? props.nav : fallbackData.nav;
+  const logoLabel = props.logoLabel ?? fallbackData.logoLabel;
+  const logoHref = props.logoHref ?? fallbackData.logoHref;
+  const logoImage = props.logoImage ?? fallbackData.logoImage;
+  const logoAlt = logoImage?.alt ?? logoLabel ?? "Site logo";
+  const logoSrc = logoImage?.url ?? "/logo.png";
 
   return (
     <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-red-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center min-h-16">
           {/* Logo */}
-          <Link href={data.logoHref || "/"} className="flex items-center space-x-2">
-            <div className="w-20 h-20 rounded-full flex items-center justify-center">
-              <Image src="/logo.png" alt="logo" width={100} height={100} />
+          <Link href={logoHref || "/"} aria-label={logoAlt} className="flex items-center space-x-2">
+            <div className="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden">
+              <Image
+                src={logoSrc}
+                alt={logoAlt}
+                width={100}
+                height={100}
+                className="h-full w-full object-contain"
+                priority
+              />
             </div>
+            <span className="sr-only">{logoLabel}</span>
           </Link>
 
           {/* Desktop Navigation */}
