@@ -22,39 +22,47 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const global = await fetchGlobal();
 
   const headerProps = {
-    logoLabel: global?.Header?.Logo?.label || "Coming2Canada",
+    logoLabel: global?.Header?.Logo?.label || global?.Footer?.companyName || global?.siteTitle || "Coming2Canada",
     logoHref: global?.Header?.Logo?.url || "/",
-    nav:
-      global?.Header?.NavLink?.map((n) => ({
-        id: n.id,
-        label: n.label,
-        url: n.url || "#",
-        icon: n.icon || null,
-        image: n.image || null,
-        dropdown: (n.dropdown || []).map((d) => ({
-          id: d.id,
-          label: d.label,
-          url: d.url || "#",
-          icon: d.icon || null,
-        })),
-      })) || [],
+    logoImage: global?.Header?.Logo?.image ?? null,
+    nav: global?.Header?.NavLink ?? [],
   };
 
+  const contactDetails = [...(global?.Footer?.ContactDetails ?? [])];
+  const email = global?.contactEmail?.trim();
+
+  if (email) {
+    const normalizedEmail = email.toLowerCase();
+    const hasEmailDetail = contactDetails.some(
+      (detail) =>
+        detail.type === "email" ||
+        (typeof detail.value === "string" && detail.value.toLowerCase() === normalizedEmail)
+    );
+
+    if (!hasEmailDetail) {
+      contactDetails.unshift({
+        id: Number.MAX_SAFE_INTEGER,
+        label: "Email",
+        value: email,
+        type: "email",
+        href: `mailto:${email}`,
+      });
+    }
+  }
+
   const footerProps = {
+    logo: global?.Footer?.logo ?? null,
+    logoAlt: global?.Footer?.logoAlt ?? null,
+    companyName: global?.Footer?.companyName ?? global?.siteTitle ?? null,
+    companyTagline: global?.Footer?.companyTagline ?? null,
+    description: global?.siteDescription ?? null,
     links:
       global?.Footer?.FooterLinks?.map((n) => ({
         id: n.id,
         label: n.label,
         url: n.url || "#",
-      })) || [],
-    contactDetails:
-      global?.Footer?.ContactDetails?.map((detail) => ({
-        id: detail.id,
-        label: detail.label || null,
-        value: detail.value,
-        type: detail.type || null,
-        href: detail.href || null,
-      })) || [],
+      })) ?? [],
+    contactDetails,
     copyright: global?.Footer?.FooterCopyright,
   };
 

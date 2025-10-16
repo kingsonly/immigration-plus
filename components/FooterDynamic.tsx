@@ -2,6 +2,11 @@
 import Link from "next/link";
 import Image from "next/image";
 
+type MediaAsset = {
+  url: string;
+  alt: string | null;
+};
+
 export type FooterLink = {
   id: number;
   label: string;
@@ -19,10 +24,26 @@ export type ContactDetail = {
 export type FooterProps = {
   links: FooterLink[];
   contactDetails?: ContactDetail[];
+  logo?: MediaAsset | null;
+  logoAlt?: string | null;
+  companyName?: string | null;
+  companyTagline?: string | null;
+  description?: string | null;
   copyright?: string | null;
 };
 
-function fallback(): Required<FooterProps> {
+type FooterFallback = {
+  links: FooterLink[];
+  contactDetails: ContactDetail[];
+  logo: MediaAsset | null;
+  logoAlt: string | null;
+  companyName: string;
+  companyTagline: string;
+  description: string;
+  copyright: string;
+};
+
+function fallback(): FooterFallback {
   return {
     links: [
       { id: 1, label: "Permanent Residency", url: "/services/permanent-residency" },
@@ -61,8 +82,27 @@ function fallback(): Required<FooterProps> {
         type: "location"
       }
     ],
+    logo: { url: "/logo.png", alt: "Coming2Canada logo" },
+    logoAlt: "Coming2Canada logo",
+    companyName: "Coming2Canada",
+    companyTagline: "TENTACULAR IMMIGRATION SOLUTIONS LTD",
+    description: "Your trusted partner for Canadian immigration success.",
     copyright: "Ac 2025 TENTACULAR IMMIGRATION SOLUTIONS LTD. All rights reserved.",
   };
+}
+
+function contactKey(detail: ContactDetail): string {
+  if (detail.type) return `type:${detail.type}`;
+  if (detail.label) return `label:${detail.label.toLowerCase()}`;
+  return `value:${detail.value.toLowerCase()}`;
+}
+
+function mergeContactDetails(primary: ContactDetail[], fallbackDetails: ContactDetail[]): ContactDetail[] {
+  if (!primary.length) return fallbackDetails;
+
+  const seen = new Set(primary.map(contactKey));
+  const extras = fallbackDetails.filter((detail) => !seen.has(contactKey(detail)));
+  return [...primary, ...extras];
 }
 
 function resolveContactHref(detail: ContactDetail): string | null {
@@ -92,8 +132,17 @@ function fallbackLabel(detail: ContactDetail): string | null {
 export default function FooterDynamic(props: FooterProps) {
   const fallbackData = fallback();
   const links = props.links?.length ? props.links : fallbackData.links;
-  const contactDetails = props.contactDetails?.length ? props.contactDetails : fallbackData.contactDetails;
+  const providedContacts = Array.isArray(props.contactDetails)
+    ? props.contactDetails.filter((detail) => Boolean(detail?.value?.trim()))
+    : [];
+  const contactDetails = mergeContactDetails(providedContacts, fallbackData.contactDetails);
+  const logo = props.logo ?? fallbackData.logo;
+  const logoAlt = props.logoAlt ?? logo?.alt ?? fallbackData.logoAlt;
+  const companyName = props.companyName ?? fallbackData.companyName;
+  const companyTagline = props.companyTagline ?? fallbackData.companyTagline;
+  const description = props.description ?? fallbackData.description;
   const copyright = props.copyright ?? fallbackData.copyright;
+  const logoSrc = logo?.url ?? "/logo.png";
 
   return (
     <footer className="bg-gray-900 text-white py-12">
@@ -101,13 +150,21 @@ export default function FooterDynamic(props: FooterProps) {
         <div className="grid md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="min-w-8 min-h-8 bg-gradient-to-r from-white to-white rounded-full flex items-center justify-center">
-                <Image src="/logo.png" alt="logo" width={60} height={60} />
-              </div>
-              <span className="font-bold text-xl">Coming2Canada</span>
+              {logoSrc ? (
+                <div className="min-w-8 min-h-8 bg-gradient-to-r from-white to-white rounded-full flex items-center justify-center overflow-hidden">
+                  <Image
+                    src={logoSrc}
+                    alt={logoAlt || companyName || "Site logo"}
+                    width={60}
+                    height={60}
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+              ) : null}
+              {companyName ? <span className="font-bold text-xl">{companyName}</span> : null}
             </div>
-            <p className="text-gray-400 mb-4">TENTACULAR IMMIGRATION SOLUTIONS LTD</p>
-            <p className="text-gray-400">Your trusted partner for Canadian immigration success.</p>
+            {companyTagline ? <p className="text-gray-400 mb-4">{companyTagline}</p> :  <p className="text-gray-400">{description}</p>}
+            
 
             <ul className="mt-6 space-y-3 text-gray-400">
               {contactDetails.map((detail) => {
