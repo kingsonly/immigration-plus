@@ -11,13 +11,30 @@ export default factories.createCoreController(
           socialLinks: true,
           Header: {
             populate: {
-              Logo: true,
-              NavLink: { populate: { dropdown: true } },
+              Logo: {
+                populate: {
+                  image: true,
+                  dropdown: true,
+                },
+              },
+              NavLink: {
+                populate: {
+                  dropdown: true,
+                  image: true,
+                },
+              },
             },
           },
           Footer: {
             populate: {
-              FooterLinks: { populate: { dropdown: true } },
+              logo: true,
+              FooterLinks: {
+                populate: {
+                  dropdown: true,
+                  image: true,
+                },
+              },
+              ContactDetails: true,
             },
           },
         },
