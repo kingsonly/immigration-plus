@@ -18,8 +18,8 @@ async function fetchHomepage() {
 
   try {
     const json = await fetchJSON<StrapiSingleResponse<Record<string, any>>>(`/api/homepage?${params.toString()}`, {
-      cache: "no-store"
 
+      next: { revalidate: 60 }
     });
 
     const node = json?.data;
