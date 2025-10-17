@@ -164,7 +164,7 @@ export default function HomePage({ entry }: { entry: StrapiHomepage | null }) {
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
       {/* Hero */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+      <section className="relative min-h-[80vh] md:min-h-screen flex flex-col items-center justify-center overflow-hidden pt-24 pb-16 sm:pb-24">
         <motion.div className="absolute inset-0 bg-gradient-to-br from-red-50 via-white to-pink-50" style={{ y }} />
         <motion.div
           className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-red-200 to-pink-200 rounded-full opacity-20"
@@ -178,27 +178,27 @@ export default function HomePage({ entry }: { entry: StrapiHomepage | null }) {
         />
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
           <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 leading-tight">
               <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">{hero.titleTop}</span>
               <br />
               <span className="text-gray-900">{hero.titleBottom}</span>
             </h1>
             {hero.html ? (
-              <div className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed" dangerouslySetInnerHTML={{ __html: hero.html }} />
+              <div className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed" dangerouslySetInnerHTML={{ __html: hero.html }} />
             ) : null}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center w-full">
               {(hero.ctas || []).map((c: any, i: number) => {
                 const Icon = pickIcon(c.icon);
                 const outline = (c?.variant || "default") === "outline";
                 return (
-                  <motion.div key={i} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <motion.div key={i} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
                     <Link href={c?.url || "#"}>
                       <Button
                         size="lg"
                         className={
                           outline
-                            ? "border-red-500 text-red-600 hover:bg-red-50 text-lg px-8 py-4 rounded-full"
-                            : "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-lg px-8 py-4 rounded-full"
+                            ? "border-red-500 text-red-600 hover:bg-red-50 text-base sm:text-lg px-6 sm:px-8 py-4 rounded-full w-1/2 sm:w-auto justify-center"
+                            : "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-base sm:text-lg px-6 sm:px-8 py-4 rounded-full w-1/2 sm:w-auto justify-center"
                         }
                         variant={outline ? "outline" : "default"}
                       >
@@ -235,49 +235,49 @@ export default function HomePage({ entry }: { entry: StrapiHomepage | null }) {
       ) : null}
 
       {/* Services Journey (alternating) */}
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-16 px-8 sm:py-20 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-32">
+          <div className="space-y-24 lg:space-y-32">
             {(services || []).map((service: any, index: number) => {
               const Icon = service.icon || pickIcon(service.iconName);
               return (
                 <motion.div
                   key={index}
-                  className={`service-section relative ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} flex flex-col lg:flex items-center gap-12`}
+                  className={`service-section relative flex flex-col ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} items-center gap-10 lg:gap-16`}
                   initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
                 >
-                  <div className="flex-1 space-y-6">
-                    <div className="flex items-center space-x-4">
-                      <div className={`w-16 h-16 bg-gradient-to-r ${service.colorClass} rounded-2xl flex items-center justify-center transform rotate-12`}>
-                        <Icon className="w-8 h-8 text-white" />
+                  <div className="flex-1 space-y-6 w-full">
+                    <div className="flex flex-col sm:flex-row sm:items-center items-start gap-4">
+                      <div className={`w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r ${service.colorClass} rounded-2xl flex items-center justify-center transform rotate-12`}>
+                        <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                       </div>
-                      <div>
-                        <h3 className="text-3xl font-bold text-gray-900">{service.title}</h3>
-                        <p className="text-lg text-red-600 font-medium">{service.description}</p>
+                      <div className="space-y-3">
+                        <h3 className="text-2xl md:text-3xl font-bold text-gray-900">{service.title}</h3>
+                        <p className="text-base sm:text-lg text-red-600 font-medium">{service.description}</p>
                       </div>
                     </div>
-                    <p className="text-gray-600 text-lg leading-relaxed">{service.details}</p>
-                    <div className="flex items-center space-x-4">
+                    <p className="text-gray-600 text-base sm:text-lg leading-relaxed">{service.details}</p>
+                    <div className="flex items-center gap-3">
                       <CheckCircle className="w-5 h-5 text-green-500" />
                       <span className="text-gray-700">Expert guidance throughout the process</span>
                     </div>
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center gap-3">
                       <CheckCircle className="w-5 h-5 text-green-500" />
                       <span className="text-gray-700">Personalized strategy for your situation</span>
                     </div>
                     <Link href={service.slug || "#"}>
-                      <Button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
+                      <Button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 mt-6 w-full sm:w-auto justify-center">
                         Learn More
                         <ArrowRight className="ml-2 w-4 h-4" />
                       </Button>
                     </Link>
                   </div>
 
-                  <div className="flex-1 flex justify-center">
+                  <div className="flex-1 flex justify-center w-full">
                     <motion.div
-                      className={`w-80 h-80 bg-gradient-to-br ${service.colorClass} rounded-3xl transform rotate-6 flex items-center justify-center relative overflow-hidden`}
+                      className={`w-full max-w-xs sm:max-w-sm h-64 sm:h-72 md:h-80 bg-gradient-to-br ${service.colorClass} rounded-3xl transform rotate-6 flex items-center justify-center relative overflow-hidden shadow-xl`}
                       whileHover={{ rotate: 0, scale: 1.05 }}
                       transition={{ duration: 0.3 }}
                     >
@@ -292,7 +292,7 @@ export default function HomePage({ entry }: { entry: StrapiHomepage | null }) {
                         }}
                         transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
                       />
-                      <Icon className="w-32 h-32 text-white/80" />
+                      <Icon className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 text-white/80" />
                     </motion.div>
                   </div>
                 </motion.div>
@@ -307,14 +307,14 @@ export default function HomePage({ entry }: { entry: StrapiHomepage | null }) {
         ? splitFeatures.map((sf, i) => {
             const Icon = sf.icon || Users;
             return (
-              <section key={i} className={`py-20 ${i % 2 === 1 ? "bg-gray-50" : "bg-white"}`}>
+              <section key={i} className={`py-16 sm:py-20 ${i % 2 === 1 ? "bg-gray-50" : "bg-white"}`}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                  <div className={`grid lg:grid-cols-2 gap-12 items-center ${sf.reverse ? "lg:flex-row-reverse" : ""}`}>
+                  <div className={`grid gap-10 lg:grid-cols-2 lg:gap-16 items-center ${sf.reverse ? "lg:flex-row-reverse" : ""}`}>
                     <motion.div initial={{ opacity: 0, x: sf.reverse ? 50 : -50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
-                      <h2 className="text-4xl font-bold mb-3 text-gray-900">{sf.title}</h2>
+                      <h2 className="text-3xl sm:text-4xl font-bold mb-3 text-gray-900">{sf.title}</h2>
                       {sf.subtitle ? <p className="text-red-600 font-medium mb-4">{sf.subtitle}</p> : null}
                       {sf.html ? (
-                        <div className="space-y-4 text-gray-600 text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: sf.html }} />
+                        <div className="space-y-4 text-gray-600 text-base sm:text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: sf.html }} />
                       ) : null}
                       <ul className="mt-6 space-y-3">
                         {(sf.items || []).map((it: string, idx: number) => (
@@ -330,9 +330,9 @@ export default function HomePage({ entry }: { entry: StrapiHomepage | null }) {
                       initial={{ opacity: 0, x: sf.reverse ? -50 : 50 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.8 }}
-                      className="relative"
+                      className="relative flex justify-center"
                     >
-                      <div className="w-full h-96 bg-gradient-to-br from-red-500 to-pink-600 rounded-3xl transform rotate-3 flex items-center justify-center relative overflow-hidden">
+                      <div className="w-full max-w-xs sm:max-w-sm h-64 sm:h-80 lg:h-96 bg-gradient-to-br from-red-500 to-pink-600 rounded-3xl transform rotate-3 flex items-center justify-center relative overflow-hidden shadow-xl">
                         <motion.div
                           className="absolute inset-0 bg-white/10"
                           animate={{
@@ -344,7 +344,7 @@ export default function HomePage({ entry }: { entry: StrapiHomepage | null }) {
                           }}
                           transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
                         />
-                        <Icon className="w-32 h-32 text-white/80" />
+                        <Icon className="w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 text-white/80" />
                       </div>
                     </motion.div>
                   </div>
