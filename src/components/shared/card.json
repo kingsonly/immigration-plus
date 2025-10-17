@@ -22,7 +22,8 @@
     "lists": {
       "type": "component",
       "component": "shared.list-item",
-      "repeatable": true
+      "repeatable": true,
+      "populate": true
     },
     "image": { "type": "media", "allowedTypes": ["images"], "multiple": false }
   },

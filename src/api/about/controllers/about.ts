@@ -15,12 +15,41 @@ export default factories.createCoreController("api::about.about", ({ strapi }) =
     const publicationState: "live" | "preview" =
       ctx.query?.publicationState === "preview" ? "preview" : "live";
 
-    // IMPORTANT: for dynamic zones, nested populate must be "*"
     const populate = {
       blocks: {
-        populate: "*", // <- This is the key fix for DZs in Strapi v5
+        on: {
+          "blocks.hero": {
+            populate: {
+              ctas: true,
+              image: true,
+            },
+          },
+          "blocks.heading-section": {
+            populate: {
+              cta: true,
+              image: true,
+            },
+          },
+          "blocks.card-grid": {
+            populate: {
+              Cards: {
+                populate: {
+                  lists: true,
+                  link: true,
+                  image: true,
+                },
+              },
+              link: true,
+            },
+          },
+          "blocks.split-feature": {
+            populate: {
+              items: true,
+            },
+          },
+        },
       },
-    } as any;
+    } as const;
 
     try {
       // Single types: use findMany; Strapi returns an array of length 1
