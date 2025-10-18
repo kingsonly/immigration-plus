@@ -157,14 +157,14 @@ export default function FooterDynamic(props: FooterProps) {
                     alt={logoAlt || companyName || "Site logo"}
                     width={60}
                     height={60}
-                    className="h-full w-full object-contain"
+                    className="h-20 w-20 md:h-full md:w-full object-contain"
                   />
                 </div>
               ) : null}
               {companyName ? <span className="font-bold text-xl">{companyName}</span> : null}
             </div>
             {companyTagline ? <p className="text-gray-400 mb-4">{companyTagline}</p> :  <p className="text-gray-400">{description}</p>}
-            
+
 
             <ul className="mt-6 space-y-3 text-gray-400">
               {contactDetails.map((detail) => {

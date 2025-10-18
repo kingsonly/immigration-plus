@@ -143,6 +143,7 @@ function adaptServicesLanding(entry: any | null) {
   const services = Array.isArray((svcGrid as any)?.Cards)
     ? (svcGrid as any).Cards.map((c: any, i: number) => ({
         icon: pickIcon(c.icon),
+        iconName: c.icon,
         title: c.title,
         description: c.description,
         details:
@@ -342,9 +343,7 @@ export default function ServicesPage({ entry }: { entry: any | null }) {
     (s: any) => ({
       ...s,
       icon:
-        typeof s.icon === "function"
-          ? s.icon
-          : pickIcon((s.icon as any)?._name),
+        s.icon || pickIcon(s.iconName)
     })
   );
 
@@ -376,7 +375,7 @@ export default function ServicesPage({ entry }: { entry: any | null }) {
         ]
   ).map((c: any) => ({
     ...c,
-    icon: typeof c.icon === "function" ? c.icon : pickIcon(c.icon),
+    icon: c.icon || pickIcon(c.iconName),
   }));
 
   const H = cms?.H || {};
@@ -438,10 +437,10 @@ export default function ServicesPage({ entry }: { entry: any | null }) {
       {/* Services (alternating) */}
       <section
         id="services"
-        className="py-20 bg-gradient-to-b from-white to-gray-50"
+        className="py-20 px-8 bg-gradient-to-b from-white to-gray-50"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-32">
+          <div className="space-y-24 lg:space-y-32">
             {services.map((service: any, index: number) => (
               <motion.div
                 key={index}
@@ -452,23 +451,23 @@ export default function ServicesPage({ entry }: { entry: any | null }) {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <div className="flex-1 space-y-6">
-                  <div className="flex items-center space-x-4">
+                <div className="flex-1 space-y-6 w-full">
+                  <div className="flex flex-col sm:flex-row sm:items-center items-start gap-4">
                     <div
-                      className={`w-16 h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center transform rotate-12`}
+                      className={`w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center transform rotate-12`}
                     >
-                      <service.icon className="w-8 h-8 text-white" />
+                      <service.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                     </div>
-                    <div>
-                      <h3 className="text-3xl font-bold text-gray-900">
+                    <div className="space-y-3">
+                      <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
                         {service.title}
                       </h3>
-                      <p className="text-lg text-red-600 font-medium">
+                      <p className="text-base sm:text-lg text-red-600 font-medium">
                         {service.description}
                       </p>
                     </div>
                   </div>
-                  <p className="text-gray-600 text-lg leading-relaxed">
+                  <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
                     {service.details}
                   </p>
                   <div className="flex items-center space-x-4">
@@ -484,7 +483,7 @@ export default function ServicesPage({ entry }: { entry: any | null }) {
                     </span>
                   </div>
                   <Link href={service.href || "#"}>
-                    <Button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
+                    <Button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 mt-6 w-full sm:w-auto justify-center">
                       Learn More
                       <ArrowRight className="ml-2 w-4 h-4" />
                     </Button>
@@ -604,9 +603,7 @@ export default function ServicesPage({ entry }: { entry: any | null }) {
             {((cms?.whyCards?.length ? cms.whyCards : []) as any[]).map(
               (feature, index) => {
                 const Icon =
-                  typeof feature.icon === "function"
-                    ? feature.icon
-                    : pickIcon(feature.icon);
+                  feature.icon || pickIcon(feature.iconName)
 
                 return (
                   <motion.div

@@ -65,7 +65,7 @@ function canSendEmail() {
     !!process.env.SMTP_PASS
   );
 }
-
+//TODO:also send an email notification to the subscriber
 async function sendNotification(payload: SubscriberPayload) {
   if (!canSendEmail()) return;
 
@@ -94,12 +94,32 @@ async function sendNotification(payload: SubscriberPayload) {
     .filter(Boolean)
     .join("\n");
 
+  const subscriberLines = [
+    `Thank you for subscribing to our newsletter!`,
+    "",
+    `We're excited to have you on board and look forward to keeping you informed with the latest news and updates.`,
+    "",
+    `If you have any questions or need assistance, feel free to reach out to us at ${process.env.NEWSLETTER_NOTIFICATION_EMAIL}.`,
+    "",
+    `Best regards,`,
+    `The Team`,
+  ]
+  .filter(Boolean).join("\n");
+
   await transporter.sendMail({
     from: process.env.SMTP_FROM || process.env.SMTP_USER,
     to: process.env.NEWSLETTER_NOTIFICATION_EMAIL,
     subject: "New newsletter subscriber",
     text: lines,
   });
+
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM || process.env.SMTP_USER,
+    to: payload.email,
+    subject: "Thank you for subscribing to our newsletter!",
+    text: subscriberLines,
+  });
+
 }
 
 export async function POST(request: Request) {
