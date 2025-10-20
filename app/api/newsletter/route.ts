@@ -65,14 +65,13 @@ function canSendEmail() {
     !!process.env.SMTP_PASS
   );
 }
-//TODO:also send an email notification to the subscriber
 async function sendNotification(payload: SubscriberPayload) {
   if (!canSendEmail()) return;
 
   const port = Number(process.env.SMTP_PORT);
   const secure = process.env.SMTP_SECURE === "true" || port === 465;
 
-  const transporter = nodemailer.createTransport({
+  const transporterOptions: nodemailer.TransportOptions = {
     host: process.env.SMTP_HOST,
     port,
     secure,
@@ -80,7 +79,13 @@ async function sendNotification(payload: SubscriberPayload) {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
-  });
+  };
+
+  if (process.env.SMTP_ALLOW_SELF_SIGNED === "true") {
+    transporterOptions.tls = { rejectUnauthorized: false };
+  }
+
+  const transporter = nodemailer.createTransport(transporterOptions);
 
   const lines = [
     `New newsletter subscriber`,
@@ -104,21 +109,23 @@ async function sendNotification(payload: SubscriberPayload) {
     `Best regards,`,
     `The Team`,
   ]
-  .filter(Boolean).join("\n");
+    .filter(Boolean)
+    .join("\n");
 
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
-    to: process.env.NEWSLETTER_NOTIFICATION_EMAIL,
-    subject: "New newsletter subscriber",
-    text: lines,
-  });
-
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
-    to: payload.email,
-    subject: "Thank you for subscribing to our newsletter!",
-    text: subscriberLines,
-  });
+  await Promise.all([
+    transporter.sendMail({
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      to: process.env.NEWSLETTER_NOTIFICATION_EMAIL,
+      subject: "New newsletter subscriber",
+      text: lines,
+    }),
+    transporter.sendMail({
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      to: payload.email,
+      subject: "Thank you for subscribing to our newsletter!",
+      text: subscriberLines,
+    }),
+  ]);
 
 }
 
