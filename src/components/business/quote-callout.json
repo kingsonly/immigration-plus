@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_business_quote_callouts",
+  "info": {
+    "displayName": "Quote Callout",
+    "description": "CTA callout block with dual action buttons"
+  },
+  "attributes": {
+    "iconName": {
+      "type": "string"
+    },
+    "heading": {
+      "type": "string"
+    },
+    "body": {
+      "type": "text"
+    },
+    "primaryCTA": {
+      "type": "component",
+      "component": "business.cta-button"
+    },
+    "secondaryCTA": {
+      "type": "component",
+      "component": "business.cta-button"
+    },
+    "footnote": {
+      "type": "string"
+    }
+  }
+}

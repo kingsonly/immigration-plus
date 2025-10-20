@@ -10,30 +10,75 @@
       "component": "business.hero",
       "repeatable": false
     },
+    "programsIntro": {
+      "type": "component",
+      "component": "business.section-intro",
+      "repeatable": false
+    },
     "programs": {
       "type": "component",
       "component": "business.program",
       "repeatable": true
     },
-    "seServices": {
+    "startupVisaIntro": {
       "type": "component",
-      "component": "business.service",
-      "repeatable": true
+      "component": "business.section-intro",
+      "repeatable": false
+    },
+    "startupVisaHowItWorks": {
+      "type": "component",
+      "component": "business.copy-block",
+      "repeatable": false
     },
     "howItWorks": {
       "type": "component",
       "component": "business.step",
       "repeatable": true
     },
+    "startupVisaServicesCopy": {
+      "type": "component",
+      "component": "business.copy-block",
+      "repeatable": false
+    },
+    "seServices": {
+      "type": "component",
+      "component": "business.service",
+      "repeatable": true
+    },
+    "startupVisaFeesCopy": {
+      "type": "component",
+      "component": "business.copy-block",
+      "repeatable": false
+    },
     "fees": {
       "type": "component",
       "component": "business.fee",
       "repeatable": true
     },
+    "startupVisaGovFeesCopy": {
+      "type": "component",
+      "component": "business.copy-block",
+      "repeatable": false
+    },
     "govFees": {
       "type": "component",
       "component": "business.gov-fee",
       "repeatable": true
+    },
+    "quoteCTA": {
+      "type": "component",
+      "component": "business.quote-callout",
+      "repeatable": false
+    },
+    "provincialIntro": {
+      "type": "component",
+      "component": "business.section-intro",
+      "repeatable": false
+    },
+    "provincialOverview": {
+      "type": "component",
+      "component": "business.copy-block",
+      "repeatable": false
     },
     "pnpOverview": {
       "type": "component",
@@ -45,20 +90,70 @@
       "component": "business.stream",
       "repeatable": true
     },
+    "c11Intro": {
+      "type": "component",
+      "component": "business.section-intro",
+      "repeatable": false
+    },
+    "c11Overview": {
+      "type": "component",
+      "component": "business.copy-block",
+      "repeatable": false
+    },
+    "c11Highlights": {
+      "type": "component",
+      "component": "business.card",
+      "repeatable": true
+    },
+    "c11Timeline": {
+      "type": "component",
+      "component": "business.timeline-step",
+      "repeatable": true
+    },
     "c11Benefits": {
       "type": "component",
       "component": "business.benefit",
       "repeatable": true
     },
-    "quoteCTA": {
+    "selfEmployedIntro": {
       "type": "component",
-      "component": "business.cta-button",
+      "component": "business.section-intro",
+      "repeatable": false
+    },
+    "selfEmployedChecklists": {
+      "type": "component",
+      "component": "business.checklist",
+      "repeatable": true
+    },
+    "selfEmployedServicesCopy": {
+      "type": "component",
+      "component": "business.copy-block",
+      "repeatable": false
+    },
+    "selfEmployedServices": {
+      "type": "component",
+      "component": "business.card",
+      "repeatable": true
+    },
+    "postInvestmentIntro": {
+      "type": "component",
+      "component": "business.section-intro",
       "repeatable": false
     },
     "postInvestmentCards": {
       "type": "component",
       "component": "business.card",
       "repeatable": true
+    },
+    "postInvestmentSupport": {
+      "type": "component",
+      "component": "business.support-card",
+      "repeatable": false
+    },
+    "finalCta": {
+      "type": "component",
+      "component": "business.final-cta",
+      "repeatable": false
     }
   }
 }

@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_business_checklists",
+  "info": {
+    "displayName": "Checklist",
+    "description": "Titled bullet list for self-employed program details"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "items": {
+      "type": "component",
+      "component": "shared.list-item",
+      "repeatable": true
+    }
+  }
+}

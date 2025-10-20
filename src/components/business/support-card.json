@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_business_support_cards",
+  "info": {
+    "displayName": "Support Card",
+    "description": "Highlight card with supporting bullet chips"
+  },
+  "attributes": {
+    "iconName": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "chips": {
+      "type": "component",
+      "component": "shared.list-item",
+      "repeatable": true
+    }
+  }
+}

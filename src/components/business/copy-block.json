@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_business_copy_blocks",
+  "info": {
+    "displayName": "Copy Block",
+    "description": "Heading and body copy with optional icon for supporting sections"
+  },
+  "attributes": {
+    "iconName": {
+      "type": "string"
+    },
+    "heading": {
+      "type": "string"
+    },
+    "subheading": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

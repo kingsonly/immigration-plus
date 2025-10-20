@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_business_final_ctas",
+  "info": {
+    "displayName": "Final CTA",
+    "description": "Closing call-to-action content for the business immigration page"
+  },
+  "attributes": {
+    "iconName": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "body": {
+      "type": "text"
+    },
+    "buttonLabel": {
+      "type": "string"
+    },
+    "buttonHref": {
+      "type": "string"
+    },
+    "footnote": {
+      "type": "text"
+    }
+  }
+}

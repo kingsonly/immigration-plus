@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_business_timeline_steps",
+  "info": {
+    "displayName": "Timeline Step",
+    "description": "Milestone entry for process timelines"
+  },
+  "attributes": {
+    "iconName": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

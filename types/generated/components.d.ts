@@ -20,15 +20,70 @@ export interface BlocksBusinessImmigration extends Struct.ComponentSchema {
   };
   attributes: {
     c11Benefits: Schema.Attribute.Component<'business.benefit', true>;
+    c11Highlights: Schema.Attribute.Component<'business.card', true>;
+    c11Intro: Schema.Attribute.Component<'business.section-intro', false>;
+    c11Overview: Schema.Attribute.Component<'business.copy-block', false>;
+    c11Timeline: Schema.Attribute.Component<'business.timeline-step', true>;
     fees: Schema.Attribute.Component<'business.fee', true>;
+    finalCta: Schema.Attribute.Component<'business.final-cta', false>;
     govFees: Schema.Attribute.Component<'business.gov-fee', true>;
     hero: Schema.Attribute.Component<'business.hero', false>;
     howItWorks: Schema.Attribute.Component<'business.step', true>;
     pnpOverview: Schema.Attribute.Component<'business.kv', true>;
     postInvestmentCards: Schema.Attribute.Component<'business.card', true>;
+    postInvestmentIntro: Schema.Attribute.Component<
+      'business.section-intro',
+      false
+    >;
+    postInvestmentSupport: Schema.Attribute.Component<
+      'business.support-card',
+      false
+    >;
     programs: Schema.Attribute.Component<'business.program', true>;
-    quoteCTA: Schema.Attribute.Component<'business.cta-button', false>;
+    programsIntro: Schema.Attribute.Component<'business.section-intro', false>;
+    provincialIntro: Schema.Attribute.Component<
+      'business.section-intro',
+      false
+    >;
+    provincialOverview: Schema.Attribute.Component<
+      'business.copy-block',
+      false
+    >;
+    quoteCTA: Schema.Attribute.Component<'business.quote-callout', false>;
+    selfEmployedChecklists: Schema.Attribute.Component<
+      'business.checklist',
+      true
+    >;
+    selfEmployedIntro: Schema.Attribute.Component<
+      'business.section-intro',
+      false
+    >;
+    selfEmployedServices: Schema.Attribute.Component<'business.card', true>;
+    selfEmployedServicesCopy: Schema.Attribute.Component<
+      'business.copy-block',
+      false
+    >;
     seServices: Schema.Attribute.Component<'business.service', true>;
+    startupVisaFeesCopy: Schema.Attribute.Component<
+      'business.copy-block',
+      false
+    >;
+    startupVisaGovFeesCopy: Schema.Attribute.Component<
+      'business.copy-block',
+      false
+    >;
+    startupVisaHowItWorks: Schema.Attribute.Component<
+      'business.copy-block',
+      false
+    >;
+    startupVisaIntro: Schema.Attribute.Component<
+      'business.section-intro',
+      false
+    >;
+    startupVisaServicesCopy: Schema.Attribute.Component<
+      'business.copy-block',
+      false
+    >;
     streams: Schema.Attribute.Component<'business.stream', true>;
   };
 }
@@ -430,6 +485,32 @@ export interface BusinessCard extends Struct.ComponentSchema {
   };
 }
 
+export interface BusinessChecklist extends Struct.ComponentSchema {
+  collectionName: 'components_business_checklists';
+  info: {
+    description: 'Titled bullet list for self-employed program details';
+    displayName: 'Checklist';
+  };
+  attributes: {
+    heading: Schema.Attribute.String;
+    items: Schema.Attribute.Component<'shared.list-item', true>;
+  };
+}
+
+export interface BusinessCopyBlock extends Struct.ComponentSchema {
+  collectionName: 'components_business_copy_blocks';
+  info: {
+    description: 'Heading and body copy with optional icon for supporting sections';
+    displayName: 'Copy Block';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    heading: Schema.Attribute.String;
+    iconName: Schema.Attribute.String;
+    subheading: Schema.Attribute.String;
+  };
+}
+
 export interface BusinessCtaButton extends Struct.ComponentSchema {
   collectionName: 'components_business_cta_button';
   info: {
@@ -453,6 +534,22 @@ export interface BusinessFee extends Struct.ComponentSchema {
     details: Schema.Attribute.JSON;
     note: Schema.Attribute.String;
     range: Schema.Attribute.String;
+  };
+}
+
+export interface BusinessFinalCta extends Struct.ComponentSchema {
+  collectionName: 'components_business_final_ctas';
+  info: {
+    description: 'Closing call-to-action content for the business immigration page';
+    displayName: 'Final CTA';
+  };
+  attributes: {
+    body: Schema.Attribute.Text;
+    buttonHref: Schema.Attribute.String;
+    buttonLabel: Schema.Attribute.String;
+    footnote: Schema.Attribute.Text;
+    iconName: Schema.Attribute.String;
+    title: Schema.Attribute.String;
   };
 }
 
@@ -509,6 +606,38 @@ export interface BusinessProgram extends Struct.ComponentSchema {
   };
 }
 
+export interface BusinessQuoteCallout extends Struct.ComponentSchema {
+  collectionName: 'components_business_quote_callouts';
+  info: {
+    description: 'CTA callout block with dual action buttons';
+    displayName: 'Quote Callout';
+  };
+  attributes: {
+    body: Schema.Attribute.Text;
+    footnote: Schema.Attribute.String;
+    heading: Schema.Attribute.String;
+    iconName: Schema.Attribute.String;
+    primaryCTA: Schema.Attribute.Component<'business.cta-button', false>;
+    secondaryCTA: Schema.Attribute.Component<'business.cta-button', false>;
+  };
+}
+
+export interface BusinessSectionIntro extends Struct.ComponentSchema {
+  collectionName: 'components_business_section_intros';
+  info: {
+    description: 'Reusable heading, subtitle, and description for business immigration sections';
+    displayName: 'Section Intro';
+  };
+  attributes: {
+    anchorId: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    eyebrow: Schema.Attribute.String;
+    iconName: Schema.Attribute.String;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface BusinessService extends Struct.ComponentSchema {
   collectionName: 'components_business_service';
   info: {
@@ -546,6 +675,33 @@ export interface BusinessStream extends Struct.ComponentSchema {
     program: Schema.Attribute.String;
     province: Schema.Attribute.String;
     streams: Schema.Attribute.JSON;
+  };
+}
+
+export interface BusinessSupportCard extends Struct.ComponentSchema {
+  collectionName: 'components_business_support_cards';
+  info: {
+    description: 'Highlight card with supporting bullet chips';
+    displayName: 'Support Card';
+  };
+  attributes: {
+    chips: Schema.Attribute.Component<'shared.list-item', true>;
+    description: Schema.Attribute.Text;
+    iconName: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface BusinessTimelineStep extends Struct.ComponentSchema {
+  collectionName: 'components_business_timeline_steps';
+  info: {
+    description: 'Milestone entry for process timelines';
+    displayName: 'Timeline Step';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    iconName: Schema.Attribute.String;
+    title: Schema.Attribute.String;
   };
 }
 
@@ -1249,15 +1405,22 @@ declare module '@strapi/strapi' {
       'blocks.video-grid': BlocksVideoGrid;
       'business.benefit': BusinessBenefit;
       'business.card': BusinessCard;
+      'business.checklist': BusinessChecklist;
+      'business.copy-block': BusinessCopyBlock;
       'business.cta-button': BusinessCtaButton;
       'business.fee': BusinessFee;
+      'business.final-cta': BusinessFinalCta;
       'business.gov-fee': BusinessGovFee;
       'business.hero': BusinessHero;
       'business.kv': BusinessKv;
       'business.program': BusinessProgram;
+      'business.quote-callout': BusinessQuoteCallout;
+      'business.section-intro': BusinessSectionIntro;
       'business.service': BusinessService;
       'business.step': BusinessStep;
       'business.stream': BusinessStream;
+      'business.support-card': BusinessSupportCard;
+      'business.timeline-step': BusinessTimelineStep;
       'law.about-block': LawAboutBlock;
       'law.bullet-item': LawBulletItem;
       'law.contact-cta': LawContactCta;

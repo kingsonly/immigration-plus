@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_business_section_intros",
+  "info": {
+    "displayName": "Section Intro",
+    "description": "Reusable heading, subtitle, and description for business immigration sections"
+  },
+  "attributes": {
+    "anchorId": {
+      "type": "string"
+    },
+    "eyebrow": {
+      "type": "string"
+    },
+    "iconName": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}
