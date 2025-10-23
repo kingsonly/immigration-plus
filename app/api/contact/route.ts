@@ -1,4 +1,3 @@
-// app/api/contact/route.ts
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
@@ -9,26 +8,30 @@ type Payload = {
   phone?: string;
   service?: string;
   message: string;
-  // Honeypot
   company?: string;
 };
 
-function isEmail(s: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+function isEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
+
+const STRAPI_URL =
+  process.env.STRAPI_URL?.replace(/\/$/, "") ||
+  process.env.NEXT_PUBLIC_STRAPI_URL?.replace(/\/$/, "") ||
+  "http://localhost:1337";
+
+const STRAPI_TOKEN = process.env.STRAPI_TOKEN || process.env.NEXT_PUBLIC_STRAPI_TOKEN;
 
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as Payload;
 
-    // Basic validation
     const errors: string[] = [];
-    if (!body.firstName?.trim()) errors.push("First name is required");
-    if (!body.lastName?.trim()) errors.push("Last name is required");
-    if (!body.email?.trim() || !isEmail(body.email)) errors.push("Valid email is required");
-    if (!body.message?.trim()) errors.push("Message is required");
+    if (!body.firstName?.trim()) errors.push("First name is required.");
+    if (!body.lastName?.trim()) errors.push("Last name is required.");
+    if (!body.email?.trim() || !isEmail(body.email)) errors.push("A valid email is required.");
+    if (!body.message?.trim()) errors.push("Message is required.");
 
-    // Honeypot: reject if filled
     if (body.company && body.company.trim().length > 0) {
       return NextResponse.json({ ok: true }, { status: 200 });
     }
@@ -37,11 +40,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, errors }, { status: 400 });
     }
 
-    // Post to Strapi securely using server credentials
-    const STRAPI_URL =
-      process.env.NEXT_PUBLIC_STRAPI_URL || process.env.STRAPI_URL || "http://localhost:1337";
-    const STRAPI_TOKEN = process.env.STRAPI_TOKEN || process.env.NEXT_PUBLIC_STRAPI_TOKEN;
-
     if (!STRAPI_TOKEN) {
       return NextResponse.json(
         { ok: false, error: "Missing STRAPI_TOKEN on server" },
@@ -49,8 +47,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Create a contact-submission (no need to open public perms)
-    const res = await fetch(`${STRAPI_URL.replace(/\/$/, "")}/api/inquiries`, {
+    const res = await fetch(`${STRAPI_URL}/api/inquiries`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +61,7 @@ export async function POST(req: Request) {
           phone: body.phone || null,
           service: body.service || null,
           message: body.message,
-          source: "website",
+          source: "immigration website",
         },
       }),
       cache: "no-store",
@@ -88,9 +85,10 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ ok: true }, { status: 200 });
-  } catch (e: any) {
+  } catch (error: any) {
+    console.error("Contact submission failed", error);
     return NextResponse.json(
-      { ok: false, error: e?.message || "Unexpected error" },
+      { ok: false, error: error?.message || "Unexpected error" },
       { status: 500 }
     );
   }
@@ -112,7 +110,7 @@ async function sendNotification(payload: Payload) {
   const port = Number(process.env.SMTP_PORT);
   const secure = process.env.SMTP_SECURE === "true" || port === 465;
 
-  const transporter = nodemailer.createTransport({
+  const transporterOptions: nodemailer.TransportOptions = {
     host: process.env.SMTP_HOST,
     port,
     secure,
@@ -120,7 +118,13 @@ async function sendNotification(payload: Payload) {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
-  });
+  };
+
+  if (process.env.SMTP_ALLOW_SELF_SIGNED === "true") {
+    transporterOptions.tls = { rejectUnauthorized: false };
+  }
+
+  const transporter = nodemailer.createTransport(transporterOptions);
 
   const lines = [
     "New contact inquiry",

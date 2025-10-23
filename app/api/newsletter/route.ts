@@ -65,6 +65,7 @@ function canSendEmail() {
     !!process.env.SMTP_PASS
   );
 }
+
 async function sendNotification(payload: SubscriberPayload) {
   if (!canSendEmail()) return;
 
@@ -126,7 +127,6 @@ async function sendNotification(payload: SubscriberPayload) {
       text: subscriberLines,
     }),
   ]);
-
 }
 
 export async function POST(request: Request) {
@@ -139,22 +139,23 @@ export async function POST(request: Request) {
     });
 
     const result = await upsertSubscriber(payload);
+
     await sendNotification(payload).catch((err) => {
       console.error("Failed to send newsletter notification", err);
     });
 
     const message =
       result.status === "exists"
-        ? "You're already subscribed. Thanks for staying in touch!"
-        : "Thanks for subscribing! We'll be in touch soon.";
+        ? "You're already subscribed. Thank you for staying connected."
+        : "Thanks for subscribing! We'll keep you updated with legal insights.";
 
     return NextResponse.json({ status: result.status, message });
   } catch (error: any) {
-    console.error("Newsletter subscription failed", error);
+    console.error("Law newsletter subscription failed", error);
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { message: "Please provide a valid email address." },
+        { message: "Please enter a valid email address." },
         { status: 400 }
       );
     }
