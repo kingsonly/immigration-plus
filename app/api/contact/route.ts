@@ -140,10 +140,31 @@ async function sendNotification(payload: Payload) {
     .filter(Boolean)
     .join("\n");
 
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
-    to: process.env.NEWSLETTER_NOTIFICATION_EMAIL,
-    subject: "New website inquiry",
-    text: lines,
-  });
+  const confirmationLines = [
+    `Hello ${payload.firstName || ""},`,
+    "",
+    "Thank you for reaching out to us. We've received your message and a member of our team will respond shortly.",
+    "",
+    "If you need immediate assistance, please call us at +1 (613) 371-6611.",
+    "",
+    "Best regards,",
+    "Tentacular Immigration Team",
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  await Promise.all([
+    transporter.sendMail({
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      to: process.env.NEWSLETTER_NOTIFICATION_EMAIL,
+      subject: "New website inquiry",
+      text: lines,
+    }),
+    transporter.sendMail({
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      to: payload.email,
+      subject: "We received your message",
+      text: confirmationLines,
+    }),
+  ]);
 }
