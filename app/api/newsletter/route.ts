@@ -65,14 +65,14 @@ function canSendEmail() {
     !!process.env.SMTP_PASS
   );
 }
-//TODO:also send an email notification to the subscriber
+
 async function sendNotification(payload: SubscriberPayload) {
   if (!canSendEmail()) return;
 
   const port = Number(process.env.SMTP_PORT);
   const secure = process.env.SMTP_SECURE === "true" || port === 465;
 
-  const transporter = nodemailer.createTransport({
+  const transporterOptions: nodemailer.TransportOptions = {
     host: process.env.SMTP_HOST,
     port,
     secure,
@@ -80,7 +80,13 @@ async function sendNotification(payload: SubscriberPayload) {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
-  });
+  };
+
+  if (process.env.SMTP_ALLOW_SELF_SIGNED === "true") {
+    transporterOptions.tls = { rejectUnauthorized: false };
+  }
+
+  const transporter = nodemailer.createTransport(transporterOptions);
 
   const lines = [
     `New newsletter subscriber`,
@@ -104,22 +110,23 @@ async function sendNotification(payload: SubscriberPayload) {
     `Best regards,`,
     `The Team`,
   ]
-  .filter(Boolean).join("\n");
+    .filter(Boolean)
+    .join("\n");
 
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
-    to: process.env.NEWSLETTER_NOTIFICATION_EMAIL,
-    subject: "New newsletter subscriber",
-    text: lines,
-  });
-
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
-    to: payload.email,
-    subject: "Thank you for subscribing to our newsletter!",
-    text: subscriberLines,
-  });
-
+  await Promise.all([
+    transporter.sendMail({
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      to: process.env.NEWSLETTER_NOTIFICATION_EMAIL,
+      subject: "New newsletter subscriber",
+      text: lines,
+    }),
+    transporter.sendMail({
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      to: payload.email,
+      subject: "Thank you for subscribing to our newsletter!",
+      text: subscriberLines,
+    }),
+  ]);
 }
 
 export async function POST(request: Request) {
@@ -132,22 +139,23 @@ export async function POST(request: Request) {
     });
 
     const result = await upsertSubscriber(payload);
+
     await sendNotification(payload).catch((err) => {
       console.error("Failed to send newsletter notification", err);
     });
 
     const message =
       result.status === "exists"
-        ? "You're already subscribed. Thanks for staying in touch!"
-        : "Thanks for subscribing! We'll be in touch soon.";
+        ? "You're already subscribed. Thank you for staying connected."
+        : "Thanks for subscribing! We'll keep you updated with legal insights.";
 
     return NextResponse.json({ status: result.status, message });
   } catch (error: any) {
-    console.error("Newsletter subscription failed", error);
+    console.error("Law newsletter subscription failed", error);
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { message: "Please provide a valid email address." },
+        { message: "Please enter a valid email address." },
         { status: 400 }
       );
     }
