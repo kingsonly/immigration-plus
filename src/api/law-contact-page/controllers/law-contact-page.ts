@@ -3,6 +3,32 @@ import { factories } from "@strapi/strapi";
 const defaultPopulate = {
   sections: {
     populate: "*",
+    on: {
+      "law.hero-simple": {
+        populate: ["background"],
+      },
+      "law.contact-info-section": {
+        populate: {
+          cards: {
+            populate: ["lines"],
+          },
+        },
+      },
+      "law.contact-cta": {
+        populate: {
+          contactPoints: true,
+          whatToExpect: true,
+          primaryCta: true,
+          secondaryCta: true,
+          formFields: {
+            populate: ["options"],
+          },
+        },
+      },
+      "law.simple-cta": {
+        populate: ["primaryCta", "secondaryCta"],
+      },
+    },
   },
   seo: {
     populate: "*",
