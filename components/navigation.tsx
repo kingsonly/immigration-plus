@@ -184,7 +184,8 @@ export default function NavigationClient(props: HeaderProps) {
                   <div key={item.id}>
                     {hasDropdown ? (
                       <div>
-                        <button
+                        <Link
+                          href={item.url || "#"}
                           onClick={() =>
                             setOpenDropdownId((cur) => (cur === item.id ? null : item.id))
                           }
@@ -196,7 +197,7 @@ export default function NavigationClient(props: HeaderProps) {
                               openDropdownId === item.id ? "rotate-180" : ""
                             }`}
                           />
-                        </button>
+                        </Link>
                         <AnimatePresence>
                           {openDropdownId === item.id && (
                             <motion.div
