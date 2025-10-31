@@ -275,7 +275,7 @@ export default function HomePage({ entry }: { entry: StrapiHomepage | null }) {
                     </Link>
                   </div>
 
-                  <div className="flex-1 flex justify-center w-full">
+                  <div className="md:flex-1 md:flex hidden justify-center w-full">
                     <motion.div
                       className={`w-full max-w-xs sm:max-w-sm h-64 sm:h-72 md:h-80 bg-gradient-to-br ${service.colorClass} rounded-3xl transform rotate-6 flex items-center justify-center relative overflow-hidden shadow-xl`}
                       whileHover={{ rotate: 0, scale: 1.05 }}
@@ -332,7 +332,7 @@ export default function HomePage({ entry }: { entry: StrapiHomepage | null }) {
                       transition={{ duration: 0.8 }}
                       className="relative flex justify-center"
                     >
-                      <div className="w-full max-w-xs sm:max-w-sm h-64 sm:h-80 lg:h-96 bg-gradient-to-br from-red-500 to-pink-600 rounded-3xl transform rotate-3 flex items-center justify-center relative overflow-hidden shadow-xl">
+                      <div className="w-full max-w-xs sm:max-w-sm h-64 sm:h-80 lg:h-96 bg-gradient-to-br from-red-500 to-pink-600 rounded-3xl transform rotate-3 hidden md:flex items-center justify-center relative overflow-hidden shadow-xl">
                         <motion.div
                           className="absolute inset-0 bg-white/10"
                           animate={{
