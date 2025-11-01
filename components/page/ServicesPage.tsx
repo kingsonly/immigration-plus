@@ -490,7 +490,7 @@ export default function ServicesPage({ entry }: { entry: any | null }) {
                   </Link>
                 </div>
 
-                <div className="flex-1 flex justify-center">
+                <div className="md:flex-1 hidden md:flex justify-center">
                   <motion.div
                     className={`w-80 h-80 bg-gradient-to-br ${service.color} rounded-3xl transform rotate-6 flex items-center justify-center relative overflow-hidden`}
                     whileHover={{ rotate: 0, scale: 1.05 }}
