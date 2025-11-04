@@ -71,23 +71,23 @@ function fallback(): FooterFallback {
       {
         id: 2,
         label: "Email",
-        value: "info@coming2canada.co",
+        value: "info@tentacularimmigration.com",
         type: "email",
-        href: "mailto:info@coming2canada.co"
+        href: "mailto:info@tentacularimmigration.com"
       },
       {
         id: 3,
         label: "Location",
-        value: "Vancouver, British Columbia",
+        value: "Burlington, Ontario",
         type: "location"
       }
     ],
-    logo: { url: "/logo.png", alt: "Coming2Canada logo" },
-    logoAlt: "Coming2Canada logo",
-    companyName: "Coming2Canada",
-    companyTagline: "TENTACULAR IMMIGRATION SOLUTIONS LTD",
-    description: "Your trusted partner for Canadian immigration success.",
-    copyright: "Ac 2025 TENTACULAR IMMIGRATION SOLUTIONS LTD. All rights reserved.",
+    logo: { url: "/logo.png", alt: "TENTACULAR IMMIGRATION SOLUTIONS LTD" },
+    logoAlt: "TENTACULAR IMMIGRATION SOLUTIONS LTD",
+    companyName: "TENTACULAR IMMIGRATION SOLUTIONS LTD",
+    companyTagline: "Your trusted partner for Canadian immigration success.",
+    description: "",
+    copyright: "2025 TENTACULAR IMMIGRATION SOLUTIONS LTD. All rights reserved.",
   };
 }
 
@@ -157,11 +157,11 @@ export default function FooterDynamic(props: FooterProps) {
                     alt={logoAlt || companyName || "Site logo"}
                     width={60}
                     height={60}
-                    className="h-20 w-20 md:h-full md:w-full object-contain"
+                    className="h-20 w-20 md:h-24 md:w-24 object-contain"
                   />
                 </div>
               ) : null}
-              {companyName ? <span className="font-bold text-xl">{companyName}</span> : null}
+
             </div>
             {companyTagline ? <p className="text-gray-400 mb-4">{companyTagline}</p> :  <p className="text-gray-400">{description}</p>}
 

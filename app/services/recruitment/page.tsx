@@ -441,7 +441,7 @@ export default function RecruitmentPage() {
             </p>
           )}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href={hero?.ctas?.[0]?.url || "/contact"}>
+            <Link href={hero?.ctas?.[0]?.url || "/contact#consultation"}>
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
@@ -450,7 +450,7 @@ export default function RecruitmentPage() {
                 {hero?.ctas?.[0]?.label || "Start Hiring Process"}
               </Button>
             </Link>
-            <Link href={hero?.ctas?.[1]?.url || "/jobs"}>
+            <Link href={hero?.ctas?.[1]?.url || "/contact#consultation"}>
               <Button
                 size="lg"
                 variant="outline"

@@ -247,7 +247,7 @@ export default function ContactLandingClient({
       </section>
 
       {/* Form + Calendly */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      <section id="contact" className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Form */}

@@ -72,7 +72,7 @@ function adaptHomepage(entry: StrapiHomepage | null) {
         title: c.title,
         description: c.description,
         details: Array.isArray(c.lists) && c.lists.length
-          ? c.lists.map((l: any) => l?.listItem).filter(Boolean).join(" • ")
+          ? c.lists.map((l: any) => l?.listItem).filter(Boolean).join(" — ")
           : c.description,
         colorClass: palette[i % palette.length],
         slug: c?.link?.url || "#",

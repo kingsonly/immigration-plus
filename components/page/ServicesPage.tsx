@@ -151,7 +151,7 @@ function adaptServicesLanding(entry: any | null) {
             ? c.lists
                 .map((l: any) => l?.listItem)
                 .filter(Boolean)
-                .join(" • ")
+                .join(" — ")
             : c.description,
         color: palette[i % palette.length],
         href: c?.link?.url || "#",
