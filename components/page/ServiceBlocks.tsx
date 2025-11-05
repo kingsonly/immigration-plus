@@ -508,32 +508,133 @@ export default function ServiceBlocks({ blocks }: { blocks: Block[] }) {
           }
 
           case "blocks.application-process": {
+            const eyebrow = pickFirstString(block, ["eyebrow", "label"]);
             const title = pickFirstString(block, ["title", "Heading"]);
-            const iconName = pickFirstString(block, ["icon"]) || "FileText";
+            const description = pickFirstString(block, ["summary", "description", "subheading"]);
             const items = Array.isArray(block?.items) ? block.items : [];
-            const renderedItems = renderListItems(items);
 
-            if (!title && renderedItems.length === 0) return null;
+            const steps = items
+              .map((item: any, stepIdx: number) => {
+                const stepTitle =
+                  pickFirstString(item, ["title", "heading", "listItem", "label"]) ||
+                  `Step ${stepIdx + 1}`;
+                if (!stepTitle) return null;
+
+                const stepDescription = pickFirstString(item, ["description", "text", "body"]);
+                const iconName = pickFirstString(item, ["icon", "iconName"]) || "ClipboardCheck";
+
+                const rawStepNumber =
+                  typeof item?.stepNumber === "number" && !Number.isNaN(item.stepNumber)
+                    ? item.stepNumber
+                    : parseInt(pickFirstString(item, ["stepNumber", "step"]) ?? "", 10);
+                const badge =
+                  !Number.isNaN(rawStepNumber) && rawStepNumber > 0
+                    ? String(rawStepNumber).padStart(2, "0")
+                    : String(stepIdx + 1).padStart(2, "0");
+
+                const subItemSource = Array.isArray(item?.items)
+                  ? item.items
+                  : Array.isArray(item?.points)
+                    ? item.points
+                    : Array.isArray(item?.details)
+                      ? item.details
+                      : [];
+
+                const highlights = subItemSource
+                  .map((sub: any) =>
+                    pickFirstString(sub, ["listItem", "title", "text", "description", "value"])
+                  )
+                  .filter(Boolean);
+
+                return {
+                  title: stepTitle,
+                  description: stepDescription,
+                  iconName,
+                  badge,
+                  highlights,
+                };
+              })
+              .filter(Boolean) as Array<{
+              title: string;
+              description?: string;
+              iconName: string;
+              badge: string;
+              highlights: string[];
+            }>;
+
+            if (!title && steps.length === 0) return null;
 
             return (
-              <section key={idx} className="py-20 bg-white">
+              <section key={idx} className="py-20 bg-gradient-to-b from-gray-50 to-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                  {title && (
-                    <div className="text-center mb-12">
-                      <h2 className="text-4xl font-bold">{title}</h2>
-                    </div>
-                  )}
-                  <div className="grid md:grid-cols-2 gap-8 items-start">
-                    <ul className="space-y-3">{renderedItems}</ul>
-                    <div className="flex justify-center md:justify-end">
-                      <div className="w-28 h-28 rounded-2xl bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center">
-                        <LucideIcon
-                          name={iconName}
-                          className="text-white"
-                          size={64}
-                        />
-                      </div>
-                    </div>
+                  <div className="text-center mb-16 space-y-3">
+                    {eyebrow ? (
+                      <span className="inline-flex items-center gap-2 rounded-full bg-red-50 px-4 py-2 text-sm font-semibold text-red-600">
+                        <LucideIcon name="Sparkles" className="h-4 w-4" />
+                        {eyebrow}
+                      </span>
+                    ) : null}
+                    {title ? (
+                      <h2 className="text-4xl font-bold text-gray-900">{title}</h2>
+                    ) : null}
+                    {description ? (
+                      <p className="text-lg text-gray-600 max-w-3xl mx-auto">{description}</p>
+                    ) : null}
+                  </div>
+
+                  <div className="grid auto-rows-fr gap-6 md:grid-cols-2 xl:grid-cols-3">
+                    {steps.map((step, stepIdx) => (
+                      <Card
+                        key={`${step.title}-${stepIdx}`}
+                        className="group flex h-full w-full flex-col border border-gray-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                      >
+                        <CardContent className="flex h-full flex-col space-y-4 p-6">
+                          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
+                            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-r from-red-500 to-pink-500 text-base font-semibold text-white shadow-md sm:h-16 sm:w-16">
+                              {step.badge}
+                            </div>
+                            <div className="flex-1 space-y-2 text-left">
+                              <div className="inline-flex items-center gap-2 text-red-500">
+                                <LucideIcon
+                                  name={step.iconName}
+                                  className="h-6 w-6 text-red-500 sm:h-7 sm:w-7"
+                                />
+                                <span className="text-xs font-semibold uppercase tracking-wide text-red-500/80 sm:text-sm">
+                                  Step {stepIdx + 1}
+                                </span>
+                              </div>
+                              <h3 className="text-lg font-semibold text-gray-900 sm:text-xl">
+                                {step.title}
+                              </h3>
+                              {step.description ? (
+                                <p className="text-sm leading-relaxed text-gray-600">
+                                  {step.description}
+                                </p>
+                              ) : null}
+                            </div>
+                          </div>
+
+                          {step.highlights.length > 0 ? (
+                            <ul className="space-y-2 text-sm text-gray-600">
+                              {step.highlights.map((highlight, highlightIdx) => (
+                                <li
+                                  key={`${step.title}-point-${highlightIdx}`}
+                                  className="flex items-start gap-3 text-left"
+                                >
+                                  <LucideIcon
+                                    name="CheckCircle2"
+                                    className="mt-1 h-5 w-5 shrink-0 text-red-500"
+                                  />
+                                  <span className="leading-relaxed">{highlight}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : null}
+
+                          <div className="mt-auto" />
+                        </CardContent>
+                      </Card>
+                    ))}
                   </div>
                 </div>
               </section>

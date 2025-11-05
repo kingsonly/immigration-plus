@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
@@ -14,6 +14,9 @@ import {
   Clock,
   DollarSign,
   FileText,
+  ClipboardCheck,
+  ClipboardList,
+  Sparkles,
 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -46,50 +49,95 @@ export default function CitizenshipPage() {
   if (Array.isArray(blocks) && blocks.length > 0) {
     return <ServiceBlocks blocks={blocks} />
   }
-const eligibilityRequirements = [
+
+  const eligibilityRequirements = [
     {
-      icon: Users, // Suggests multi-generational or group support
+      icon: Users,
       title: "Permanent Resident (PR) Status",
       description:
-        "You must currently hold PR status and not be under review for fraud or removal.",
+        "You must currently hold PR status and cannot be under review for fraud or removal.",
     },
     {
-      icon: Users, // Suggests multi-generational or group support
+      icon: Users,
       title: "Physical Presence",
       description:
-        "You must have been physically present in Canada for at least 1,095 days (3 years) during the 5 years before your application. (Time spent in Canada as a temporary resident or protected person may count for half-days, up to 365 total.).",
+        "Be physically present in Canada for at least 1,095 days (3 years) within the 5 years before applying. Time as a temporary resident can count as half days, up to 365 days total.",
     },
     {
-      icon: Users, // Suggests multi-generational or group support
+      icon: Users,
       title: "Income Tax Filing",
       description:
-        "You must have filed Canadian income tax in at least 3 of the last 5 years, if requiredâ€‹.",
+        "File Canadian income tax for at least 3 of the previous 5 tax years, when required.",
     },
     {
-      icon: Users, // Suggests multi-generational or group support
-      title: "Language Proficiency (Age 18â€“54)",
+      icon: Users,
+      title: "Language Proficiency (Age 18-54)",
       description:
-        "Demonstrate your English or French speaking and listening skills at Canadian Language Benchmark Level 4 or higher.",
+        "Provide proof of English or French ability at CLB level 4 or higher for speaking and listening.",
     },
     {
-      icon: Users, // Suggests multi-generational or group support
-      title: "Citizenship Test (Age 18â€“54)",
+      icon: Users,
+      title: "Citizenship Test (Age 18-54)",
       description:
-        "Pass a 20-question multiple-choice test on Canadaâ€™s history, values, institutions, and symbols â€” you must answer at least 15 correctly to meet the 75% passing score.",
+        "Pass a 20-question multiple-choice test on Canada's history, values, institutions, and symbols.",
     },
     {
-      icon: Users, // Suggests multi-generational or group support
+      icon: Users,
       title: "Oath of Citizenship",
       description:
-        "Once approved, youâ€™ll attend a ceremony and take an oath to officially become a Canadian citizen",
+        "Attend a ceremony to take the Oath of Citizenship and receive your citizenship certificate.",
     },
-
   ];
+
   const otherRequirements = [
-    "First-Generation Limit: Children born abroad to Canadian parents may still need a citizenship certificateâ€”check IRCCâ€™s rules.",
-    "Accommodations & Waivers: You can request help or exemptions for language, testing, or the oath for disabilities or special circumstances.",
-    "Prohibitions: Criminal convictions or being under removal orders may affect eligibility.",
-  ]
+    "First-generation limit: children born abroad to Canadian parents may still need a citizenship certificate - confirm eligibility with IRCC.",
+    "Accommodations & waivers: request support or exemptions for language, testing, or the oath if you have disabilities or special circumstances.",
+    "Prohibitions: criminal convictions or removal orders can impact eligibility; resolve these issues before you apply.",
+  ];
+
+  const applicationPhases = [
+    {
+      icon: ClipboardCheck,
+      title: "Verify Eligibility",
+      summary: "Confirm you meet every statutory requirement before completing the forms.",
+      bullets: [
+        "Run IRCC's physical presence calculator and review tax filings.",
+        "Collect language test results or equivalent proof if you are 18-54.",
+        "Ensure no pending prohibitions such as removal orders or fraud reviews.",
+      ],
+    },
+    {
+      icon: ClipboardList,
+      title: "Prepare Your Application",
+      summary: "Assemble a complete, audit-ready package to avoid processing delays.",
+      bullets: [
+        "Download and complete the adult citizenship application package.",
+        "Include identity documents, proof of residency, and any required translations.",
+        "Pay the government fees and keep digital copies of every receipt.",
+      ],
+    },
+    {
+      icon: GraduationCap,
+      title: "Testing & Interview",
+      summary: "Demonstrate knowledge of Canada and confirm your language skills.",
+      bullets: [
+        "Attend the citizenship test (online or in person) if you're 18-54.",
+        "Prepare for a brief interview if requested by IRCC.",
+        "Respond quickly to any additional document or fingerprint request.",
+      ],
+    },
+    {
+      icon: Sparkles,
+      title: "Ceremony & Oath",
+      summary: "Celebrate reaching the finish line and obtain your certificate.",
+      bullets: [
+        "Review your ceremony notice and confirm attendance promptly.",
+        "Bring required identification and take the Oath of Citizenship.",
+        "Collect your certificate and apply for a Canadian passport right away.",
+      ],
+    },
+  ];
+
   const processSteps = [
     {
       step: "01",
@@ -158,7 +206,7 @@ const eligibilityRequirements = [
           >
             <h2 className="text-4xl font-bold mb-4 text-gray-900">Eligibility Requirements</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              To apply for Canadian citizenship, you must meet the following core criteria .
+              To apply for Canadian citizenship, you must meet the following core criteria.
             </p>
           </motion.div>
 
@@ -223,92 +271,106 @@ const eligibilityRequirements = [
       {/* Application Process Section */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid items-start gap-12 lg:grid-cols-[1.5fr,1fr]">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
+              initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6 }}
             >
-              <h2 className="text-4xl font-bold mb-6 text-gray-900">Application Process</h2>
-              {/* <div className="space-y-4 text-gray-600 text-lg leading-relaxed">
-
-                <p>
-                  Founded with a vision to make Canadian immigration accessible and successful for everyone, TENTACULAR
-                  IMMIGRATION SOLUTIONS LTD has been helping individuals and families achieve their Canadian dreams for
-                  over a decade.
-                </p>
-                <p>
-                  Our journey began when our founder experienced firsthand the challenges of navigating Canada's
-                  immigration system. This personal experience ignited a passion to help others avoid the same pitfalls
-                  and achieve success in their immigration journey.
-                </p>
-                <p>
-                  Today, we're proud to be one of Canada's most trusted immigration consulting firms, with a track
-                  record of success that speaks for itself. Our team of licensed consultants brings together decades of
-                  combined experience and a deep understanding of Canadian immigration law.
-                </p>
-              </div> */}
-
-              <div className="space-y-6 text-gray-700 text-lg leading-relaxed">
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2"> Confirm You Meet Eligibility:</h3>
-                  <ul className="list-disc list-inside space-y-1">
-                    <li>Use IRCC's Physical Presence Calculator</li>
-                    <li>Gather language proof and tax records</li>
-                    <li>Complete the citizenship test study materials</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">âœ”ï¸ Prepare & Submit Your Application:</h3>
-                  <ul className="list-disc list-inside space-y-1">
-                    <li>Use the adult PR application package</li>
-                    <li>Include all supporting documents and fees</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">âœ”ï¸ Take the Citizenship Test and/or Interview (if required):</h3>
-                  <ul className="list-disc list-inside space-y-1">
-                    <li>Administered online or in person for applicants aged 18-54</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Attend Your Citizenship Ceremony & Take the Oath:</h3>
-                  <ul className="list-disc list-inside space-y-1">
-                    <li>Official ceremony where you complete the oath and receive your citizenship</li>
-                  </ul>
-                </div>
+              <div className="inline-flex items-center gap-2 rounded-full bg-red-50 px-4 py-2 text-sm font-semibold text-red-600">
+                <ClipboardCheck className="h-4 w-4" />
+                Application Roadmap
               </div>
+              <h2 className="mt-4 text-4xl font-bold text-gray-900">Navigate the Citizenship Application with Confidence</h2>
+              <p className="mt-4 max-w-2xl text-lg text-gray-600">
+                We break every milestone into clear action items so you know exactly what to prepare, submit, and expect next.
+              </p>
 
+              <div className="mt-10 grid gap-6 md:grid-cols-2">
+                {applicationPhases.map((phase, index) => (
+                  <motion.div
+                    key={phase.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                  >
+                    <Card className="h-full border border-gray-100 shadow-sm transition-shadow duration-300 hover:shadow-lg">
+                      <CardContent className="h-full space-y-4 p-6">
+                        <div className="flex items-start gap-4">
+                          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-red-500 to-red-600 text-white shadow-md">
+                            <phase.icon className="h-8 w-8" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-xl font-semibold text-gray-900">{phase.title}</h3>
+                            <p className="mt-1 text-sm text-gray-600">{phase.summary}</p>
+                          </div>
+                        </div>
+                        <ul className="space-y-2 text-sm text-gray-600">
+                          {phase.bullets.map((item) => (
+                            <li key={item} className="flex items-start gap-2">
+                              <CheckCircle className="mt-1 h-5 w-5 text-red-500" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6 }}
               className="relative"
             >
-              <div className="w-full h-96 bg-gradient-to-br from-red-500 to-pink-600 rounded-3xl transform rotate-3 flex items-center justify-center relative overflow-hidden">
-                <motion.div
-                  className="absolute inset-0 bg-white/10"
-                  animate={{
-                    background: [
-                      "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-                      "radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-                      "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-                    ],
-                  }}
-                  transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
-                />
-                <FileText className="w-32 h-32 text-white/80" />
+              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-red-500 via-rose-500 to-pink-500 p-8 text-white shadow-xl">
+                <div className="absolute inset-0 opacity-40" style={{ backgroundImage: 'radial-gradient(circle at 20% 20%, rgba(255,255,255,0.35), transparent 55%)' }} />
+                <div className="absolute inset-10 rounded-3xl border border-white/20" />
+                <div className="relative space-y-6">
+                  <div className="flex items-center gap-3">
+                    <FileText className="h-10 w-10 text-white" />
+                    <div>
+                      <h3 className="text-2xl font-semibold">What We Handle For You</h3>
+                      <p className="text-sm text-white/80">Licensed consultants review every submission before it reaches IRCC.</p>
+                    </div>
+                  </div>
+                  <ul className="space-y-3 text-white/90">
+                    {[
+                      "Tailored document checklist and residency evidence review",
+                      "Tax filing validation and language proof guidance",
+                      "Citizenship test preparation resources and interview coaching",
+                      "Ceremony scheduling support plus passport-readiness plan",
+                    ].map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <CheckCircle className="mt-1 h-5 w-5 text-white" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="border-t border-white/20 pt-6">
+                    <p className="text-sm text-white/80">Need a tailored plan? Book a strategy session and we?ll map every milestone together.</p>
+                    <div className="mt-4 flex flex-wrap gap-3">
+                      <Link href="/contact">
+                        <Button size="lg" className="bg-white text-red-600 hover:bg-white/90">
+                          Book Consultation
+                        </Button>
+                      </Link>
+                      <Link href="/resources">
+                        <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                          Citizenship Resources
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
-
       {/* Process Section */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

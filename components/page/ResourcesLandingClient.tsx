@@ -154,9 +154,9 @@ export default function ResourcesLandingClient({ initialData }: { initialData: R
                         />
                       </div>
                       <CardContent className="p-6 flex-1 flex flex-col">
-                        <div className={`w-16 h-16 bg-gradient-to-r ${item.colorClass || "from-red-500 to-red-600"} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                        {/* <div className={`w-16 h-16 bg-gradient-to-r ${item.colorClass || "from-red-500 to-red-600"} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                           {renderIcon(item.icon, "w-8 h-8 text-white")}
-                        </div>
+                        </div> */}
                         <h3 className="text-xl font-bold text-gray-900 mb-3 flex-1">{item.title}</h3>
                         <div className="mt-auto flex items-center justify-between pt-2">
                           <Button className={`bg-gradient-to-r ${item.colorClass || "from-red-500 to-red-600"} hover:opacity-90`}>
@@ -187,6 +187,7 @@ export default function ResourcesLandingClient({ initialData }: { initialData: R
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {initialData.tools.map((tool, index) => (
               <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }}>
+                <Link href={tool.link}>
                 <Card className="h-full hover:shadow-lg transition-shadow duration-300 group cursor-pointer">
                   <CardContent className="p-6 text-center">
                     <div className={`w-16 h-16 bg-gradient-to-r ${tool.colorClass || "from-red-500 to-red-600"} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
@@ -196,6 +197,8 @@ export default function ResourcesLandingClient({ initialData }: { initialData: R
                     {tool.description && <p className="text-gray-600 text-sm">{tool.description}</p>}
                   </CardContent>
                 </Card>
+
+                </Link>
               </motion.div>
             ))}
           </div>
